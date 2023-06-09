@@ -1,0 +1,29 @@
+service: fetch-games-api
+frameworkVersion: "3"
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  # stage: dev
+  region: us-east-1
+  iam:
+    role: arn:aws:iam::558280373626:role/LabRole
+
+functions:
+  api:
+    handler: index.handler
+    timeout: 30
+    events:
+      - http:
+          path: api/fetch-games
+          method: get
+          cors:
+            origin: "*"
+
+custom:
+  offline:
+    httpPort: 3001
