@@ -1,0 +1,234 @@
+const UserServices = require("../services/userService");
+const CommonFunctions = require("../common/commonFunctions");
+
+require("dotenv").config();
+
+exports.create = async (req, res) => {
+  try {
+    const params = {
+      ClientId: process.env.CLIENT_ID,
+      Username: req.body.email,
+      Password: req.body.password,
+      UserAttributes: [
+        { Name: "email", Value: req.body.email },
+        { Name: "family_name", Value: req.body.family_name },
+        { Name: "given_name", Value: req.body.given_name },
+        { Name: "gender", Value: req.body.gender },
+        { Name: "phone_number", Value: req.body.phone_number },
+      ],
+    };
+    const response = await UserServices.create(params);
+    res.send(response);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.verifyEmail = async (req, res) => {
+  try {
+    const params = {
+      ClientId: process.env.CLIENT_ID,
+      ConfirmationCode: req.body.code,
+      Username: req.body.email,
+    };
+
+    const response = await UserServices.verifyEmail(params);
+    if (!response.error) {
+      res.send({ message: "Email Confirmed Successfully!" });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const params = {
+      AuthFlow: "USER_PASSWORD_AUTH",
+      ClientId: process.env.CLIENT_ID,
+      AuthParameters: {
+        USERNAME: req.body.email,
+        PASSWORD: req.body.password,
+      },
+    };
+    const response = await UserServices.login(params);
+    res.cookie("AccessToken", response?.AuthenticationResult?.AccessToken);
+    res.send(response);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.headers.authorization,
+      UserAttributes: [
+        { Name: "email", Value: req.body.email },
+        { Name: "family_name", Value: req.body.family_name },
+        { Name: "given_name", Value: req.body.given_name },
+        { Name: "gender", Value: req.body.gender },
+        { Name: "phone_number", Value: req.body.phone_number },
+      ],
+    };
+    const response = await UserServices.updateUser(params);
+    if (!response.error) {
+      res.send({ message: "User Updated Successfully!" });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.headers.authorization,
+    };
+    const response = await UserServices.getUser(params);
+    const user = CommonFunctions.getUser(response.UserAttributes);
+    res.send(user);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.signout = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.headers.authorization,
+    };
+    const response = await UserServices.signout(params);
+    if (!response.error) {
+      res.send({ message: "User Signed Out Successfully!" });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const params = {
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.headers.username,
+    };
+
+    const response = await UserServices.deleteUser(params);
+    if (!response.error) {
+      res.send({ message: "User Deleted Successfully!" });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const params = {
+      ClientId: process.env.CLIENT_ID,
+      Username: req.body.email,
+    };
+
+    const response = await UserServices.forgotPassword(params);
+    if (!response.error) {
+      res.send({
+        message:
+          "Password reset initiated. Check your email for further instructions.",
+      });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.confirmPasswordReset = async (req, res) => {
+  try {
+    const params = {
+      ClientId: process.env.CLIENT_ID,
+      Username: req.body.email,
+      ConfirmationCode: req.body.verificationCode,
+      Password: req.body.newPassword,
+    };
+
+    const response = await UserServices.confirmPasswordReset(params);
+    if (!response.error) {
+      res.send({ message: "Password Reset Successfully!" });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.verifyToken = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.body.token,
+    };
+    const response = await UserServices.getUser(params);
+    if (!response.error) {
+      const user = CommonFunctions.getUser(response.UserAttributes);
+      res.send(user);
+    } else {
+      const errorMessage = {
+        message: "Unauthorized.",
+        loginNeeded: true,
+      };
+      res.send(errorMessage);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};

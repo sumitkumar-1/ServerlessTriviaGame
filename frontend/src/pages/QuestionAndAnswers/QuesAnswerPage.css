@@ -1,0 +1,40 @@
+.container {
+    margin-top: 100px;
+}
+
+label {
+    margin-bottom: 15px;
+    color: #27374D;
+    font-weight: 600;
+}
+
+.login-form {
+    background-color: #DDE6ED;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inputField {
+    background-color: transparent;
+    border-radius: 30px;
+    border: 1px solid #27374D;
+}
+
+.inputField:focus {
+    background-color: transparent;
+    border: 1px solid #27374D;
+}
+
+.login-form h2 {
+    text-align: center;
+    color: #27374D;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-block {
+    width: 100%;
+}
