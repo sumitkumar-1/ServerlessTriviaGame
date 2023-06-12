@@ -4,7 +4,21 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  iam:
+    role: LabRole
+  iamRole: 
 
 functions:
-  function1:
+  api:
     handler: index.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+ - serverless-offline
+ 
+package:
+  exclude:
+    - node_modules/**
