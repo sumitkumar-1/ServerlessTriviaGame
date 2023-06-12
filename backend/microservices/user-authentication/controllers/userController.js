@@ -63,7 +63,20 @@ exports.login = async (req, res) => {
     };
     const response = await UserServices.login(params);
     res.cookie("AccessToken", response?.AuthenticationResult?.AccessToken);
-    res.send(response);
+    let user;
+    if (response?.AuthenticationResult?.AccessToken) {
+      const params = {
+        AccessToken: response?.AuthenticationResult?.AccessToken,
+      };
+      const userResponse = await UserServices.getUser(params);
+      user = CommonFunctions.getUser(userResponse.UserAttributes);
+    }
+    const responseMessage = {
+      user: user,
+      authDetails: response,
+    };
+    res.send(responseMessage);
+
   } catch (error) {
     const errorMessage = {
       message: "Internal Server Error.",

@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoutes";
 import HomePage from "./pages/HomePage";
@@ -12,6 +11,7 @@ import ForgotPasswordPage from "./pages/Forgotpassword/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Forgotpassword/ResetPasswordPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import LobbyView from "./components/LobbyView";
+import "./App.css";
 
 const App = () => {
   return (
