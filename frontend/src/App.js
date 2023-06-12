@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/Forgotpassword/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Forgotpassword/ResetPasswordPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
+import LobbyView from "./components/LobbyView";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/lobby" element={<LobbyView />} />
         </Route>
       </Routes>
     </Fragment>
