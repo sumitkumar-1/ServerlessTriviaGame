@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "e3b24cc5-d06c-4942-b867-860a55f12f5e",
+		"name": "serverless-trivia-game",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Team Management",
+			"item": [
+				{
+					"name": "createTeam",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ThunderBoltsUnited\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GenerateTeamName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/generate/teamName",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"generate",
+								"teamName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTeams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sendInvite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"addedBy\": \"7e33d2c8-d94a-452c-8ed5-f19e337ce5ac\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"invites"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "acceptInvite",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/accept",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"invites",
+								":memberId",
+								"accept"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": ""
+								},
+								{
+									"key": "memberId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rejectInvite",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/reject",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"invites",
+								":memberId",
+								"reject"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
+								},
+								{
+									"key": "memberId",
+									"value": "3965ad0f-7280-44e0-8e2a-f46db8fc7701"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteMember",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"members",
+								":memberId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
+								},
+								{
+									"key": "memberId",
+									"value": "3965ad0f-7280-44e0-8e2a-f46db8fc7701"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"members",
+								":memberId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": ""
+								},
+								{
+									"key": "memberId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTeamStats",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gamesPlayed\": 100,\r\n    \"wins\": 90,\r\n    \"losses\": 10,\r\n    \"pointsEarned\": 900 \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"stats"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeamStats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"stats"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTeamById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:id",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subscribeEmailNotification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/notification/subscribe",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"notification",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unsubscribeEmailNotification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/notification/unsubscribe",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"notification",
+								"unsubscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTeam",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:id",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Leaderboards",
+			"item": []
+		},
+		{
+			"name": "User Authentication",
+			"item": []
+		},
+		{
+			"name": "User Profile Management",
+			"item": []
+		},
+		{
+			"name": "Trivia Game Lobby",
+			"item": []
+		},
+		{
+			"name": "In-Game Experience",
+			"item": []
+		},
+		{
+			"name": "Trivia Content Management",
+			"item": []
+		},
+		{
+			"name": "Notifications and Alerts",
+			"item": []
+		},
+		{
+			"name": "Automated Question Tagging",
+			"item": []
+		},
+		{
+			"name": "Virtual Assistance",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "fornowthiswillwork",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "teamUrl",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

@@ -1,5 +1,5 @@
 const verifyAPIUser = (request, response, next) => {
-    const reqToken = req.headers.authorization;
+    const reqToken = request.headers.authorization;
     if (!reqToken) {
         return response.status(401).send('Unauthorized');
     }

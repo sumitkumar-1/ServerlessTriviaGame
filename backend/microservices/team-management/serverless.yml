@@ -7,18 +7,25 @@ provider:
   stage: dev
   region: us-east-1
   iam:
-    role: LabRole
-  iamRole: 
+    role: arn:aws:iam::AWS_ACCOUNT_ID:role/LabRole
 
 functions:
   api:
     handler: index.handler
     events:
       - httpApi: '*'
+    environment:
+      SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:AWS_ACCOUNT_ID:team-notification-topic'
+      OPENAI_API_KEY: 'YOUR OPENAI API KEY'
+      REGION: 'us-east-1'
+
+resources:
+  Resources:
+    TeamNotificationTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: team-notification-topic
+        DisplayName: Trivia Notification
 
 plugins:
  - serverless-offline
- 
-package:
-  exclude:
-    - node_modules/**
