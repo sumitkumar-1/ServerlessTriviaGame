@@ -4,7 +4,28 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  iam:
+    role: arn:aws:iam::AWS_ACCOUNT_ID:role/LabRole
 
 functions:
-  function1:
+  api:
     handler: index.handler
+    events:
+      - httpApi: '*'
+    environment:
+      SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:AWS_ACCOUNT_ID:team-notification-topic'
+      OPENAI_API_KEY: 'YOUR OPENAI API KEY'
+      REGION: 'us-east-1'
+
+resources:
+  Resources:
+    TeamNotificationTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: team-notification-topic
+        DisplayName: Trivia Notification
+
+plugins:
+ - serverless-offline
