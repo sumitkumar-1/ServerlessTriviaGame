@@ -1,10 +1,25 @@
 service: leaderboards
-frameworkVersion: '3'
 
 provider:
-  name: aws
-  runtime: nodejs18.x
+  name: google
+  stage: dev
+  runtime: nodejs14
+  region: us-central1
+  project: b009040970-serverless
+
+frameworkVersion: '3'
+
+plugins:
+  - serverless-google-cloudfunctions
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
 
 functions:
-  function1:
-    handler: index.handler
+  service:
+    handler: app
+    events:
+      - http: path
