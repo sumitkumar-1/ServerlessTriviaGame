@@ -1,13 +1,14 @@
-module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v3.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const express = require("express");
+const cors = require('cors');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+const leaderboardRouter = require('./routes/leaderboard.route');
+
+app.use('/api/leaderboard', leaderboardRouter);
+
+module.exports = {
+  app,
 };
