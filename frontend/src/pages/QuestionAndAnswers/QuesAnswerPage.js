@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./QuesAnswerPage.css";
 import Questions from "../../utils/questionsArray";
 import { useNavigate } from "react-router-dom";
-import { StoreUserResponse } from "../../apis/apis";
+import { StoreUserResponse } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 
