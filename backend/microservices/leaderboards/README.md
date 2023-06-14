@@ -12,7 +12,7 @@ The leaderboard app offers the following features:
 
 3. **Detailed Statistics**: The app provides detailed statistics for the top-performing teams and players. Users can gain insights into their performance, including metrics like win rate, average score, or any other relevant statistics.
 
-### Deployment
+## Deployment
 
 Update Environment Variables:
 
@@ -40,6 +40,7 @@ Deploying google-node-express-api-project to stage dev (us-east-1)
 endpoint: ANY - https://us-central1-xxxxxxxxxx.cloudfunctions.net/leaderboards-dev-service
 functions:
   api: google-node-express-api-project-dev-api (766 kB)
+```
 
 ## APIs
 
