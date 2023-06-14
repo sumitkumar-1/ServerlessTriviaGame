@@ -1,3 +1,66 @@
+# service: game-experience
+# frameworkVersion: '3'
+
+# provider:
+#   name: aws
+#   runtime: nodejs18.x
+#   stage: dev
+#   region: us-east-1
+#   iamRoleStatements:
+#     - Effect: 'Allow'
+#       Action:
+#         - 'dynamodb:*'
+#         - 'sns:*'
+#       Resource: '*'
+#   role: arn:aws:iam::217372277497:role/LabRole
+  
+# functions:
+#   api:
+#     handler: index.handler
+#     events:
+#       - httpApi: '*'
+#   handleChatNotifications:
+#     handler: index.handleChatNotifications
+#     events:
+#       - sns:
+#           arn:
+#             Fn::GetAtt: [ChatSNSTopic, Arn]
+
+# resources:
+#   Resources:
+#     ChatTable:
+#       Type: 'AWS::DynamoDB::Table'
+#       Properties:
+#         TableName: 'Chat'
+#         AttributeDefinitions:
+#           - AttributeName: 'chatId'
+#             AttributeType: 'S'
+#         KeySchema:
+#           - AttributeName: 'chatId'
+#             KeyType: 'HASH'
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
+#     ChatSNSTopic:
+#       Type: 'AWS::SNS::Topic'
+#       Properties:
+#         TopicName: 'ChatTopic'
+
+# plugins:
+#   - serverless-dynamodb-local
+#   - serverless-offline
+  
+
+# custom:
+#   dynamodb:
+#     start:
+#       port: 8000
+#       inMemory: true
+#       migrate: true
+
+# package:
+#   exclude:
+#     - node_modules/**
 service: game-experience
 frameworkVersion: '3'
 
@@ -6,19 +69,54 @@ provider:
   runtime: nodejs18.x
   stage: dev
   region: us-east-1
-  iam:
-    role: LabRole
-  iamRole: 
-
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:*'
+        - 'sns:*'
+      Resource: '*'
+  role: arn:aws:iam::217372277497:role/LabRole
+  
 functions:
   api:
     handler: index.handler
     events:
       - httpApi: '*'
+  handleChatNotifications:
+    handler: index.handleChatNotifications
+    events:
+      - sns:
+          arn: arn:aws:sns:us-east-1:217372277497:ChatTopic
 
-plugins:
- - serverless-offline
- 
-package:
-  exclude:
-    - node_modules/**
+resources:
+  Resources:
+    ChatTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'Chat'
+        AttributeDefinitions:
+          - AttributeName: 'chatId'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'chatId'
+            KeyType: 'HASH'
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    MemberQueueUrls:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'MemberQueueUrls'
+        AttributeDefinitions:
+          - AttributeName: 'member_id'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'member_id'
+            KeyType: 'HASH'
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1          
+    ChatSNSTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: 'ChatTopic'

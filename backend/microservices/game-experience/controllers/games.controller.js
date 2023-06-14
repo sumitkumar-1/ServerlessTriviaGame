@@ -1,6 +1,12 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const AWS = require('aws-sdk');
+const sns = new AWS.SNS();
+const Chat = require("../models/chat.model");
+const { v4: uuidv4 } = require("uuid");
+const sqs = new AWS.SQS();
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 // const admin = require('firebase-admin');
 // admin.initializeApp();
@@ -82,7 +88,7 @@ let teams = [
     {
         "_id": "1",
         "teamName": "The Quizzards",
-        "members": [ 
+        "members": [
             {
                 "_id": "1",
                 "username": "JohnDoe",
@@ -93,7 +99,7 @@ let teams = [
                     "gamesPlayed": 10,
                     "gamesWon": 5
                 }
-            },{
+            }, {
                 "_id": "2",
                 "username": "JaneDoe",
                 "password": "hashed_password",
@@ -103,7 +109,7 @@ let teams = [
                     "gamesPlayed": 8,
                     "gamesWon": 4
                 }
-            },{
+            }, {
                 "_id": "3",
                 "username": "BobSmith",
                 "password": "hashed_password",
@@ -120,7 +126,7 @@ let teams = [
     {
         "_id": "2",
         "teamName": "Brainiacs",
-        "members": [ 
+        "members": [
             {
                 "_id": "4",
                 "username": "AliceWonder",
@@ -131,7 +137,7 @@ let teams = [
                     "gamesPlayed": 5,
                     "gamesWon": 2
                 }
-            },{
+            }, {
                 "_id": "5",
                 "username": "CharlieBucket",
                 "password": "hashed_password",
@@ -141,7 +147,7 @@ let teams = [
                     "gamesPlayed": 9,
                     "gamesWon": 4
                 }
-            },{
+            }, {
                 "_id": "6",
                 "username": "DianaPrince",
                 "password": "hashed_password",
@@ -209,94 +215,100 @@ let questions = [
 ];
 
 
+
 let chats = [];  // You will probably use some sort of WebSocket connection in real implementation
 
 // API Endpoints
 
 // Submit an answer to a question
 const submitAnswer = async (req, res) => {
-    const question = questions.find(q => q._id === req.params.id);
-    if (!question) return res.status(404).send('Question not found');
+    try {
+        const question = questions.find(q => q._id === req.params.id);
+        if (!question) return res.status(404).send({ message: 'Question not found' });
 
-    // Check if the provided answer matches the correct answer of the question
-    const isCorrect = req.body.answer === question.correctAnswer;
-
-    // Modify the userAnswer field in the question
-    question.userAnswer = req.body.answer;
-
-    // Depending on whether the answer is correct or not, return a different response
-    if (isCorrect) {
-        res.status(200).send('Correct answer');
-    } else {
-        res.status(200).send('Incorrect answer');
+        const isCorrect = req.body.answer === question.correctAnswer;
+        res.status(200).send({
+            message: isCorrect ? 'Correct answer' : 'Incorrect answer',
+            isCorrect: isCorrect,
+        });
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error. Failed to submit Answer !!', error: error });
     }
-  };
+};
 
 
 // Get the correct answer and explanation for a question
 const getCorrectAnswer = async (req, res) => {
-    const question = questions.find(q => q._id === req.params.id);
-    if (!question) return res.status(404).send('Question not found');
+    try {
+        const question = questions.find(q => q._id === req.params.id);
+        if (!question) return res.status(404).send({ message: 'Question not found' });
 
-    res.status(200).json({ correctAnswer: question.correctAnswer, explanation: question.explanation });
-  };
+        res.status(200).json({
+            correctAnswer: question.correctAnswer,
+            explanation: question.explanation
+        });
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error. Failed to get answers Explaination !!', error: error });
+    }
+};
 
 // Get real-time team score
 // Handle answer submission and update score accordingly
 const realTimeScore = async (req, res) => {
-    const question = questions.find(q => q._id === req.params.id);
-    if (!question) return res.status(404).send('Question not found');
-    
-    // Fetch the team
-    const teamRef = db.collection('teams').doc(req.body.teamId);
-    const team = await teamRef.get();
+    try {
+        const question = questions.find(q => q._id === req.params.id);
+        if (!question) return res.status(404).send({ message: 'Question not found' });
 
-    if (!team.exists) {
-        return res.status(404).send('Team not found');
+        const teamRef = db.collection('teams').doc(req.body.teamId);
+        const team = await teamRef.get();
+
+        if (!team.exists) {
+            return res.status(404).send({ message: 'Team not found' });
+        }
+
+        let teamData = team.data();
+        let newScore = teamData.score;
+
+        if (req.body.answer === question.correctAnswer) {
+            newScore += question.points; // assuming 'points' attribute for each question
+            await teamRef.update({ score: newScore });
+        }
+
+        res.status(200).send({ message: 'Answer processed', newScore: newScore });
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error. Not Able to fetch Real Time Score !!', error: error });
     }
+};
 
-    let teamData = team.data();
-    let newScore = teamData.score;
 
-    // If the answer is correct, increment the score
-    if (req.body.answer === question.correctAnswer) {
-        newScore += question.points; // assuming 'points' attribute for each question
-        await teamRef.update({ score: newScore });
-    }
-
-    res.status(200).send('Answer processed');
-  };
-
-// Send a chat message. In your real implementation, you would probably use some sort of WebSocket connection for this
-app.post('/api/chats', (req, res) => {
-    chats.push(req.body);
-    res.send('Message sent');
-});
-
-// Get all chat messages. In your real implementation, you would probably use some sort of WebSocket connection for this
-app.get('/api/chats', (req, res) => {
-    res.json(chats);
-});
 
 // Track individual performance
-const getIndivdualScore = async (req, res) => {
-    const user = users.find(u => u._id === req.params.id);
-    if (!user) return res.status(404).send('User not found');
+const getIndividualScore = async (req, res) => {
+    try {
+        const user = users.find(u => u._id === req.params.id);
+        if (!user) return res.status(404).send({ message: 'User not found' });
 
-    res.json(user.individualScores);
-  };
+        res.status(200).json({ individualScores: user.individualScores });
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error.', error: error });
+    }
+};
 
 
 // Track team performance
 const getTeamScore = async (req, res) => {
-    const team = teams.find(t => t._id === req.params.id);
-    if (!team) return res.status(404).send('Team not found');
+    try {
+        const team = teams.find(t => t._id === req.params.id);
+        if (!team) return res.status(404).send({ message: 'Team not found' });
 
-    // Calculate team performance based on the members' performance. This is just a placeholder
-    team.performance = calculatePerformance(team);
+        // Calculate team performance based on the members' performance. This is just a placeholder
+        team.performance = calculatePerformance(team);
 
-    res.json({ performance: team.performance });
-  };
+        res.status(200).json({ performance: team.performance });
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error.', error: error });
+    }
+};
 
 
 // const port = process.env.PORT || 3000;
@@ -313,10 +325,205 @@ function calculatePerformance(team) {
     return Math.floor(Math.random() * 100);
 }
 
+
+
+
+
+// const sendMessage = async (req, res) => {
+//     try {
+
+//         // Extract message details from the req object
+//         const { teamId, senderId, message } = req.body;
+
+//         // TODO: Validate teamId, senderId, and message here
+//         // You may need to query DynamoDB to check if the sender is part of the team
+
+//         // Prepare a unique chatId and timestamp
+//         const chatId = uuidv4();
+//         const timestamp = Date.now();
+
+//         // Prepare the chat message
+//         const chatMessage = new Chat({
+//             chatId,
+//             teamId,
+//             senderId,
+//             message,
+//             timestamp,
+//         });
+//         // Store the message in DynamoDB
+//         await chatMessage.save();
+
+//         // Find team with given teamId
+//         const team = teams.find(t => t._id === teamId);
+
+//         // Make sure the team exists
+//         if (!team) {
+//             throw new Error("Team not found");
+//         }
+
+//         // For each team member, create an SQS queue
+//         team.members.forEach(async member => {
+//             let params = {
+//                 QueueName: `${member._id}_Queue`,
+//                 Attributes: {
+//                     'DelaySeconds': '60',  // Delay messages for 1 minute (60 seconds)
+//                     'MessageRetentionPeriod': '86400'  // Delete messages after 1 day (86400 seconds)
+//                 }
+//             };
+
+//             let queue = await sqs.createQueue(params).promise();
+
+//             console.log(`Queue URL for member ${member._id}: ${queue.QueueUrl}`);
+
+//         });
+
+//         // Publish the chat message to the corresponding SNS topic
+//         const snsParams = {
+//             Message: JSON.stringify(chatMessage),
+//             TopicArn: `arn:aws:sns:${process.env.region}:${process.env.accountID}:ChatTopic`
+//         };
+
+//         await sns.publish(snsParams).promise();
+
+//         // // Return a success response
+
+
+//         const ChatDynamo = await Chat.get(chatId);
+
+//         // res.status(200).send({ chatId, timestamp });
+//         res.status(200).send({ ChatDynamo , memberQueueMap});
+//     } catch (error) {
+//         // Handle any errors that occurred while saving to DynamoDB or publishing to SNS
+//         console.error('Error: ', error);
+//         res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
+//     }
+// };
+
+
+const sendMessage = async (req, res) => {
+    try {
+        // Extract message details from the req object
+        const { teamId, senderId, message } = req.body;
+
+        // TODO: Validate teamId, senderId, and message here
+        // You may need to query DynamoDB to check if the sender is part of the team
+
+        // Prepare a unique chatId and timestamp
+        const chatId = uuidv4();
+        const timestamp = Date.now();
+
+        // Prepare the chat message
+        const chatMessage = new Chat({
+            chatId,
+            teamId,
+            senderId,
+            message,
+            timestamp,
+        });
+        // Store the message in DynamoDB
+        await chatMessage.save();
+
+        // Find team with given teamId
+        const team = teams.find(t => t._id === teamId);
+
+        // Make sure the team exists
+        if (!team) {
+            throw new Error("Team not found");
+        }
+
+        // For each team member, create an SQS queue and store the queue URL in DynamoDB
+        team.members.forEach(async member => {
+            let params = {
+                QueueName: `${member._id}_Queue`,
+                Attributes: {
+                    'DelaySeconds': '60',  // Delay messages for 1 minute (60 seconds)
+                    'MessageRetentionPeriod': '86400'  // Delete messages after 1 day (86400 seconds)
+                }
+            };
+
+            let queue = await sqs.createQueue(params).promise();
+            console.log(`Queue URL for member ${member._id}: ${queue.QueueUrl}`);
+
+            let dbParams = {
+                TableName: 'MemberQueueUrls',
+                Item: {
+                    'member_id': member._id,
+                    'queue_url': queue.QueueUrl
+                }
+            };
+
+            await docClient.put(dbParams).promise();
+        });
+
+        // Publish the chat message to the corresponding SNS topic
+        const snsParams = {
+            Message: JSON.stringify(chatMessage),
+            TopicArn: `arn:aws:sns:${process.env.region}:${process.env.accountID}:ChatTopic`
+        };
+
+        await sns.publish(snsParams).promise();
+
+        // Return a success response
+        const ChatDynamo = await Chat.get(chatId);
+        res.status(200).send({ ChatDynamo });
+    } catch (error) {
+        // Handle any errors that occurred while saving to DynamoDB or publishing to SNS
+        console.error('Error: ', error);
+        res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
+    }
+};
+const processEvent = async (event) => {
+    try {
+        const message = JSON.parse(event.Records[0].Sns.Message);
+        const { teamId } = message;
+
+        // Retrieve the team members
+        const team = teams.find(t => t._id === teamId);
+        if (!team) {
+            throw new Error("Team not found");
+        }
+
+        // For each team member, send the message to their SQS queue
+        for(let member of team.members){
+            // Retrieve the member's queue URL from DynamoDB
+            let dbParams = {
+                TableName: 'MemberQueueUrls',
+                Key: {
+                    'member_id': member._id
+                }
+            };
+
+            let data = await docClient.get(dbParams).promise();
+            console.log(data);
+            if (!data.Item) {
+                throw new Error(`Queue URL not found for member ${member._id}`);
+            }
+
+            let params = {
+                QueueUrl: data.Item.queue_url,
+                MessageBody: JSON.stringify(message),
+            };
+
+            console.log(params);
+
+            await sqs.sendMessage(params).promise();
+        }
+    } catch (error) {
+        console.error('Error: ', error);
+        throw error;
+    }
+};
+
+
+
+
+
 module.exports = {
     submitAnswer,
     getCorrectAnswer,
     realTimeScore,
-    getIndivdualScore,
+    getIndividualScore,
     getTeamScore,
+    sendMessage,
+    processEvent
 };
