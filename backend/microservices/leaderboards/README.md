@@ -89,7 +89,7 @@ Get the leaderboard for a specific entity.
   - `entityId`: The ID of the entity.
 - Controller: `LeaderboardController.getLeaderboardByEntityId`
 
-### Local development
+## Local development
 
 It is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
 
