@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { SignOut } from "../apis/apiClient";
-import { Login, verifyToken } from "../apis/apis";
+import { SignOut, Login, verifyToken } from "../services/user.service";
 
 const AuthContext = createContext(null);
 

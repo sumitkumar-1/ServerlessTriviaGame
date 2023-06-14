@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { NavLink, useNavigate } from "react-router-dom";
-import { CreateUser } from "../../apis/apis";
+import { CreateUser } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";

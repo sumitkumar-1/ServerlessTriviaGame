@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./auth.interceptor";
 
 const USER_AUTH_BASE_URL = process.env.REACT_APP_USER_AUTHENTICATION_BASE_URL;
 
@@ -11,3 +12,9 @@ export const verifyToken = (data) => axios.post(`${USER_AUTH_BASE_URL}/verifyTok
 export const StoreUserResponse = (data) => axios.post(`${USER_AUTH_BASE_URL}/storeUserResponse`, data);
 export const QuestionAnswerValidation = (data) => axios.post(`${USER_AUTH_BASE_URL}/questionAnswerValidation`, data);
 export const GetQuestionAnswer = (data) => axios.post(`${USER_AUTH_BASE_URL}/getQuestionAnswer`, data);
+
+export const GetUser = () => api.get(`${USER_AUTH_BASE_URL}/getUser`);
+export const UpdateUser = (data) => api.post(`${USER_AUTH_BASE_URL}/updateUser`, data);
+export const SignOut = () => api.get(`${USER_AUTH_BASE_URL}/signout`);
+export const DeleteUser = () => api.get(`${USER_AUTH_BASE_URL}/deleteUser`);
+export const QuestionAnswerValidationWithAuth = (data) => api.post(`${USER_AUTH_BASE_URL}/questionAnswerValidation`, data);

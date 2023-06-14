@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./VerifyEmailPage.css";
 import { useNavigate } from "react-router-dom";
-import { VerifyEmail } from "../../apis/apis";
+import { VerifyEmail } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./QuesAnswerPage.css";
 import { useNavigate } from "react-router-dom";
-import { GetQuestionAnswer, QuestionAnswerValidation } from "../../apis/apis";
+import { GetQuestionAnswer, QuestionAnswerValidationWithAuth } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 
@@ -41,7 +41,7 @@ const VerifyQuestionAnswersPage = () => {
       question: securityQuestion,
       answer: data.answer,
     };
-    const response = await QuestionAnswerValidation(requestBody);
+    const response = await QuestionAnswerValidationWithAuth(requestBody);
     if (!response?.data[0]?.isValidated) {
       navigate("/verifyQuestionAnswers");
       setIsLoading(false);

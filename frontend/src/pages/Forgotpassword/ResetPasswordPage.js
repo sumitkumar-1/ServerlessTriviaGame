@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Forgotpassword.css";
 import { useNavigate } from "react-router-dom";
-import { ConfirmPasswordReset } from "../../apis/apis";
+import { ConfirmPasswordReset } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
