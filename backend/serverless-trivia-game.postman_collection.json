@@ -429,7 +429,138 @@
 		},
 		{
 			"name": "Leaderboards",
-			"item": []
+			"item": [
+				{
+					"name": "getAllLeaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tournamentUrl}}/api/leaderboard/getAll",
+							"host": [
+								"{{tournamentUrl}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterLeaderboardByTimeFrame",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tournamentUrl}}/api/leaderboard/filter/:timeFrame",
+							"host": [
+								"{{tournamentUrl}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"filter",
+								":timeFrame"
+							],
+							"variable": [
+								{
+									"key": "timeFrame",
+									"value": "daily"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEntityStatistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tournamentUrl}}/api/leaderboard/statistics/:entityId/:category",
+							"host": [
+								"{{tournamentUrl}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"statistics",
+								":entityId",
+								":category"
+							],
+							"variable": [
+								{
+									"key": "entityId",
+									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
+								},
+								{
+									"key": "category",
+									"value": "Education"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getLeaderboardByEntityId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tournamentUrl}}/api/leaderboard/entity/:entityId",
+							"host": [
+								"{{tournamentUrl}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"entity",
+								":entityId"
+							],
+							"variable": [
+								{
+									"key": "entityId",
+									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateLeaderboard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entityId\": \"jeoqjeowqjeowqeowqejowqjeowqe\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk2\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"win\",\r\n    \"totalScore\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tournamentUrl}}/api/leaderboard/update",
+							"host": [
+								"{{tournamentUrl}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "User Authentication",
@@ -502,6 +633,11 @@
 	"variable": [
 		{
 			"key": "teamUrl",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "tournamentUrl",
 			"value": "",
 			"type": "default"
 		}
