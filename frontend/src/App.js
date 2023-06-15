@@ -10,8 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/Forgotpassword/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Forgotpassword/ResetPasswordPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
-import LobbyView from "./components/LobbyView";
-import "./App.css";
+import LobbyView from "./components/Lobby/LobbyView";
 
 const App = () => {
   return (
