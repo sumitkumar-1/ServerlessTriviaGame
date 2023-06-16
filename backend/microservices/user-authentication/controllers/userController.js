@@ -96,6 +96,7 @@ exports.updateUser = async (req, res) => {
         { Name: "given_name", Value: req.body.given_name },
         { Name: "gender", Value: req.body.gender },
         { Name: "phone_number", Value: req.body.phone_number },
+        { Name: "picture", Value: req.body.picture },
       ],
     };
     const response = await UserServices.updateUser(params);

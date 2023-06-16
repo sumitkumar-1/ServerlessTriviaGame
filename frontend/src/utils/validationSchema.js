@@ -69,3 +69,21 @@ export const ResetPasswordValidationSchema = Yup.object().shape({
     .matches(/^\d{6}$/, "Verification code must be a 6-digit number")
     .required("Verification code is required"),
 });
+
+export const EditProfileValidationSchema = Yup.object().shape({
+  family_name: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Accepting only Letters.")
+    .required("Family Name Required."),
+  given_name: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Accepting only Letters.")
+    .required("Given Name Required."),
+  gender: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Accepting only Letters.")
+    .required("Gender is Required."),
+  phone_number: Yup.string()
+    .matches(
+      /^\+1\d{10}$/,
+      "Invalid Phone Number Required +1. Should be of 10 Digits."
+    )
+    .required("Phone Number is Required."),
+});

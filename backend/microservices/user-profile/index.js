@@ -1,13 +1,12 @@
-module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v3.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-};
+const express = require("express");
+const cors = require("cors");
+const serverless = require("serverless-http");
+const { router } = require("./routes/routes");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(router);
+
+module.exports.handler = serverless(app);
