@@ -2,7 +2,7 @@ service: UserAuthentication
 frameworkVersion: '3'
 
 custom:
-  tableName: 'users-table-${sls:stage}'
+  tableName: 'cognito-users-table-${sls:stage}'
 
 plugins:
   - serverless-offline
