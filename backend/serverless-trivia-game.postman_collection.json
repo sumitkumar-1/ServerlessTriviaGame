@@ -1,8 +1,10 @@
 {
 	"info": {
-		"_postman_id": "e3b24cc5-d06c-4942-b867-860a55f12f5e",
+		"_postman_id": "ab3b7920-3254-401b-9501-b73ac43358bf",
 		"name": "serverless-trivia-game",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24824996",
+		"_collection_link": "https://bold-water-700163.postman.co/workspace/My-Workspace~c9d5edf1-84af-4e40-82a7-490f7e5d8513/collection/24824996-ab3b7920-3254-401b-9501-b73ac43358bf?action=share&creator=24824996&source=collection_link"
 	},
 	"item": [
 		{
@@ -572,7 +574,73 @@
 		},
 		{
 			"name": "Trivia Game Lobby",
-			"item": []
+			"item": [
+				{
+					"name": "Get games [FIRESTORE]",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "dummy",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://5zau2ukg3qgw3afqnhd5mrfoyq0tntgw.lambda-url.us-east-1.on.aws/api/fetch-games",
+							"protocol": "https",
+							"host": [
+								"5zau2ukg3qgw3afqnhd5mrfoyq0tntgw",
+								"lambda-url",
+								"us-east-1",
+								"on",
+								"aws"
+							],
+							"path": [
+								"api",
+								"fetch-games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Game [FIRESTORE]",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"difficulty\": \"Medium\",\r\n\t\"timeLimit\": 1800,\r\n\t\"createdAt\": {\r\n\t\t\"_seconds\": 1686118597,\r\n\t\t\"_nanoseconds\": 154000000\r\n\t},\r\n\t\"name\": \"Trivia Game\",\r\n\t\"category\": \"HP\",\r\n\t\"participants\": [{\r\n\t\t\"user_id\": \"1\",\r\n\t\t\"name\": \"John\"\r\n\t}, {\r\n\t\t\"user_id\": \"2\",\r\n\t\t\"name\": \"Jane\"\r\n\t}],\r\n\t\"updatedAt\": {\r\n\t\t\"_seconds\": 1686118610,\r\n\t\t\"_nanoseconds\": 182000000\r\n\t},\r\n\t\"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://g3suie4psh.execute-api.us-east-1.amazonaws.com/dev/push-message",
+							"protocol": "https",
+							"host": [
+								"g3suie4psh",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"push-message"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "In-Game Experience",
@@ -580,7 +648,175 @@
 		},
 		{
 			"name": "Trivia Content Management",
-			"item": []
+			"item": [
+				{
+					"name": "Get Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/games",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Game",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Super Trivia\",\r\n    \"category\": \"History\",\r\n    \"difficulty\": \"Medium\",\r\n    \"questions\": [\r\n            {\r\n                \"questionId\": \"Q1\",\r\n                \"question\": \"When was the Battle of Hastings?\",\r\n                \"options\": [\"1066\", \"1067\", \"1065\", \"1064\"],\r\n                \"correctAnswer\": \"1066\"\r\n            },\r\n            {\r\n                \"questionId\": \"Q2\",\r\n                \"question\": \"Who discovered America?\",\r\n                \"options\": [\"Christopher Columbus\", \"Amerigo Vespucci\", \"Ferdinand Magellan\", \"Marco Polo\"],\r\n                \"correctAnswer\": \"Christopher Columbus\"\r\n            }\r\n    ],\r\n    \"timeLimit\": 120,\r\n    \"participants\": [\"User1\", \"User2\"],\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cms_base_url}}/games",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Game",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/games/{id}",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Game",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cms_base_url}}/games/{id}",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/questions",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Question",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category\": \"Science\",\r\n    \"difficulty\": \"Medium\",\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"correctAnswer\": \"H\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cms_base_url}}/questions",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Question",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/games/{id}",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/games/{id}",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"games",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Notifications and Alerts",
@@ -640,6 +876,16 @@
 			"key": "tournamentUrl",
 			"value": "",
 			"type": "default"
+		},
+		{
+			"key": "game_lobby_websocket",
+			"value": "wss://djwkdpdytb.execute-api.us-east-1.amazonaws.com/dev",
+			"type": "string"
+		},
+		{
+			"key": "cms_base_url",
+			"value": "https://szavq6khjj.execute-api.us-east-1.amazonaws.com/dev",
+			"type": "string"
 		}
 	]
 }
