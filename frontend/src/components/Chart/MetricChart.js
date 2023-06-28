@@ -5,12 +5,12 @@ import { ArcElement } from "chart.js";
 
 Chart.register(ArcElement);
 
-const MetricChart = () => {
+const MetricChart = (props) => {
   const data = {
     labels: ["Win", "Loss"],
     datasets: [
       {
-        data: [3, 2],
+        data: [props.win, props.loss],
         backgroundColor: ["#27374D", "#526D82"],
         borderWidth: 0,
       },
