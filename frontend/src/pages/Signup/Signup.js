@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { NavLink, useNavigate } from "react-router-dom";
-import { CreateUser } from "../../apis/apis";
+import { CreateUser } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -113,7 +113,7 @@ const Signup = ({ redirectAnotherPage }) => {
               <input
                 type="phone_number"
                 name="phone_number"
-                alue={formik.values.phone_number}
+                value={formik.values.phone_number}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="form-control inputField"

@@ -1,5 +1,6 @@
 require('dotenv').config()
 const app = require('../utils/firebase');
+const { publishMessage } = require('../utils/pubsub');
 
 const getTriviaGames = async (event, context) => {
     try {
@@ -10,12 +11,17 @@ const getTriviaGames = async (event, context) => {
             const game = gameDoc.data();
             games.push(game);
         });
+
+        // Publish a message to the Pub/Sub topic for game updates
+        const pubSubData = {
+            games: games,
+        };
+        await publishMessage('available-games', pubSubData);
+
         return {
             statusCode: 200,
             'headers': {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Methods": "OPTIONS,GET"
+                'Authorization': 'Bearer dummy',
             },
             body: JSON.stringify(games)
         };
@@ -23,7 +29,7 @@ const getTriviaGames = async (event, context) => {
         console.error('Error fetching trivia games:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Internal server error', error: error})
+            body: JSON.stringify({ message: 'Internal server error', error: error }),
         };
     }
 };

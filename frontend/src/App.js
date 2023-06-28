@@ -2,16 +2,16 @@ import React, { Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoutes";
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/Login/LoginPage";
-import ProfilePage from "./pages/ProfilePage";
 import VerifyQuestionAnswersPage from "./pages/QuestionAndAnswers/VerifyQuestionAnswersPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/Forgotpassword/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Forgotpassword/ResetPasswordPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
-import LobbyView from "./components/LobbyView";
-import "./App.css";
+import LobbyView from "./components/Lobby/LobbyView";
+import ProfilePage from "./pages/profile/ProfilePage";
+import LoginPage from "./pages/Login/LoginPage";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 const App = () => {
   return (
@@ -30,6 +30,8 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby" element={<LobbyView />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/editProfile" element={<EditProfile />} />
         </Route>
       </Routes>
     </Fragment>

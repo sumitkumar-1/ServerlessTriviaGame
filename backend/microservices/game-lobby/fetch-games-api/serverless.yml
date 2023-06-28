@@ -14,6 +14,35 @@ provider:
     role: arn:aws:iam::558280373626:role/LabRole
 
 functions:
+  connect:
+    handler: functions./connect.main
+    events:
+      - websocket:
+          route: $connect
+  disconnect:
+    handler: functions./disconnect.main
+    events:
+      - websocket:
+          route: $disconnect
+  sendMessage:
+    handler: functions./sendMessage.main
+    environment:
+      websocketsApiDomain:
+        Fn::Join:
+          - ''
+          - - Ref: WebsocketsApi
+            - .execute-api.
+            - ${self:provider.region}
+            - .amazonaws.com/
+            - ${self:provider.stage}
+    events:
+      - eventBridge:
+          eventBus: ${self:custom.eventBusArn}
+          pattern:
+            source:
+              - notifications-events
+            detail-type:
+              - MESSAGE_SENT
   api:
     handler: index.handler
     timeout: 30
@@ -23,7 +52,21 @@ functions:
           method: get
           cors:
             origin: "*"
+      - http:
+          path: api/sse
+          method: get
+          cors:
+            origin: "*"
+      - http:
+          path: api/publish
+          method: post
+          cors:
+            origin: "*"
 
 custom:
   offline:
     httpPort: 3001
+
+package:
+  include:
+    - serviceAccountKey.json

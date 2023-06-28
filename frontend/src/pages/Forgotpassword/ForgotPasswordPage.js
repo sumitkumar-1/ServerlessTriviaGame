@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Forgotpassword.css";
 import { useNavigate } from "react-router-dom";
-import { ForgotPassword } from "../../apis/apis";
+import { ForgotPassword } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";

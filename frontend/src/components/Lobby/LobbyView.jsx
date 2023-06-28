@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import './LobbyView.scss';
+// import GameListener from './GameListener';
 
 const animatedComponents = makeAnimated();
 
@@ -12,6 +14,31 @@ const LobbyView = () => {
   const [filteredGames, setFilteredGames] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+  const [wsConnection, setWsConnection] = useState(null);
+
+  useEffect(() => {
+    const ws = new WebSocket('wss://djwkdpdytb.execute-api.us-east-1.amazonaws.com/dev');
+    
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = handleMessage;
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket closed');
+    };
+
+    setWsConnection(ws);
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -20,15 +47,17 @@ const LobbyView = () => {
           'https://ys6m7oxeaa.execute-api.us-east-1.amazonaws.com/dev/api/fetch-games',
           {
             headers: {
-              Authorization: 'Bearer dummy-token',
+              Authorization: 'Bearer dummy-token'
             },
           }
         );
+        console.log('Games fetched:', response.data);
         setGames(response.data);
+        console.log(JSON.stringify(response.data));
         setFilteredGames(response.data);
+      }
 
-        // No need to update the state for categories and difficulties here, as we'll use the response data for filtering
-      } catch (error) {
+       catch (error) {
         console.error('Error fetching trivia games:', error);
       }
     };
@@ -56,6 +85,15 @@ const LobbyView = () => {
 
     setFilteredGames(filtered);
   };
+
+  const handleMessage = (gameData) => {
+    setGames((prevGames) => [...prevGames, gameData]);
+  };
+
+  const handleError = (error) => {
+    console.error('SSE error:', error);
+  };
+
 
   return (
     <div className="lobby-view">
@@ -92,13 +130,19 @@ const LobbyView = () => {
                 <Card.Body>
                   <Card.Title>{game.name}</Card.Title>
                   <Card.Text>Category: {game.category}</Card.Text>
-                  {/* Additional game information */}
+                  <Card.Text>Difficulty: {game.difficulty}</Card.Text>
+                  <Card.Text>Players: {game.participants.length || '10'}/{game.maxPlayers}</Card.Text>
+                  <Card.Text>Host: {game.host || ''}</Card.Text>
+                  <Card.Text>Game ID: {game.id || ''}</Card.Text>
+                  <Card.Text>Remaining Time: {game.remainingTime || '0'}</Card.Text>
+                  <Link to={`/game/${game.id}`} className="btn btn-primary">Join Game</Link>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
       </Container>
+      {/* <GameListener onMessage={handleMessage} onError={handleError} /> */}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Signup from "./Signup";
 import VerifyEmailPage from "../VerifyEmail/VerifyEmailPage";
 import QuesAnswerPage from "../QuestionAndAnswers/QuesAnswerPage";
 import "./Signup.css";
+import "../../App.css";
 
 const SignUpPage = () => {
   const [page, setPage] = useState("pageone");
