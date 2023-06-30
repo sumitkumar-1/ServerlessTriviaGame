@@ -12,6 +12,7 @@ import LobbyView from "./components/Lobby/LobbyView";
 import ProfilePage from "./pages/profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import Forms from "./pages/ContentManagement/Forms";
 import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
 import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
 
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/editProfile" element={<EditProfile />} />
+          <Route path="/cms" element={<Forms />} />
           <Route path="/createTeam" element={<CreateTeamPage />} />
           <Route path="/teamdashboard" element={<TeamDashboardPage />} />
         </Route>

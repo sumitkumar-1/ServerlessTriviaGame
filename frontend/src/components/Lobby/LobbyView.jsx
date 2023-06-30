@@ -18,7 +18,7 @@ const LobbyView = () => {
 
   useEffect(() => {
     const ws = new WebSocket('wss://djwkdpdytb.execute-api.us-east-1.amazonaws.com/dev');
-    
+
     ws.onopen = () => {
       console.log('Connected to WebSocket server');
     };
@@ -53,11 +53,10 @@ const LobbyView = () => {
         );
         console.log('Games fetched:', response.data);
         setGames(response.data);
-        console.log(JSON.stringify(response.data));
         setFilteredGames(response.data);
       }
 
-       catch (error) {
+      catch (error) {
         console.error('Error fetching trivia games:', error);
       }
     };
@@ -89,11 +88,6 @@ const LobbyView = () => {
   const handleMessage = (gameData) => {
     setGames((prevGames) => [...prevGames, gameData]);
   };
-
-  const handleError = (error) => {
-    console.error('SSE error:', error);
-  };
-
 
   return (
     <div className="lobby-view">
@@ -131,11 +125,11 @@ const LobbyView = () => {
                   <Card.Title>{game.name}</Card.Title>
                   <Card.Text>Category: {game.category}</Card.Text>
                   <Card.Text>Difficulty: {game.difficulty}</Card.Text>
-                  <Card.Text>Players: {game.participants.length || '10'}/{game.maxPlayers}</Card.Text>
+                  <Card.Text>Players: {game.participants ? game.participants.length : '0'}/{game.maxPlayers}</Card.Text>
                   <Card.Text>Host: {game.host || ''}</Card.Text>
                   <Card.Text>Game ID: {game.id || ''}</Card.Text>
                   <Card.Text>Remaining Time: {game.remainingTime || '0'}</Card.Text>
-                  <Link to={`/game/${game.id}`} className="btn btn-primary">Join Game</Link>
+                  <Link to={`/game/${game.gameId}`} className="btn btn-primary">Join Game</Link>
                 </Card.Body>
               </Card>
             </Col>

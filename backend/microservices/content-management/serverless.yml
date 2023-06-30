@@ -1,10 +1,65 @@
 service: content-management
 frameworkVersion: '3'
 
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  iam:
+    role: arn:aws:iam::558280373626:role/LabRole
 
 functions:
-  function1:
-    handler: index.handler
+  getGames:
+    handler: src/games/getGames.main
+    events:
+      - http:
+          path: /games
+          method: GET
+  createGame:
+    handler: src/games/createGame.main
+    events:
+      - http:
+          path: /games
+          method: POST
+  editGame:
+    handler: src/games/editGame.main
+    events:
+      - http:
+          path: /games/{id}
+          method: PUT
+  deleteGame:
+    handler: src/games/deleteGame.main
+    events:
+      - http:
+          path: /games/{id}
+          method: DELETE
+  
+  getQuestions:
+    handler: src/questions/getQuestions.main
+    events:
+      - http:
+          path: /questions
+          method: GET
+  createQuestion:
+    handler: src/questions/createQuestion.main
+    events:
+      - http:
+          path: /questions
+          method: POST
+  editQuestion:
+    handler: src/questions/editQuestion.main
+    events:
+      - http:
+          path: /questions/{id}
+          method: PUT
+  deleteQuestion:
+    handler: src/questions/deleteQuestion.main
+    events:
+      - http:
+          path: /questions/{id}
+          method: DELETE
