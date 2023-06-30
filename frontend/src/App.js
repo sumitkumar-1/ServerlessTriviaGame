@@ -12,6 +12,8 @@ import LobbyView from "./components/Lobby/LobbyView";
 import ProfilePage from "./pages/profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
+import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
 
 const App = () => {
   return (
@@ -32,6 +34,8 @@ const App = () => {
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/editProfile" element={<EditProfile />} />
+          <Route path="/createTeam" element={<CreateTeamPage />} />
+          <Route path="/teamdashboard" element={<TeamDashboardPage />} />
         </Route>
       </Routes>
     </Fragment>
