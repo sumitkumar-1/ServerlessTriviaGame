@@ -15,6 +15,8 @@ import EditProfile from "./pages/EditProfile/EditProfile";
 import Forms from "./pages/ContentManagement/Forms";
 import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
 import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
+import LeaderboardPage from "./pages/LeaderBoard/LeaderBoard";
+import DetailedStatisticsPage from "./pages/DetailedLeaderBoard/DetailedLeaderBoard";
 
 const App = () => {
   return (
@@ -29,7 +31,7 @@ const App = () => {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/resetPassword" element={<ResetPasswordPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
-        <Route element={<ProtectedRoute />}>
+        <Route /*element={<ProtectedRoute />}*/>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby" element={<LobbyView />} />
@@ -38,6 +40,8 @@ const App = () => {
           <Route path="/cms" element={<Forms />} />
           <Route path="/createTeam" element={<CreateTeamPage />} />
           <Route path="/teamdashboard" element={<TeamDashboardPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/detailedleaderboard" element={<DetailedStatisticsPage />} />
         </Route>
       </Routes>
     </Fragment>
