@@ -6,9 +6,6 @@ const Chat = require("../models/chat.model");
 const { v4: uuidv4 } = require("uuid");
 const sqs = new AWS.SQS({ region: process.env.region });
 const SnsService = require("../utils/sns.service");
-// const admin = require('firebase-admin');
-// admin.initializeApp();
-// const db = admin.firestore();
 
 // Mock data
 let users = [
@@ -171,7 +168,8 @@ let questions = [
         "correctAnswer": "Paris",
         "hints": ["It's in Europe", "It's known as the City of Light"],
         "explanation": "Paris is the capital and most populous city of France.",
-        "category": "Geography"
+        "category": "Geography",
+        "points":10
     },
     {
         "_id": "2",
@@ -180,7 +178,8 @@ let questions = [
         "correctAnswer": "Mercury",
         "hints": ["It's not Earth", "It's the closest planet to the Sun"],
         "explanation": "Mercury is the smallest planet in our solar system.",
-        "category": "Astronomy"
+        "category": "Astronomy",
+        "points":10
     },
     {
         "_id": "3",
@@ -189,7 +188,8 @@ let questions = [
         "correctAnswer": "Blue Whale",
         "hints": ["It's a marine animal", "It's larger than any dinosaur"],
         "explanation": "The Blue Whale is the largest animal ever known to have existed.",
-        "category": "Biology"
+        "category": "Biology",
+        "points":10
     },
     {
         "_id": "4",
@@ -198,7 +198,8 @@ let questions = [
         "correctAnswer": "Albert Einstein",
         "hints": ["He's a famous physicist", "He's not Newton or Tesla"],
         "explanation": "Albert Einstein is best known for developing the theory of relativity.",
-        "category": "Physics"
+        "category": "Physics",
+        "points":10
     },
     {
         "_id": "5",
@@ -207,7 +208,8 @@ let questions = [
         "correctAnswer": "Jane Austen",
         "hints": ["The author is female", "It's not Bronte or Woolf"],
         "explanation": "'Pride and Prejudice' was written by Jane Austen.",
-        "category": "Literature"
+        "category": "Literature",
+        "points":10
     }
     // add more questions as needed
 ];
@@ -252,25 +254,56 @@ const getCorrectAnswer = async (req, res) => {
 
 // Get real-time team score
 // Handle answer submission and update score accordingly
+// const realTimeScore = async (req, res) => {
+//     try {
+//         const question = questions.find(q => q._id === req.params.id);
+//         if (!question) return res.status(404).send({ message: 'Question not found' });
+
+//         // const teamRef = db.collection('teams').doc(req.body.teamId);
+//         // const team = await teamRef.get();
+//         const team = teams.find(t => t._id === req.body.teamId);
+//         if (!team.exists) {
+//             return res.status(404).send({ message: 'Team not found' });
+//         }
+
+//         // let teamData = team.data();
+//         let newScore = team.teamScores;
+//         console.log(teamData);
+//         console.log(newScore);
+        
+//         if (req.body.answer === question.correctAnswer) {
+//             newScore += question.points; // assuming 'points' attribute for each question
+//             await teamRef.update({ score: newScore });
+//         }
+
+//         console.log(newScore);
+
+//         res.status(200).send({ message: 'Answer processed', newScore: newScore });
+//     } catch (error) {
+//         res.status(500).send({ message: 'Internal Server Error. Not Able to fetch Real Time Score !!', error: error });
+//     }
+// };
 const realTimeScore = async (req, res) => {
     try {
         const question = questions.find(q => q._id === req.params.id);
         if (!question) return res.status(404).send({ message: 'Question not found' });
 
-        const teamRef = db.collection('teams').doc(req.body.teamId);
-        const team = await teamRef.get();
-
-        if (!team.exists) {
+        const team = teams.find(t => t._id === req.body.teamId);
+        if (!team) {
             return res.status(404).send({ message: 'Team not found' });
         }
 
-        let teamData = team.data();
-        let newScore = teamData.score;
-
+        let newScore = team.teamScores;
+        console.log(team);
+        console.log(newScore);
+        
         if (req.body.answer === question.correctAnswer) {
             newScore += question.points; // assuming 'points' attribute for each question
-            await teamRef.update({ score: newScore });
+            // Update the score directly in the object
+            team.teamScores = newScore;
         }
+
+        console.log(newScore);
 
         res.status(200).send({ message: 'Answer processed', newScore: newScore });
     } catch (error) {
@@ -323,80 +356,6 @@ function calculatePerformance(team) {
     return Math.floor(Math.random() * 100);
 }
 
-
-
-// const sendMessage = async (req, res) => {
-//     try {
-//         // Extract message details from the req object
-//         const { teamId, senderId, message } = req.body;
-
-//         // TODO: Validate teamId, senderId, and message here
-//         // You may need to query DynamoDB to check if the sender is part of the team
-
-//         // Prepare a unique chatId and timestamp
-//         const chatId = uuidv4();
-//         const timestamp = Date.now();
-
-//         // Prepare the chat message
-//         const chatMessage = new Chat({
-//             chatId,
-//             teamId,
-//             senderId,
-//             message,
-//             timestamp,
-//         });
-//         // Store the message in DynamoDB
-//         await chatMessage.save();
-
-//         // Find team with given teamId
-//         const team = teams.find(t => t._id === teamId);
-
-//         // Make sure the team exists
-//         if (!team) {
-//             throw new Error("Team not found");
-//         }
-
-//         // For each team member, create an SQS queue and store the queue URL in DynamoDB
-//         team.members.forEach(async member => {
-//             let params = {
-//                 QueueName: `${member._id}_Queue`,
-//                 Attributes: {
-//                     'DelaySeconds': '60',  // Delay messages for 1 minute (60 seconds)
-//                     'MessageRetentionPeriod': '86400'  // Delete messages after 1 day (86400 seconds)
-//                 }
-//             };
-
-//             let queue = await sqs.createQueue(params).promise();
-//             console.log(`Queue URL for member ${member._id}: ${queue.QueueUrl}`);
-
-//             let dbParams = {
-//                 TableName: 'MemberQueueUrls',
-//                 Item: {
-//                     'member_id': member._id,
-//                     'queue_url': queue.QueueUrl
-//                 }
-//             };
-
-//             await docClient.put(dbParams).promise();
-//         });
-
-//         // Publish the chat message to the corresponding SNS topic
-//         const snsParams = {
-//             Message: JSON.stringify(chatMessage),
-//             TopicArn: `arn:aws:sns:${process.env.region}:${process.env.accountID}:ChatTopic`
-//         };
-
-//         await sns.publish(snsParams).promise();
-
-//         // Return a success response
-//         const ChatDynamo = await Chat.get(chatId);
-//         res.status(200).send({ ChatDynamo });
-//     } catch (error) {
-//         // Handle any errors that occurred while saving to DynamoDB or publishing to SNS
-//         console.error('Error: ', error);
-//         res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
-//     }
-// };
 
 const sendMessage = async (req, res) => {
     try {
