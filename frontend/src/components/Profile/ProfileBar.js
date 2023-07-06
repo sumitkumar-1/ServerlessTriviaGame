@@ -2,11 +2,20 @@ import React from "react";
 import "./ProfileBar.css";
 import MetricChart from "../Chart/MetricChart";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ProfileBar = (props) => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const EditProfile = async (e) => {
     navigate("/editProfile");
+  };
+
+  const Logout = async () => {
+    const logout = await auth.logout();
+    if (logout) {
+      navigate("/login");
+    }
   };
 
   return (
@@ -38,9 +47,14 @@ const ProfileBar = (props) => {
                     </h6>
                     <p>{props.userData.email}</p>
                     <p className="mobile">{props.userData.phone_number}</p>
-                    <button className="btn btn-primary" onClick={EditProfile}>
-                      Edit Profile
-                    </button>
+                    <div className="profileButtons">
+                      <button className="btn btn-primary" onClick={EditProfile}>
+                        Edit Profile
+                      </button>
+                      <button className="btn btn-primary" onClick={Logout}>
+                        Logout
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -48,7 +62,7 @@ const ProfileBar = (props) => {
           </div>
         </div>
         <div className="col-sm-12 col-xs-12 col-md-12 col-lg-6">
-          {props.gameData.win === 0 && props.gameData.loss === 0 ? (
+          {props.gameData.win !== 0 || props.gameData.loss !== 0 ? (
             <MetricChart win={props.gameData.win} loss={props.gameData.loss} />
           ) : (
             ""

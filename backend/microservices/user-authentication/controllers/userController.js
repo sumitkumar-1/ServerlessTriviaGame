@@ -51,6 +51,34 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
+exports.verifyEmailWithoutCode = async (req, res) => {
+  try {
+    const params = {
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.body.email,
+      UserAttributes: [{ Name: "email_verified", Value: "true" }],
+    };
+
+    const response = await UserServices.verifyEmailWithoutCode(params);
+    if (!response.error) {
+      const params = {
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: req.body.email,
+      };
+      await UserServices.adminConfirmSignUp(params);
+      res.send({ message: "Email Confirmed Successfully!", success: true });
+    } else {
+      res.send({ success: false, response: response });
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     const params = {
@@ -76,7 +104,6 @@ exports.login = async (req, res) => {
       authDetails: response,
     };
     res.send(responseMessage);
-
   } catch (error) {
     const errorMessage = {
       message: "Internal Server Error.",

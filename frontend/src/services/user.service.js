@@ -13,6 +13,7 @@ export const verifyToken = (data) => axios.post(`${USER_AUTH_BASE_URL}/verifyTok
 export const StoreUserResponse = (data) => axios.post(`${USER_AUTH_BASE_URL}/storeUserResponse`, data);
 export const QuestionAnswerValidation = (data) => axios.post(`${USER_AUTH_BASE_URL}/questionAnswerValidation`, data);
 export const GetQuestionAnswer = (data) => axios.post(`${USER_AUTH_BASE_URL}/getQuestionAnswer`, data);
+export const VerifyEmailWithoutCode = (data) => axios.post(`${USER_AUTH_BASE_URL}/verifyEmailWithoutCode`, data);
 
 export const GetUser = () => api.get(`${USER_AUTH_BASE_URL}/getUser`);
 export const UpdateUser = (data) => api.post(`${USER_AUTH_BASE_URL}/updateUser`, data);
