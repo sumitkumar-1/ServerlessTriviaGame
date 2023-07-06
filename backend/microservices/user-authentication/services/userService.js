@@ -10,6 +10,14 @@ exports.verifyEmail = async (params) => {
   return cognito.confirmSignUp(params).promise();
 };
 
+exports.verifyEmailWithoutCode = async (params) => {
+  return cognito.adminUpdateUserAttributes(params).promise();
+};
+
+exports.adminConfirmSignUp = async (params) => {
+  return cognito.adminConfirmSignUp(params).promise();
+};
+
 exports.login = async (params) => {
   return cognito.initiateAuth(params).promise();
 };

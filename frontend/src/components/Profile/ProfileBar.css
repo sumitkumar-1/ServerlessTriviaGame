@@ -66,6 +66,8 @@ p {
     color: #DDE6ED;
     border-radius: 30px;
     font-weight: bold;
+    margin-right: 10px;
+    border: 1px solid #27374D;
 }
 
 .btn:hover {
@@ -74,6 +76,13 @@ p {
     border: 1px solid #27374D;
     transition: 0.3s ease;
     font-weight: bold;
+}
+
+.profileButtons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
 }
 
 
