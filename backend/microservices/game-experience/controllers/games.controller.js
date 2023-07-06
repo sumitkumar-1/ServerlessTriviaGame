@@ -120,7 +120,7 @@ let teams = [
     },
     {
         "_id": "2",
-        "teamName": "Brainiacs",
+        "teamName": "RBC",
         "members": [
             {
                 "_id": "4",
@@ -230,6 +230,8 @@ const submitAnswer = async (req, res) => {
         res.status(200).send({
             message: isCorrect ? 'Correct answer' : 'Incorrect answer',
             isCorrect: isCorrect,
+            correctAnswer: question.correctAnswer,
+            explanation: question.explanation
         });
     } catch (error) {
         res.status(500).send({ message: 'Internal Server Error. Failed to submit Answer !!', error: error });
@@ -294,22 +296,32 @@ const realTimeScore = async (req, res) => {
         }
 
         let newScore = team.teamScores;
-        console.log(team);
-        console.log(newScore);
         
         if (req.body.answer === question.correctAnswer) {
             newScore += question.points; // assuming 'points' attribute for each question
             // Update the score directly in the object
             team.teamScores = newScore;
+            // Updating individual member scores
+            team.members.forEach(member => {
+                member.individualScores += question.points;
+            });
         }
 
-        console.log(newScore);
-
-        res.status(200).send({ message: 'Answer processed', newScore: newScore });
+        res.status(200).send({ 
+            message: 'Answer processed', 
+            teamName: team.teamName, 
+            newTeamScore: team.teamScores, 
+            members: team.members.map(member => ({
+                username: member.username,
+                newScore: member.individualScores
+            }))
+        });
     } catch (error) {
         res.status(500).send({ message: 'Internal Server Error. Not Able to fetch Real Time Score !!', error: error });
     }
 };
+
+
 
 
 
