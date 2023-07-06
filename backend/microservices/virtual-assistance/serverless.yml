@@ -4,7 +4,53 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lex:*'
+      Resource: '*'
+  role: ${env:LAB_ROLE_ARN}
 
 functions:
-  function1:
+  api:
     handler: index.handler
+    events:
+      - httpApi: '*'
+  chatbot:
+    handler: index.handler
+    role: "arn:aws:iam::<account-id>:role/<role-name>"
+    events:
+      - http:
+          path: /your-path
+          method: get
+
+
+
+  Resources:
+    ChatBot:
+      Type: "AWS::Lex::Bot"
+      Properties:
+        BotName: "YourBotName"
+        Description: "Your bot description"
+        AbortStatement: 
+          Messages: 
+            - 
+              Content: "Sorry, I could not understand. Please try again."
+              ContentType: "PlainText"
+        ClarificationPrompt: 
+          MaxAttempts: 2
+          Messages: 
+            - 
+              Content: "I did not understand that, can you please rephrase?"
+              ContentType: "PlainText"
+        IdleSessionTTLInSeconds: 300
+        Intents: 
+          - 
+            IntentName: "YourIntentName"
+            IntentVersion: "$LATEST"
+        Locale: "en-US"
+        ProcessBehavior: "BUILD"
+        VoiceId: "Salli"
+        ChildDirected: false
