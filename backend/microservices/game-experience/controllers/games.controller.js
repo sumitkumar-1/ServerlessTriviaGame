@@ -2,12 +2,10 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const AWS = require('aws-sdk');
-const sns = new AWS.SNS();
 const Chat = require("../models/chat.model");
 const { v4: uuidv4 } = require("uuid");
-const sqs = new AWS.SQS();
-const docClient = new AWS.DynamoDB.DocumentClient();
-
+const sqs = new AWS.SQS({ region: process.env.region });
+const SnsService = require("../utils/sns.service");
 // const admin = require('firebase-admin');
 // admin.initializeApp();
 // const db = admin.firestore();
@@ -327,11 +325,8 @@ function calculatePerformance(team) {
 
 
 
-
-
 // const sendMessage = async (req, res) => {
 //     try {
-
 //         // Extract message details from the req object
 //         const { teamId, senderId, message } = req.body;
 
@@ -361,7 +356,7 @@ function calculatePerformance(team) {
 //             throw new Error("Team not found");
 //         }
 
-//         // For each team member, create an SQS queue
+//         // For each team member, create an SQS queue and store the queue URL in DynamoDB
 //         team.members.forEach(async member => {
 //             let params = {
 //                 QueueName: `${member._id}_Queue`,
@@ -372,9 +367,17 @@ function calculatePerformance(team) {
 //             };
 
 //             let queue = await sqs.createQueue(params).promise();
-
 //             console.log(`Queue URL for member ${member._id}: ${queue.QueueUrl}`);
 
+//             let dbParams = {
+//                 TableName: 'MemberQueueUrls',
+//                 Item: {
+//                     'member_id': member._id,
+//                     'queue_url': queue.QueueUrl
+//                 }
+//             };
+
+//             await docClient.put(dbParams).promise();
 //         });
 
 //         // Publish the chat message to the corresponding SNS topic
@@ -385,20 +388,15 @@ function calculatePerformance(team) {
 
 //         await sns.publish(snsParams).promise();
 
-//         // // Return a success response
-
-
+//         // Return a success response
 //         const ChatDynamo = await Chat.get(chatId);
-
-//         // res.status(200).send({ chatId, timestamp });
-//         res.status(200).send({ ChatDynamo , memberQueueMap});
+//         res.status(200).send({ ChatDynamo });
 //     } catch (error) {
 //         // Handle any errors that occurred while saving to DynamoDB or publishing to SNS
 //         console.error('Error: ', error);
 //         res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
 //     }
 // };
-
 
 const sendMessage = async (req, res) => {
     try {
@@ -413,15 +411,7 @@ const sendMessage = async (req, res) => {
         const timestamp = Date.now();
 
         // Prepare the chat message
-        const chatMessage = new Chat({
-            chatId,
-            teamId,
-            senderId,
-            message,
-            timestamp,
-        });
-        // Store the message in DynamoDB
-        await chatMessage.save();
+        const chatMessage = new Chat({ chatId, teamId, senderId, message, timestamp, });
 
         // Find team with given teamId
         const team = teams.find(t => t._id === teamId);
@@ -431,90 +421,84 @@ const sendMessage = async (req, res) => {
             throw new Error("Team not found");
         }
 
-        // For each team member, create an SQS queue and store the queue URL in DynamoDB
-        team.members.forEach(async member => {
-            let params = {
-                QueueName: `${member._id}_Queue`,
-                Attributes: {
-                    'DelaySeconds': '60',  // Delay messages for 1 minute (60 seconds)
-                    'MessageRetentionPeriod': '86400'  // Delete messages after 1 day (86400 seconds)
-                }
-            };
-
-            let queue = await sqs.createQueue(params).promise();
-            console.log(`Queue URL for member ${member._id}: ${queue.QueueUrl}`);
-
-            let dbParams = {
-                TableName: 'MemberQueueUrls',
-                Item: {
-                    'member_id': member._id,
-                    'queue_url': queue.QueueUrl
-                }
-            };
-
-            await docClient.put(dbParams).promise();
-        });
-
         // Publish the chat message to the corresponding SNS topic
-        const snsParams = {
-            Message: JSON.stringify(chatMessage),
-            TopicArn: `arn:aws:sns:${process.env.region}:${process.env.accountID}:ChatTopic`
-        };
-
-        await sns.publish(snsParams).promise();
+        await SnsService.sendMessages(chatId, teamId, senderId, message, timestamp,);
 
         // Return a success response
-        const ChatDynamo = await Chat.get(chatId);
-        res.status(200).send({ ChatDynamo });
+        res.status(200).send({ chatMessage });
     } catch (error) {
-        // Handle any errors that occurred while saving to DynamoDB or publishing to SNS
+        // Handle any errors that occurred while publishing to SNS
         console.error('Error: ', error);
         res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
     }
 };
-const processEvent = async (event) => {
+
+
+const getMessages = async (req, res) => {
+    let queueUrl;
+
     try {
-        const message = JSON.parse(event.Records[0].Sns.Message);
-        const { teamId } = message;
+        queueUrl = await getQueueUrl();
+        console.log(queueUrl);
+    } catch (err) {
+        console.error('Could not fetch Queue URL: ', err);
+         res.status(500).json({
+            error: 'Internal Server Error. Failed to fetch SQS Queue URL!'
+        });
+    }
+    const params = {
+        QueueUrl: queueUrl, // Replace with your Queue URL
+        MaxNumberOfMessages: 10,
+        WaitTimeSeconds: 20 // Long polling period
+    };
 
-        // Retrieve the team members
-        const team = teams.find(t => t._id === teamId);
-        if (!team) {
-            throw new Error("Team not found");
+    try {
+        const data = await sqs.receiveMessage(params).promise();
+
+        if (!data.Messages) {
+             res.status(204).json({ message: 'No new messages' });
         }
 
-        // For each team member, send the message to their SQS queue
-        for(let member of team.members){
-            // Retrieve the member's queue URL from DynamoDB
-            let dbParams = {
-                TableName: 'MemberQueueUrls',
-                Key: {
-                    'member_id': member._id
-                }
-            };
+        const messages = data.Messages.map(msg => JSON.parse(JSON.parse(msg.Body).Message));
 
-            let data = await docClient.get(dbParams).promise();
-            console.log(data);
-            if (!data.Item) {
-                throw new Error(`Queue URL not found for member ${member._id}`);
-            }
+        console.log(messages);
 
-            let params = {
-                QueueUrl: data.Item.queue_url,
-                MessageBody: JSON.stringify(message),
-            };
+        // We need to delete the messages from the queue after reading
+        const deleteParams = {
+            QueueUrl: params.QueueUrl,
+            Entries: data.Messages.map((msg, idx) => ({
+                Id: idx.toString(),
+                ReceiptHandle: msg.ReceiptHandle
+            }))
+        };
 
-            console.log(params);
+        await sqs.deleteMessageBatch(deleteParams).promise();
 
-            await sqs.sendMessage(params).promise();
-        }
-    } catch (error) {
-        console.error('Error: ', error);
-        throw error;
+         res.status(200).json({ messages });
+    } catch (err) {
+        console.error(err);
+         res.status(500).json({ error: 'Could not fetch messages' });
     }
 };
 
 
+const getQueueUrl = async () => {
+    const params = {
+        QueueName: 'ChatQueue'
+    };
+    return new Promise((resolve, reject) => {
+        sqs.getQueueUrl(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                reject(err);
+            }
+            else {
+                console.log(data.QueueUrl);
+                resolve(data.QueueUrl);
+            }
+        });
+    });
+}
 
 
 
@@ -525,5 +509,5 @@ module.exports = {
     getIndividualScore,
     getTeamScore,
     sendMessage,
-    processEvent
+    getMessages
 };

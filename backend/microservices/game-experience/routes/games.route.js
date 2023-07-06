@@ -9,6 +9,7 @@ router.post('/questions/:id/score',GameController.realTimeScore);
 router.get('/users/:id/individualPerformance', GameController.getIndividualScore);
 router.get('/users/:id/teamPerformance', GameController.getTeamScore);
 router.post('/chat/send', GameController.sendMessage);
+router.get('/chat/get', GameController.getMessages);
 
 
 // router.post('/', Auth.verifyAPIUser, TeamController.createTeam);
