@@ -4,7 +4,6 @@ frameworkVersion: '3'
 plugins:
   - serverless-dotenv-plugin
   - serverless-offline
-  
 provider:
   name: aws
   runtime: nodejs18.x
@@ -16,13 +15,14 @@ provider:
         - 'sns:*'
         - 'sqs:*'
       Resource: '*'
-  role: arn:aws:iam::041159192901:role/LabRole
+  role: arn:aws:iam::493846474184:role/LabRole
 
 functions:
   api:
     handler: index.handler
     events:
-      - httpApi: '*'
+      - httpApi: '*' 
+
 
 resources:
   Resources:
@@ -62,4 +62,4 @@ resources:
                   'aws:SourceArn': 
                     Ref: 'ChatSNSTopic'
         Queues:
-          - "https://sqs.us-east-1.amazonaws.com/041159192901/ChatQueue"
+          - "https://sqs.us-east-1.amazonaws.com/493846474184/ChatQueue"

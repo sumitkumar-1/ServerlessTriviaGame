@@ -22,6 +22,7 @@ const chatSchema = new dynamoose.Schema({
   chatId: { type: String, hashKey: true, required: true, index: true }, // The primary key of the Chat table
   teamId: { type: String, required: true }, // The team where the chat message was sent
   senderId: { type: String, required: true }, // The sender of the chat message
+  senderName: { type: String, required: true },
   message: { type: String, required: true }, // The chat message
   timestamp: { type: Date, default: Date.now }, // The time the message was sent
 });

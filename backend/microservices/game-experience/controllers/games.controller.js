@@ -86,37 +86,38 @@ let teams = [
         "members": [
             {
                 "_id": "1",
-                "username": "JohnDoe",
+                "username": "Alice",
                 "password": "hashed_password",
                 "email": "john@example.com",
-                "individualScores": 500,
+                "individualScores": 0,
                 "performanceStats": {
                     "gamesPlayed": 10,
                     "gamesWon": 5
                 }
             }, {
                 "_id": "2",
-                "username": "JaneDoe",
+                "username": "Bob",
                 "password": "hashed_password",
                 "email": "jane@example.com",
-                "individualScores": 400,
+                "individualScores": 0,
                 "performanceStats": {
                     "gamesPlayed": 8,
                     "gamesWon": 4
                 }
-            }, {
-                "_id": "3",
-                "username": "BobSmith",
+            },
+            {
+                "_id": "2",
+                "username": "Kathy",
                 "password": "hashed_password",
-                "email": "bob@example.com",
-                "individualScores": 550,
+                "email": "jane@example.com",
+                "individualScores": 0,
                 "performanceStats": {
-                    "gamesPlayed": 15,
-                    "gamesWon": 7
+                    "gamesPlayed": 8,
+                    "gamesWon": 4
                 }
             }
         ],
-        "teamScores": 5000
+        "teamScores": 0
     },
     {
         "_id": "2",
@@ -127,7 +128,7 @@ let teams = [
                 "username": "AliceWonder",
                 "password": "hashed_password",
                 "email": "alice@example.com",
-                "individualScores": 300,
+                "individualScores": 0,
                 "performanceStats": {
                     "gamesPlayed": 5,
                     "gamesWon": 2
@@ -137,7 +138,7 @@ let teams = [
                 "username": "CharlieBucket",
                 "password": "hashed_password",
                 "email": "charlie@example.com",
-                "individualScores": 350,
+                "individualScores": 0,
                 "performanceStats": {
                     "gamesPlayed": 9,
                     "gamesWon": 4
@@ -147,7 +148,7 @@ let teams = [
                 "username": "DianaPrince",
                 "password": "hashed_password",
                 "email": "diana@example.com",
-                "individualScores": 600,
+                "individualScores": 0,
                 "performanceStats": {
                     "gamesPlayed": 18,
                     "gamesWon": 8
@@ -225,6 +226,17 @@ const submitAnswer = async (req, res) => {
     try {
         const question = questions.find(q => q._id === req.params.id);
         if (!question) return res.status(404).send({ message: 'Question not found' });
+        console.log(req.body.answer);
+
+        // Explicitly handle null answer
+        if (req.body.answer === null) {
+            return res.status(200).send({
+                message: 'No answer selected',
+                isCorrect: false,
+                correctAnswer: question.correctAnswer,
+                explanation: question.explanation
+            });
+        }
 
         const isCorrect = req.body.answer === question.correctAnswer;
         res.status(200).send({
@@ -237,6 +249,7 @@ const submitAnswer = async (req, res) => {
         res.status(500).send({ message: 'Internal Server Error. Failed to submit Answer !!', error: error });
     }
 };
+
 
 
 // Get the correct answer and explanation for a question
@@ -354,56 +367,79 @@ const getTeamScore = async (req, res) => {
 };
 
 
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => console.log(`Listening on port ${port}`));
 
-// // Placeholder functions
-// function calculateScore(team) {
-//     // This is just a placeholder. Replace with actual calculation logic
-//     return Math.floor(Math.random() * 100);
-// }
+// const sendMessage = async (req, res) => {
+//     try {
+//         // Extract message details from the req object
+//         const { teamId, senderId, senderName, message } = req.body;
 
-function calculatePerformance(team) {
-    // This is just a placeholder. Replace with actual calculation logic
-    return Math.floor(Math.random() * 100);
-}
+//         // TODO: Validate teamId, senderId, and message here
+//         // You may need to query DynamoDB to check if the sender is part of the team
 
+//         // Prepare a unique chatId and timestamp
+//         const chatId = uuidv4();
+//         const timestamp = Date.now();
 
+//         // Prepare the chat message
+//         const chatMessage = new Chat({ chatId, teamId, senderId, message, timestamp, });
+
+//         // Find team with given teamId
+//         const team = teams.find(t => t._id === teamId);
+
+//         // Make sure the team exists
+//         if (!team) {
+//             throw new Error("Team not found");
+//         }
+
+//         // Publish the chat message to the corresponding SNS topic
+//         await SnsService.sendMessages(chatId, teamId, senderId, message, timestamp,);
+
+//         // Return a success response
+//         res.status(200).send({ chatMessage });
+//     } catch (error) {
+//         // Handle any errors that occurred while publishing to SNS
+//         console.error('Error: ', error);
+//         res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
+//     }
+// };
 const sendMessage = async (req, res) => {
     try {
-        // Extract message details from the req object
-        const { teamId, senderId, message } = req.body;
-
-        // TODO: Validate teamId, senderId, and message here
-        // You may need to query DynamoDB to check if the sender is part of the team
-
-        // Prepare a unique chatId and timestamp
-        const chatId = uuidv4();
-        const timestamp = Date.now();
-
-        // Prepare the chat message
-        const chatMessage = new Chat({ chatId, teamId, senderId, message, timestamp, });
-
-        // Find team with given teamId
-        const team = teams.find(t => t._id === teamId);
-
-        // Make sure the team exists
-        if (!team) {
-            throw new Error("Team not found");
-        }
-
-        // Publish the chat message to the corresponding SNS topic
-        await SnsService.sendMessages(chatId, teamId, senderId, message, timestamp,);
-
-        // Return a success response
-        res.status(200).send({ chatMessage });
+      // Extract message details from the req object
+      const { teamId, senderId, senderName, message } = req.body;
+  
+      // Prepare a unique chatId and timestamp
+      const chatId = uuidv4();
+      const timestamp = Date.now();
+  
+      // Prepare the chat message
+      const chatMessage = new Chat({ chatId, teamId, senderId, senderName, message, timestamp });
+  
+      // Find team with given teamId
+      const team = teams.find(t => t._id === teamId);
+  
+      // Make sure the team exists
+      if (!team) {
+        throw new Error("Team not found");
+      }
+  
+      // Validate senderId
+      const senderIsMember = team.members.some(member => member._id === senderId);
+      if (!senderIsMember) {
+        throw new Error("Sender is not a member of the team");
+      }
+  
+      // Publish the chat message to the corresponding SNS topic
+      await SnsService.sendMessages(chatId, teamId, senderId, senderName, message, timestamp);
+  
+      // Return a success response
+      res.status(200).send({ chatMessage });
     } catch (error) {
-        // Handle any errors that occurred while publishing to SNS
-        console.error('Error: ', error);
-        res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error, });
+      // Handle any errors that occurred while publishing to SNS
+      console.error('Error: ', error);
+      res.status(500).send({ message: 'Internal Server Error. Failed to send message!', error: error });
     }
-};
-
+  };
+  
 
 const getMessages = async (req, res) => {
     let queueUrl;
@@ -430,7 +466,11 @@ const getMessages = async (req, res) => {
              res.status(204).json({ message: 'No new messages' });
         }
 
-        const messages = data.Messages.map(msg => JSON.parse(JSON.parse(msg.Body).Message));
+        // const messages = data.Messages.map(msg => JSON.parse(JSON.parse(msg.Body).Message));
+        const messages = data.Messages.map(msg => {
+            const messageBody = JSON.parse(msg.Body);
+            return JSON.parse(messageBody.Message);
+          });
 
         console.log(messages);
 

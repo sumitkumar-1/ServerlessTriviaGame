@@ -5,6 +5,7 @@ const sns = new AWS.SNS({ region: process.env.region });
 const sendMessages = async (chatId,
     teamId,
     senderId,
+    senderName,
     message,
     timestamp,) => {
   try { 
@@ -12,6 +13,7 @@ const sendMessages = async (chatId,
         chatId,
         teamId,
         senderId,
+        senderName,
         message,
         timestamp,
     };
