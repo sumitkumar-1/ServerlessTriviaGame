@@ -19,7 +19,23 @@ package:
     - .git/**
 
 functions:
-  service:
-    handler: app
+  updateLeaderboard:
+    handler: updateLeaderboard
     events:
-      - http: path
+      - http: POST /
+  getGlobalLeaderboard:
+    handler: getGlobalLeaderboard
+    events:
+      - http: GET /
+  filterLeaderboardByTimeFrame:
+    handler: filterLeaderboardByTimeFrame
+    events:
+      - http: GET /
+  getEntityStatistics:
+    handler: getEntityStatistics
+    events:
+      - http: GET /
+  getLeaderboardByEntityId:
+    handler: getLeaderboardByEntityId
+    events:
+      - http: GET /
