@@ -27,13 +27,14 @@ const App = () => {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/resetPassword" element={<ResetPasswordPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
+        <Route path="/cms" element={<Forms />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/editProfile" element={<EditProfile />} />
-          <Route path="/cms" element={<Forms />} />
+          
         </Route>
       </Routes>
     </Fragment>
