@@ -1,4 +1,4 @@
-const Team = require("../models/team.model");
+const Team = require("./models/team.model");
 const { v4: uuidv4 } = require("uuid");
 
 const createTeam = async (name, userId) => {

@@ -1,4 +1,4 @@
-const Team = require("../models/team.model");
+const Team = require("./models/team.model");
 
 const updateMember = async (teamId, memberId, role) => {
   try {

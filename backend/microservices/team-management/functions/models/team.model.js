@@ -9,10 +9,11 @@ const memberSchema = new dynamoose.Schema({
   id: { type: String, required: true },
   userId: { type: String, required: true },
   role: { type: String, enum: ["admin", "user"], default: "user" },
+  pointsEarned: { type: Number, default: 0 },
   status: {
     type: String,
     enum: ["pending", "accepted", "declined"],
-    default: "invited",
+    default: "pending",
   },
   addedBy: { type: String, required: true }, // userid of the sender
   created_at: { type: Date, default: Date.now },

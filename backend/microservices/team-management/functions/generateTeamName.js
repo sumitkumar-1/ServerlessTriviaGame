@@ -1,5 +1,5 @@
-const Team = require("../models/team.model");
-const openAIService = require("../services/openai.service");
+const Team = require("./models/team.model");
+const openAIService = require("./services/openai.service");
 
 const generateTeamName = async () => {
   try {

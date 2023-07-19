@@ -6,6 +6,8 @@ exports.main = async (event) => {
       return JSON.parse(record.body);
     });
 
+    console.log("All Messages:" + messages);
+
     for (const message of messages) {
       console.log('Received message:', message);
 
@@ -20,8 +22,8 @@ exports.main = async (event) => {
       });
 
       const mailOptions = {
-        from: process.env.SENDER_EMAIL,
-        to: process.env.RECIPIENT_EMAIL,
+        from: process.env.SMTP_USERNAME,
+        to: 'sumit.kumar@dal.ca',
         subject: 'Trivia Team Notification',
         text: 'New item added to the queue: ' + JSON.stringify(message)
       };

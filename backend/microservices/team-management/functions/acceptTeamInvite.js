@@ -1,5 +1,5 @@
-const Team = require("../models/team.model");
-const SnsService = require("../services/sns.service");
+const Team = require("./models/team.model");
+const SnsService = require("./services/sns.service");
 
 const acceptInvite = async (teamId, memberId) => {
   try {

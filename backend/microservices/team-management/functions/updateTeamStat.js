@@ -1,4 +1,4 @@
-const Team = require("../models/team.model");
+const Team = require("./models/team.model");
 
 const updateTeamStats = async (teamId, gamesPlayed, wins, losses, pointsEarned) => {
   try {

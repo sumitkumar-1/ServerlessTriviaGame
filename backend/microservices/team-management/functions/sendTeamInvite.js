@@ -1,11 +1,13 @@
-const Team = require("../models/team.model");
-const SnsService = require("../services/sns.service");
+const Team = require("./models/team.model");
+const SnsService = require("./services/sns.service");
+const { v4: uuidv4 } = require("uuid");
 
-const sendInvite = async (teamId, id, addedBy, status, role) => {
+const sendInvite = async (teamId, userId, addedBy, status, role) => {
   try {
     const team = await Team.get(teamId);
     const member = {
-      id: id,
+      id: uuidv4(),
+      userId: userId,
       addedBy: addedBy,
       role: role || "user",
       status: status || "pending",
@@ -25,9 +27,9 @@ const sendInvite = async (teamId, id, addedBy, status, role) => {
 module.exports.main = async (event) => {
   try {
     const { teamId } = event.pathParameters;
-    const { id, addedBy, status, role } = JSON.parse(event.body);
+    const { userId, addedBy, status, role } = JSON.parse(event.body);
 
-    const team = await sendInvite(teamId, id, addedBy, status, role);
+    const team = await sendInvite(teamId, userId, addedBy, status, role);
     const response = {
       statusCode: 200,
       body: JSON.stringify(team),

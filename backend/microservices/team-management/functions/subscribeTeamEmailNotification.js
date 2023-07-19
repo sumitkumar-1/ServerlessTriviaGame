@@ -1,4 +1,4 @@
-const SnsService = require("../services/sns.service");
+const SnsService = require("./services/sns.service");
 
 const subscribeEmailNotification = async (email) => {
   try {
