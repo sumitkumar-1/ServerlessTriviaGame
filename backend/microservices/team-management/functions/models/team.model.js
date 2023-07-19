@@ -6,7 +6,8 @@ const dynamodb = new DynamoDB({ region: process.env.REGION });
 dynamoose.aws.sdk = dynamodb;
 
 const memberSchema = new dynamoose.Schema({
-  id: { type: String, required: true }, // userid
+  id: { type: String, required: true },
+  userId: { type: String, required: true },
   role: { type: String, enum: ["admin", "user"], default: "user" },
   status: {
     type: String,

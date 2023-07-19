@@ -3,6 +3,8 @@ import ProfileBar from "../../components/Profile/ProfileBar";
 import Statistics from "../../components/statistics/Statistics";
 import { GetAllGameData } from "../../services/user.service";
 import { toast } from "react-toastify";
+import Spinner from "../../components/Spinner/Spinner";
+import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState("");
@@ -25,8 +27,18 @@ const ProfilePage = () => {
 
   return (
     <>
-      <ProfileBar userData={userData} />
-      <Statistics gameData={gameData} />
+      {!userData || !gameData ? (
+        <>
+          <div className="loader">
+            <Spinner />
+          </div>
+        </>
+      ) : (
+        <>
+          <ProfileBar userData={userData} gameData={gameData} />
+          <Statistics gameData={gameData} />
+        </>
+      )}
     </>
   );
 };

@@ -15,6 +15,7 @@ router.post("/updateUser", authGuard, UserController.updateUser);
 router.get("/getUser", authGuard, UserController.getUser);
 router.get("/signout", authGuard, UserController.signout);
 router.get("/deleteUser", authGuard, UserController.deleteUser);
+router.post("/verifyEmailWithoutCode",UserController.verifyEmailWithoutCode);
 
 // Add Questions to the firebase DB
 router.post("/addQuestion", QuestionsController.addQuestion);

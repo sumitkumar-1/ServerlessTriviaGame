@@ -1,14 +1,13 @@
-const express = require("express");
-const cors = require('cors');
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-const leaderboardRouter = require('./routes/leaderboard.route');
-
-app.use('/api/leaderboard', leaderboardRouter);
+const updateLeaderboard = require('./functions/updateLeaderboard');
+const getGlobalLeaderboard = require('./functions/getGlobalLeaderboard');
+const filterLeaderboardByTimeFrame = require('./functions/filterLeaderboardByTimeFrame');
+const getEntityStatistics = require('./functions/getEntityStatistics');
+const getLeaderboardByEntityId = require('./functions/getLeaderboardByEntityId');
 
 module.exports = {
-  app,
+  updateLeaderboard: updateLeaderboard.main,
+  getGlobalLeaderboard: getGlobalLeaderboard.main,
+  filterLeaderboardByTimeFrame: filterLeaderboardByTimeFrame.main,
+  getEntityStatistics: getEntityStatistics.main,
+  getLeaderboardByEntityId: getLeaderboardByEntityId.main,
 };
