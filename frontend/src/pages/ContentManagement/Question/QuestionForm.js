@@ -108,6 +108,15 @@ const QuestionForm = () => {
                                 <option value="4">Option 4</option>
                             </Form.Control>
                         </Form.Group>
+                        <Form.Group controlId="answerExplanation">
+                            <Form.Label>Question</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                name="explanation"
+                                onChange={handleQuestionChange}
+                            />
+                        </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
