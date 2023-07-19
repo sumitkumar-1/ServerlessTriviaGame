@@ -1351,7 +1351,7 @@
 		},
 		{
 			"key": "cms_base_url",
-			"value": "https://szavq6khjj.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "https://n6nqalk347.execute-api.us-east-1.amazonaws.com/dev",
 			"type": "string"
 		}
 	]
