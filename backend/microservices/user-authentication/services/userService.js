@@ -45,3 +45,11 @@ exports.forgotPassword = async (params) => {
 exports.confirmPasswordReset = (params) => {
   return cognito.confirmForgotPassword(params).promise();
 };
+
+exports.getUserById = async (params) => {
+  return await cognito.adminGetUser(params).promise();
+};
+
+exports.getAllUsers = async (params) => {
+  return await cognito.listUsers(params).promise();
+};
