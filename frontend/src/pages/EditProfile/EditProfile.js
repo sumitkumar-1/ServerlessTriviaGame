@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import { EditProfileValidationSchema } from "../../utils/validationSchema";
 import AWS from "aws-sdk";
 
+// TODO: Remove constants credentials
 AWS.config.update({
   accessKeyId: "AKIAUSWUWNCSAWZWC242",
   secretAccessKey: "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",
