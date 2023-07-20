@@ -1,5 +1,5 @@
 const { client } = require("./dynamodb");
-const { GetItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
 async function findGame(gameId) {

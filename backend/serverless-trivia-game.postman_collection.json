@@ -92,15 +92,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/invites",
+							"raw": "{{teamUrl}}/api/teams/sendinvites/:teamId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								":teamId",
-								"invites"
+								"sendinvites",
+								":teamId"
 							],
 							"variable": [
 								{
@@ -118,17 +118,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/accept",
+							"raw": "{{teamUrl}}/api/teams/acceptinvites/:teamId/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
+								"acceptinvites",
 								":teamId",
-								"invites",
-								":memberId",
-								"accept"
+								":memberId"
 							],
 							"variable": [
 								{
@@ -150,17 +149,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/reject",
+							"raw": "{{teamUrl}}/api/teams/rejectinvites/:teamId/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
+								"rejectinvites",
 								":teamId",
-								"invites",
-								":memberId",
-								"reject"
+								":memberId"
 							],
 							"variable": [
 								{
@@ -182,15 +180,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
+							"raw": "{{teamUrl}}/api/teams/deletemembers/:teamId/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
+								"deletemembers",
 								":teamId",
-								"members",
 								":memberId"
 							],
 							"variable": [
@@ -213,15 +211,15 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
+							"raw": "{{teamUrl}}/api/teams/updatemembers/:teamId/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
+								"updatemembers",
 								":teamId",
-								"members",
 								":memberId"
 							],
 							"variable": [
@@ -253,15 +251,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
+							"raw": "{{teamUrl}}/api/teams/updatestats/:teamId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								":teamId",
-								"stats"
+								"updatestats",
+								":teamId"
 							],
 							"variable": [
 								{
@@ -279,15 +277,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
+							"raw": "{{teamUrl}}/api/teams/getstats/:teamId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								":teamId",
-								"stats"
+								"getstats",
+								":teamId"
 							],
 							"variable": [
 								{
@@ -305,18 +303,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:id",
+							"raw": "{{teamUrl}}/api/teams/get/:teamId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								":id"
+								"get",
+								":teamId"
 							],
 							"variable": [
 								{
-									"key": "id",
+									"key": "teamId",
 									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
 								}
 							]
@@ -339,15 +338,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/notification/subscribe",
+							"raw": "{{teamUrl}}/api/teams/subscribenotification",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"notification",
-								"subscribe"
+								"subscribenotification"
 							]
 						}
 					},
@@ -368,15 +366,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/notification/unsubscribe",
+							"raw": "{{teamUrl}}/api/teams/unsubscribenotification",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"notification",
-								"unsubscribe"
+								"unsubscribenotification"
 							]
 						}
 					},
@@ -388,13 +385,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/:id",
+							"raw": "{{teamUrl}}/api/teams/delete/:id",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
+								"delete",
 								":id"
 							],
 							"variable": [
@@ -1323,7 +1321,7 @@
 	"variable": [
 		{
 			"key": "teamUrl",
-			"value": "",
+			"value": "https://nabqrjr5x1.execute-api.us-east-1.amazonaws.com/dev/",
 			"type": "default"
 		},
 		{
@@ -1353,7 +1351,7 @@
 		},
 		{
 			"key": "cms_base_url",
-			"value": "https://szavq6khjj.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "https://n6nqalk347.execute-api.us-east-1.amazonaws.com/dev",
 			"type": "string"
 		}
 	]

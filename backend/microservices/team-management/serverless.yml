@@ -1,23 +1,133 @@
 service: team-management
 frameworkVersion: '3'
 
+plugins:
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs18.x
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
+  environment:
+    SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:377747625142:team-notification-topic'
+    SQS_ARN: 'arn:aws:sqs:us-east-1:377747625142:team-notification-queue'
+    REGION: us-east-1
+    OPENAI_API_KEY: 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
   iam:
-    role: arn:aws:iam::AWS_ACCOUNT_ID:role/LabRole
+    role: arn:aws:iam::377747625142:role/LabRole
 
 functions:
-  api:
-    handler: index.handler
+  createTeam:
+    handler: functions/createTeam.main
     events:
-      - httpApi: '*'
+      - http:
+          path: /api/teams
+          method: POST
+          cors: true
+  getTeamById:
+    handler: functions/getTeamById.main
+    events:
+      - http:
+          path: /api/teams/get/{teamId}
+          method: GET
+          cors: true
+  getAllTeams:
+    handler: functions/getAllTeams.main
+    events:
+      - http:
+          path: /api/teams
+          method: GET
+          cors: true
+  deleteTeamById:
+    handler: functions/deleteTeamById.main
+    events:
+      - http:
+          path: /api/teams/delete/{id}
+          method: DELETE
+          cors: true
+  generateTeamName:
+    handler: functions/generateTeamName.main
+    events:
+      - http:
+          path: /api/teams/generate/teamName
+          method: GET
+          cors: true
+  sendTeamInvite:
+    handler: functions/sendTeamInvite.main
+    events:
+      - http:
+          path: /api/teams/sendinvites/{teamId}/
+          method: POST
+          cors: true
+  acceptTeamInvite:
+    handler: functions/acceptTeamInvite.main
+    events:
+      - http:
+          path: /api/teams/acceptinvites/{teamId}/{memberId}
+          method: GET
+          cors: true
+  rejectTeamInvite:
+    handler: functions/rejectTeamInvite.main
+    events:
+      - http:
+          path: /api/teams/rejectinvites/{teamId}/{memberId}
+          method: GET
+          cors: true
+  deleteTeamMember:
+    handler: functions/deleteTeamMember.main
+    events:
+      - http:
+          path: /api/teams/deletemembers/{teamId}/{memberId}
+          method: DELETE
+          cors: true
+  updateTeamMember:
+    handler: functions/updateTeamMember.main
+    events:
+      - http:
+          path: /api/teams/updatemembers/{teamId}/{memberId}
+          method: POST
+          cors: true
+  updateTeamStat:
+    handler: functions/updateTeamStat.main
+    events:
+      - http:
+          path: /api/teams/updatestats/{teamId}
+          method: POST
+          cors: true
+  getTeamStats:
+    handler: functions/getTeamStats.main
+    events:
+      - http:
+          path: /api/teams/getstats/{teamId}
+          method: GET
+          cors: true
+  subscribeTeamEmailNotification:
+    handler: functions/subscribeTeamEmailNotification.main
+    events:
+      - http:
+          path: /api/teams/subscribenotification
+          method: POST
+          cors: true
+  unsubscribeTeamEmailNotification:
+    handler: functions/unsubscribeTeamEmailNotification.main
+    events:
+      - http:
+          path: /api/teams/unsubscribenotification
+          method: POST
+          cors: true
+  teamEmailNotification:
+    handler: functions/sendEmail.main
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:377747625142:team-notification-queue
     environment:
-      SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:AWS_ACCOUNT_ID:team-notification-topic'
-      OPENAI_API_KEY: 'YOUR OPENAI API KEY'
-      REGION: 'us-east-1'
+      TeamNotificationQueueUrl: 'https://sqs.us-east-1.amazonaws.com/377747625142/team-notification-queue'
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 443
+      SMTP_SECURE: true
+      SMTP_USERNAME: rajrutdev14@gmail.com
+      SMTP_PASSWORD: hcippryikbxkeahr
 
 resources:
   Resources:
@@ -27,5 +137,31 @@ resources:
         TopicName: team-notification-topic
         DisplayName: Trivia Notification
 
-plugins:
- - serverless-offline
+    TeamNotificationQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: team-notification-queue
+
+    TeamNotificationSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        TopicArn: !Ref TeamNotificationTopic
+        Endpoint: !GetAtt TeamNotificationQueue.Arn
+
+    TeamNotificationQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: sqs:SendMessage
+              Resource: !GetAtt TeamNotificationQueue.Arn
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn':
+                    - !Ref TeamNotificationTopic
+        Queues:
+          - !Ref TeamNotificationQueue

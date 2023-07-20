@@ -31,16 +31,17 @@ const App = () => {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/resetPassword" element={<ResetPasswordPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
-        <Route /*element={<ProtectedRoute />}*/>
+        <Route path="/cms" element={<Forms />} />
+        <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/cms" element={<Forms />} />
-          <Route path="/createTeam" element={<CreateTeamPage />} />
-          <Route path="/teamdashboard" element={<TeamDashboardPage />} />
-          <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/createTeam" element={<CreateTeamPage />} />
+            <Route path="/teamdashboard" element={<TeamDashboardPage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/detailedleaderboard" element={<DetailedStatisticsPage />} />
         </Route>
       </Routes>
