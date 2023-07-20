@@ -7,6 +7,7 @@ exports.getUser = (userAttributes) => {
     phone_number: "",
     email: "",
     picture: "",
+    isAdmin: "",
   };
 
   userAttributes.map((val, index) => {
@@ -30,6 +31,9 @@ exports.getUser = (userAttributes) => {
     }
     if (val.Name === "picture") {
       user.picture = val.Value;
+    }
+    if (val.Name === "custom:isAdmin") {
+      user.isAdmin = val.Value;
     }
   });
 

@@ -1,4 +1,5 @@
 const UserServices = require("../services/userService");
+const CommonFunctions = require("../common/commonFunctions");
 
 const authGuard = async (req, res, next) => {
   const token =
@@ -11,7 +12,7 @@ const authGuard = async (req, res, next) => {
       AccessToken: token,
     };
     const response = await UserServices.getUser(params);
-    req.user = response;
+    req.user = CommonFunctions.getUser(response.UserAttributes);
     next();
   } catch (error) {
     const errorMessage = {
