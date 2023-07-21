@@ -16,6 +16,8 @@ export const GetQuestionAnswer = (data) => axios.post(`${USER_AUTH_BASE_URL}/get
 export const VerifyEmailWithoutCode = (data) => axios.post(`${USER_AUTH_BASE_URL}/verifyEmailWithoutCode`, data);
 export const GetUserById = (id) => axios.get(`${USER_AUTH_BASE_URL}/getuserbyuserid/${id}`);
 export const GetAllUsers = () => axios.get(`${USER_AUTH_BASE_URL}/getAllUsers`);
+export const MakeAdmin = (data) => axios.post(`${USER_AUTH_BASE_URL}/makeAdmin`, data);
+export const RemoveAdmin = (data) => axios.post(`${USER_AUTH_BASE_URL}/removeAdmin`, data)
 
 export const GetUser = () => api.get(`${USER_AUTH_BASE_URL}/getUser`);
 export const UpdateUser = (data) => api.post(`${USER_AUTH_BASE_URL}/updateUser`, data);
