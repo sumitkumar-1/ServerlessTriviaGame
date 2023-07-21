@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import questionCategories from "./questionCategories"
+import QuestionForm from "./Question/QuestionForm";
 
 const Forms = () => {
   const [gameData, setGameData] = useState({
@@ -48,12 +52,13 @@ const Forms = () => {
           <Form onSubmit={submitGameData}>
             <Form.Group controlId="gameCategory">
               <Form.Label>Category</Form.Label>
-              <Form.Control
-                name="category"
-                type="text"
-                placeholder="Enter category"
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={questionCategories}
                 onChange={handleGameChange}
-                required
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Select" />}
               />
             </Form.Group>
 
@@ -134,73 +139,7 @@ const Forms = () => {
             </Button>
           </Form>
         </Col>
-        <Col>
-          <h2>Create Question</h2>
-          <Form onSubmit={submitQuestionData}>
-            <Form.Group controlId="questionCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                name="category"
-                type="text"
-                placeholder="Enter category"
-                onChange={handleQuestionChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="questionDifficulty">
-              <Form.Label>Difficulty</Form.Label>
-              <Form.Select
-                name="difficulty"
-                onChange={handleQuestionChange}
-                required
-              >
-                <option value="">Select difficulty</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group controlId="questionText">
-              <Form.Label>Question</Form.Label>
-              <Form.Control
-                name="question"
-                type="text"
-                placeholder="Enter question text"
-                onChange={handleQuestionChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="questionOptions">
-              <Form.Label>Options (comma separated)</Form.Label>
-              <Form.Control
-                name="options"
-                type="text"
-                placeholder="Enter options"
-                onChange={handleQuestionChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="questionCorrectAnswerId">
-              <Form.Label>Correct Answer ID</Form.Label>
-              <Form.Control
-                name="correctAnswerId"
-                type="number"
-                placeholder="Enter correct answer ID"
-                min="1"
-                onChange={handleQuestionChange}
-                required
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Create Question
-            </Button>
-          </Form>
-        </Col>
+        <QuestionForm />
       </Row>
     </Container>
   );

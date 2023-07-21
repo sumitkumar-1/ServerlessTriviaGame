@@ -20,24 +20,28 @@ functions:
       - http:
           path: /games
           method: GET
+          cors: true
   createGame:
     handler: src/games/createGame.main
     events:
       - http:
           path: /games
           method: POST
+          cors: true
   editGame:
     handler: src/games/editGame.main
     events:
       - http:
           path: /games/{id}
           method: PUT
+          cors: true
   deleteGame:
     handler: src/games/deleteGame.main
     events:
       - http:
           path: /games/{id}
           method: DELETE
+          cors: true
   
   getQuestions:
     handler: src/questions/getQuestions.main
@@ -45,21 +49,25 @@ functions:
       - http:
           path: /questions
           method: GET
+          cors: true
   createQuestion:
     handler: src/questions/createQuestion.main
     events:
       - http:
           path: /questions
           method: POST
+          cors: true
   editQuestion:
     handler: src/questions/editQuestion.main
     events:
       - http:
           path: /questions/{id}
           method: PUT
+          cors: true
   deleteQuestion:
     handler: src/questions/deleteQuestion.main
     events:
       - http:
           path: /questions/{id}
           method: DELETE
+          cors: true

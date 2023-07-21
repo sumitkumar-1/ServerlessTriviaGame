@@ -4,7 +4,8 @@ const isRequestValid = (requestBody, type) => {
         "difficulty",
         "question",
         "options",
-        "correctAnswer"
+        "correctAnswer",
+        "explanation",
     ];
 
     if (type === "edit") {

@@ -16,6 +16,10 @@ router.get("/getUser", authGuard, UserController.getUser);
 router.get("/signout", authGuard, UserController.signout);
 router.get("/deleteUser", authGuard, UserController.deleteUser);
 router.post("/verifyEmailWithoutCode",UserController.verifyEmailWithoutCode);
+router.get("/getuserbyuserid/:id", UserController.getUserById);
+router.get("/getAllUsers", UserController.getAllUsers);
+router.get("/makeAdmin", authGuard, UserController.makeAdmin);
+router.get("/removeAdmin", authGuard, UserController.removeAdmin);
 
 // Add Questions to the firebase DB
 router.post("/addQuestion", QuestionsController.addQuestion);

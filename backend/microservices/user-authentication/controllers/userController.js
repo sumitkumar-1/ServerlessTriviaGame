@@ -273,3 +273,88 @@ exports.verifyToken = async (req, res) => {
     res.send(errorMessage);
   }
 };
+
+exports.getUserById = async (req, res) => {
+  try {
+    const params = {
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.params.id,
+    };
+    const response = await UserServices.getUserById(params);
+    const user = CommonFunctions.getUser(response.UserAttributes);
+    res.send(user);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const params = {
+      UserPoolId: process.env.USER_POOL_ID,
+    };
+    const response = await UserServices.getAllUsers(params);
+    const users = [];
+    response.Users.map((val, index) => {
+      const user = CommonFunctions.getUser(val.Attributes);
+      users.push(user);
+    });
+    res.send(users);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.makeAdmin = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.headers.authorization,
+      UserAttributes: [{ Name: "custom:isAdmin", Value: "true" }],
+    };
+    const response = await UserServices.updateUser(params);
+    if (!response.error) {
+      res.send({
+        message: `${req.user.family_name} ${req.user.given_name} is now an Admin.`,
+      });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
+
+exports.removeAdmin = async (req, res) => {
+  try {
+    const params = {
+      AccessToken: req.headers.authorization,
+      UserAttributes: [{ Name: "custom:isAdmin", Value: "false" }],
+    };
+    const response = await UserServices.updateUser(params);
+    if (!response.error) {
+      res.send({
+        message: `${req.user.family_name} ${req.user.given_name} is now removed from Admin.`,
+      });
+    } else {
+      res.send(response);
+    }
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
