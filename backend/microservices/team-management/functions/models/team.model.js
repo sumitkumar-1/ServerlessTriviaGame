@@ -8,8 +8,8 @@ dynamoose.aws.sdk = dynamodb;
 const memberSchema = new dynamoose.Schema({
   id: { type: String, required: true },
   userId: { type: String, required: true },
+  email: { type: String, required: true },
   role: { type: String, enum: ["admin", "user"], default: "user" },
-  pointsEarned: { type: Number, default: 0 },
   status: {
     type: String,
     enum: ["pending", "accepted", "declined"],
@@ -22,6 +22,7 @@ const memberSchema = new dynamoose.Schema({
 const teamSchema = new dynamoose.Schema({
   id: { type: String, hashKey: true, index: true },
   name: { type: String, required: true },
+  userId: { type: String, required: true }, // HANDLE THIS JUST NOW ADDED
   members: {
     type: Array,
     default: [],

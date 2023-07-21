@@ -123,11 +123,8 @@ functions:
           arn: arn:aws:sqs:us-east-1:377747625142:team-notification-queue
     environment:
       TeamNotificationQueueUrl: 'https://sqs.us-east-1.amazonaws.com/377747625142/team-notification-queue'
-      SMTP_HOST: smtp.gmail.com
-      SMTP_PORT: 443
-      SMTP_SECURE: true
-      SMTP_USERNAME: rajrutdev14@gmail.com
-      SMTP_PASSWORD: hcippryikbxkeahr
+      EMAIL: sumit101.kumar.01@gmail.com
+      PASSWORD: rzqaouvdhjfqmvqd
 
 resources:
   Resources:

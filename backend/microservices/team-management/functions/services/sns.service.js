@@ -2,12 +2,11 @@ const AWS = require("aws-sdk");
 
 const sns = new AWS.SNS({ region: process.env.REGION });
 
-const sendInvitation = async (teamId, memberId, invite) => {
+const sendInvitation = async (template, params) => {
   try {
     const message = {
-      teamId,
-      memberId,
-      invite,
+      templateName: template,
+      params: params
     };
     const snsParams = {
       Message: JSON.stringify(message),

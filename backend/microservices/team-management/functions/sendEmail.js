@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+const fs = require("fs");
+const path = require('path');
 
 exports.main = async (event) => {
   try {
@@ -6,32 +8,47 @@ exports.main = async (event) => {
       return JSON.parse(record.body);
     });
 
-    console.log("All Messages:" + messages);
+    console.log("All Messages:" + JSON.stringify(messages));
 
     for (const message of messages) {
-      console.log('Received message:', message);
+      console.log('Received message:', message.Message);
+
+      const data = JSON.parse(message.Message);
+
+      const templateName = data.templateName;
+      const params = data.params;
+
+      console.log(templateName);
+      console.log(params);
 
       const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: process.env.SMTP_SECURE === 'true',
+        service: "gmail",
         auth: {
-          user: process.env.SMTP_USERNAME,
-          pass: process.env.SMTP_PASSWORD
+          user: process.env.EMAIL,
+          pass: process.env.PASSWORD
         }
       });
 
+      const templatePath = path.join(process.cwd(), 'templates', `${templateName}.html`);
+      console.log(templatePath);
+      const emailTemplate = fs.readFileSync(templatePath, "utf-8");
+      let emailBody = emailTemplate;
+
+      for (const [key, value] of Object.entries(params)) {
+        emailBody = emailBody.replace(`{${key}}`, value);
+      }
+
       const mailOptions = {
-        from: process.env.SMTP_USERNAME,
-        to: 'sumit.kumar@dal.ca',
+        from: process.env.EMAIL,
+        to: params.email,
         subject: 'Trivia Team Notification',
-        text: 'New item added to the queue: ' + JSON.stringify(message)
+        html: emailBody
       };
 
       await transporter.sendMail(mailOptions);
       console.log('Email notification sent.');
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.log('Error:', error);
   }
 };

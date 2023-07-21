@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "ab3b7920-3254-401b-9501-b73ac43358bf",
+		"_postman_id": "370dbb53-e130-445f-9081-2e0f9f33a015",
 		"name": "serverless-trivia-game",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24824996",
-		"_collection_link": "https://bold-water-700163.postman.co/workspace/My-Workspace~c9d5edf1-84af-4e40-82a7-490f7e5d8513/collection/24824996-ab3b7920-3254-401b-9501-b73ac43358bf?action=share&creator=24824996&source=collection_link"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -17,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"ThunderBoltsUnited\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Ethereal Warriors\",\r\n    \"userId\": \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -84,7 +82,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"addedBy\": \"7e33d2c8-d94a-452c-8ed5-f19e337ce5ac\"\r\n}",
+							"raw": "{\r\n    \"userId\": \"4321443241211fdfdsfdf\",\r\n    \"addedBy\": \"woh21wo21h3o2132131\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -105,7 +103,7 @@
 							"variable": [
 								{
 									"key": "teamId",
-									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
+									"value": "e41f414f-f63d-4d1f-8101-61c935f45085"
 								}
 							]
 						}
@@ -264,7 +262,7 @@
 							"variable": [
 								{
 									"key": "teamId",
-									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
+									"value": "e41f414f-f63d-4d1f-8101-61c935f45085"
 								}
 							]
 						}
@@ -539,7 +537,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entityId\": \"jeoqjeowqjeowqeowqejowqjeowqe\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk2\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"win\",\r\n    \"totalScore\": 100\r\n}",
+							"raw": "{\r\n    \"entityId\": \"jeoqjeowqjeowqeowqejowqjeowqe\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk2\",\r\n    \"teamA\": \"Team A\",\r\n    \"teamB\": \"Team B\",\r\n    \"teamAScore\": 100,\r\n    \"teamBScore\": 0,\r\n    \"category\": \"Space\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -955,6 +953,7 @@
 					"name": "Save User",
 					"request": {
 						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{userProfileManagementUrl}}/saveUser",
 							"host": [

@@ -2,66 +2,77 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form, Table, Modal, Tabs, Tab } from "react-bootstrap";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import teamManagementService from '../../services/team.management.service';
+import { GetAllUsers } from "../../services/user.service";
+import { useParams } from "react-router-dom";
 
 const TeamDashboardPage = () => {
-  
-  const [teamName, setTeamName] = useState("Awesome Team");
-  
-  const [teamMembers, setTeamMembers] = useState([
-    { id: 1, name: "John Doe", role: "Admin" },
-    { id: 2, name: "Jane Smith", role: "Member" },
-  ]);
-
+  const currentUserId = localStorage.getItem("UserId");
+  const { id } = useParams();
+  const [teamName, setTeamName] = useState("");
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedActionUser, setSelectedActionUser] = useState("");
+  const [selectedAction, setSelectedAction] = useState("");
   const [teamStatistics, setTeamStatistics] = useState({
     gamesPlayed: 0,
     wins: 0,
     losses: 0,
     pointsEarned: 0,
   });
-
-  const gameHistory = [
-    {
-      id: 1,
-      date: "2023-06-01",
-      opponent: "Team A",
-      result: "Win",
-      points: 100,
-    },
-    {
-      id: 2,
-      date: "2023-06-05",
-      opponent: "Team B",
-      result: "Loss",
-      points: 80,
-    },
-    {
-      id: 3,
-      date: "2023-06-08",
-      opponent: "Team C",
-      result: "Win",
-      points: 120,
-    }
-  ];
+  const [gameHistory, setGameHistory] = useState([]);
 
   useEffect(() => {
-    fetchTeamStatistics()
-      .then((statistics) => setTeamStatistics(statistics))
-      .catch((error) =>
-        console.error("Error fetching team statistics:", error)
-      );
-  }, []);
-
-  const fetchTeamStatistics = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          gamesPlayed: 20,
-          wins: 15,
-          losses: 5,
-          pointsEarned: 500,
+    // Fetch team data by id and populate the state
+    fetchTeamData(id)
+      .then((teamData) => {
+        setTeamName(teamData.name);
+        setTeamMembers(teamData.members);
+        setTeamStatistics({
+          gamesPlayed: teamData.gamesPlayed,
+          wins: teamData.wins,
+          losses: teamData.losses,
+          pointsEarned: teamData.pointsEarned,
         });
-      }, 1000);
-    });
+      })
+      .catch((error) => console.error("Error fetching team data:", error));
+
+    // Fetch game history data
+    fetchGameHistory(id)
+      .then((historyData) => setGameHistory(historyData))
+      .catch((error) => console.error("Error fetching game history:", error));
+
+    fetchAllUsers()
+      .then((users) => setAllUsers(users))
+      .catch((error) => console.error("Error fetching all users:", error));
+  }, [id]);
+
+  const fetchTeamData = async (teamId) => {
+    const response = await teamManagementService.getTeamById(teamId);
+    console.log(response);
+    return response.data;
+  };
+
+  const fetchAllUsers = async () => {
+    try {
+      const response = await GetAllUsers();
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      return [];
+    }
+  };
+
+  const fetchGameHistory = async (teamId) => {
+    return [];
+    //try {
+    //  const response = await teamManagementService.getGameHistory(teamId);
+    //  return response;
+    //} catch (error) {
+    //  console.error("Error fetching game history:", error);
+    //  return [];
+    //}
   };
 
   const chartOptions = {
@@ -122,58 +133,50 @@ const TeamDashboardPage = () => {
     ],
   };
 
-  const [invitedMembers, setInvitedMembers] = useState([]);
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
+  const [showActionModal, setShowActionModal] = useState(false);
 
-  const handleInviteMember = () => {
-    if (inviteEmail) {
+  const handleInviteMember = async () => {
+    if (selectedUser) {
+      const user = allUsers.find((user) => user.id === selectedUser);
       const newInvitation = {
-        id: Date.now(),
-        email: inviteEmail,
-        status: "Pending",
+        userId: user.id,
+        email: user.email,
+        addedBy: currentUserId,
+        role: 'user',
+        status: 'pending'
       };
-
-      setInvitedMembers([...invitedMembers, newInvitation]);
-      setInviteEmail("");
-      setShowInviteModal(false);
+  
+      try {
+        const response = await teamManagementService.sendInvite(id, newInvitation);
+        console.log(response);
+        setTeamMembers(response.data.members);
+        setSelectedUser("");
+        setShowInviteModal(false);
+      } catch (error) {
+        console.error('Error sending invitation:', error);
+      }
     }
   };
 
-  const handleAcceptInvitation = (invitationId) => {
-    const updatedInvitations = invitedMembers.map((invitation) => {
-      if (invitation.id === invitationId) {
-        return { ...invitation, status: "Accepted" };
+  const handleActionExecute = async () => {
+    if (selectedActionUser && selectedAction) {
+      try {
+        if (selectedAction === 'remove') {
+          await teamManagementService.deleteMember(id, selectedActionUser);
+        } else if (selectedAction === 'promote') {
+          await teamManagementService.updateMember(id, selectedActionUser, { role: 'admin' });
+        } else if (selectedAction === 'user') {
+          await teamManagementService.updateMember(id, selectedActionUser, { role: 'user' });
+        }
+
+        setSelectedActionUser("");
+        setSelectedAction("");
+        setShowActionModal(false);
+      } catch (error) {
+        console.error('API Error:', error);
       }
-      return invitation;
-    });
-
-    setInvitedMembers(updatedInvitations);
-  };
-
-  const handleRejectInvitation = (invitationId) => {
-    const updatedInvitations = invitedMembers.filter(
-      (invitation) => invitation.id !== invitationId
-    );
-    setInvitedMembers(updatedInvitations);
-  };
-
-  const handleRemoveMember = (memberId) => {
-    const updatedMembers = teamMembers.filter(
-      (member) => member.id !== memberId
-    );
-    setTeamMembers(updatedMembers);
-  };
-
-  const handlePromoteToAdmin = (memberId) => {
-    const updatedMembers = teamMembers.map((member) => {
-      if (member.id === memberId) {
-        return { ...member, role: "Admin" };
-      }
-      return member;
-    });
-
-    setTeamMembers(updatedMembers);
+    }
   };
 
   return (
@@ -225,8 +228,15 @@ const TeamDashboardPage = () => {
                     </Modal.Header>
                     <Modal.Body>
                       <Form.Group>
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} />
+                        <Form.Label>Select a user to invite</Form.Label>
+                        <Form.Control as="select" value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
+                          <option value="">Select a user...</option>
+                          {allUsers.map((user) => (
+                            <option key={user.id} value={user.id}>
+                              {`${user.given_name} ${user.family_name} - ${user.email}`}
+                            </option>
+                          ))}
+                        </Form.Control>
                       </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
@@ -246,28 +256,27 @@ const TeamDashboardPage = () => {
                       <tr>
                         <th>Email</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Role</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {invitedMembers.map((invitation) => (
-                        <tr key={invitation.id}>
-                          <td>{invitation.email}</td>
-                          <td>{invitation.status}</td>
-                          <td>
-                            {invitation.status === "Pending" && (
-                              <>
-                                <Button variant="success" onClick={() => handleAcceptInvitation(invitation.id)}>
-                                  Accept
-                                </Button>{" "}
-                                <Button variant="danger" onClick={() => handleRejectInvitation(invitation.id)}>
-                                  Reject
-                                </Button>
-                              </>
-                            )}
-                          </td>
+                    {teamMembers ? (
+                        teamMembers
+                          .filter((member) => member.status != "accepted")
+                          .map((member) => {
+                            return (
+                              <tr key={member.userId}>
+                                <td>{member.email}</td>
+                                <td>{member.status}</td>
+                                <td>{member.role}</td>
+                              </tr>
+                            );
+                          })
+                      ) : (
+                        <tr>
+                          <td colSpan="3">No Invitation found</td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </Table>
                 </Col>
@@ -275,40 +284,73 @@ const TeamDashboardPage = () => {
               <Row className="mt-5">
                 <Col>
                   <h4>Team Members</h4>
+                  <Button onClick={() => setShowActionModal(true)}>Perform Action</Button>
                   <Table striped bordered hover>
                     <thead>
                       <tr>
                         <th>Name</th>
                         <th>Role</th>
-                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {teamMembers.map((member) => (
-                        <tr key={member.id}>
-                          <td>{member.name}</td>
-                          <td>{member.role}</td>
-                          <td>
-                            {member.role !== "Admin" && (
-                              <Button variant="danger" onClick={() => handleRemoveMember(member.id)}>
-                                Remove
-                              </Button>
-                            )}
-                            {member.role === "Member" && (
-                              <Button variant="info" onClick={() => handlePromoteToAdmin(member.id)} >
-                                Promote to Admin
-                              </Button>
-                            )}
-                            {member.role === "Member" && (
-                              <Button variant="info" onClick={() => handlePromoteToAdmin(member.id)} >
-                                Leave Team
-                              </Button>
-                            )}
-                          </td>
+                      {teamMembers ? (
+                        teamMembers
+                          .filter((member) => member.status === "accepted")
+                          .map((member) => {
+                            const user = allUsers.find((user) => user.id === member.userId);
+                            const memberName = user ? `${user.given_name} ${user.family_name}` : "Unknown User";
+                            return (
+                              <tr key={member.id}>
+                                <td>{memberName}</td>
+                                <td>{member.role}</td>
+                              </tr>
+                            );
+                          })
+                      ) : (
+                        <tr>
+                          <td colSpan="3">No members found</td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </Table>
+                  <Modal show={showActionModal} onHide={() => setShowActionModal(false)}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Perform Action</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Form.Group>
+                        <Form.Label>Select User:</Form.Label>
+                          <Form.Control as="select" value={selectedActionUser} onChange={(e) => setSelectedActionUser(e.target.value)}>
+                            <option value="">Select a user...</option>
+                            {teamMembers
+                              .filter((member) => member.status == 'accepted')
+                              .map((member) => (
+                              <option key={member.id} value={member.id}>
+                                {`${member.email}`}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </Form.Group>
+                        <div className="mt-3"></div>
+                        <Form.Group>
+                          <Form.Label>Select Action:</Form.Label>
+                          <Form.Control as="select" value={selectedAction || ""} onChange={(e) => setSelectedAction(e.target.value)}>
+                            <option value="">Select an action</option>
+                            <option value="remove">Remove</option>
+                            <option value="user">User</option>
+                            <option value="promote">Promote to Admin</option>
+                          </Form.Control>
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={() => setShowActionModal(false)}>
+                        Cancel
+                      </Button>
+                      <Button variant={selectedAction === 'remove' ? 'danger' : 'info'} onClick={handleActionExecute}>
+                        Confirm
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </Col>
               </Row>
             </Tab>

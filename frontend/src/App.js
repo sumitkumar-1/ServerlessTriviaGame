@@ -39,7 +39,7 @@ const App = () => {
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/cms" element={<Forms />} />
             <Route path="/createTeam" element={<CreateTeamPage />} />
-            <Route path="/teamdashboard" element={<TeamDashboardPage />} />
+            <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/detailedleaderboard" element={<DetailedStatisticsPage />} />
         </Route>

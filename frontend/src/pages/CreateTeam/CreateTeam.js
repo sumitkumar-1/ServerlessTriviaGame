@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import teamManagementService from '../../services/team.management.service';
+import { useNavigate } from 'react-router-dom';
+import { GetUserByUserId } from "../../services/user.service";
 
 const CreateTeamPage = () => {
   const [teamName, setTeamName] = useState('');
+  const navigate = useNavigate();
 
   const generateTeamName = async () => {
     try {
-      const response = teamManagementService.generateTeamName();
+      const response = await teamManagementService.generateTeamName();
       setTeamName(response.data.teamName);
     } catch (error) {
       console.log("Failed to generate Team Name");
@@ -19,12 +22,14 @@ const CreateTeamPage = () => {
     setTeamName(event.target.value);
   };
 
-  const handleCreateTeam = () => {
+  const handleCreateTeam = async () => {
     console.log('Creating team:', teamName);
     try {
-      const response = teamManagementService.createTeam({name: teamName});
-      console.log(response);
-      // TODO? on sucess route to team dashboard
+      const userId = localStorage.getItem('UserId');
+      const userResponse = await GetUserByUserId(userId);
+      const response = await teamManagementService.createTeam({name: teamName, userId: userId, email: userResponse.data.email});
+      const teamId = response.data.id;
+      navigate(`/teamdashboard/${teamId}`);
     } catch (error) {
       console.log("Failed to create Team");
     }

@@ -5,15 +5,15 @@ const BASE_URL = `${process.env.REACT_APP_TEAM_MANAGEMENT_BASE_URL}/api/teams`;
 const generateTeamName = () => api.get(`${BASE_URL}/generate/teamName`);
 const createTeam = (data) => api.post(`${BASE_URL}/`, data);
 const getAllTeams = () => api.get(`${BASE_URL}/`);
-const getTeamById = (id) => api.get(`${BASE_URL}/${id}`);
+const getTeamById = (id) => api.get(`${BASE_URL}/get/${id}`);
 const deleteTeam = (id) => api.delete(`${BASE_URL}/${id}`);
 
-const sendInvite = (teamId, data) => api.post(`${BASE_URL}/${teamId}/invites`, data);
+const sendInvite = (teamId, data) => api.post(`${BASE_URL}/sendinvites/${teamId}`, data);
 const acceptInvite = (teamId, memberId) => api.post(`${BASE_URL}/${teamId}/invites/${memberId}/accept`);
 const rejectInvite = (teamId, memberId) => api.post(`${BASE_URL}/${teamId}/invites/${memberId}/reject`);
 
-const deleteMember = (teamId, memberId) => api.delete(`${BASE_URL}/${teamId}/members/${memberId}`);
-const updateMember = (teamId, memberId, data) => api.post(`${BASE_URL}/${teamId}/members/${memberId}`, data);
+const deleteMember = (teamId, memberId) => api.delete(`${BASE_URL}/deletemembers/${teamId}/${memberId}`);
+const updateMember = (teamId, memberId, data) => api.post(`${BASE_URL}/updatemembers/${teamId}/${memberId}`, data);
 
 const updateTeamStat = (teamId, data) => api.post(`${BASE_URL}/${teamId}/stats`, data);
 const getTeamStat = (teamId) => api.get(`${BASE_URL}/${teamId}/stats`);
