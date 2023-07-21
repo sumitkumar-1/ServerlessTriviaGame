@@ -6,5 +6,5 @@ const UserController = require("../controllers/userController");
 router.post("/saveUser", UserController.save);
 router.get("/getGameData", authGuard, UserController.getGameData);
 router.post("/updateGameData", authGuard, UserController.update);
-
+router.post("/updateGameDataById/:id", UserController.updateGameDataById);
 module.exports = { router };

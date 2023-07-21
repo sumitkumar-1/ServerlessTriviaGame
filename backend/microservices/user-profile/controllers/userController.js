@@ -52,3 +52,21 @@ exports.getGameData = async (req, res) => {
     res.status(404).json({ message: "Not Found.", error: err });
   }
 };
+
+exports.updateGameDataById = async (req, res) => {
+  try {
+    const user = await UserService.update(req.params.id, req.body);
+    const responseMessage = {
+      message: "User updated Successfully!",
+      isUpdated: true,
+      user: user,
+    };
+    res.json(responseMessage);
+  } catch (error) {
+    const errorMessage = {
+      message: "Internal Server Error.",
+      error: error,
+    };
+    res.send(errorMessage);
+  }
+};
