@@ -24,8 +24,6 @@ export const UpdateUser = (data) => api.post(`${USER_AUTH_BASE_URL}/updateUser`,
 export const SignOut = () => api.get(`${USER_AUTH_BASE_URL}/signout`);
 export const DeleteUser = () => api.get(`${USER_AUTH_BASE_URL}/deleteUser`);
 export const QuestionAnswerValidationWithAuth = (data) => api.post(`${USER_AUTH_BASE_URL}/questionAnswerValidation`, data);
-
-export const GetAllUsers = () => api.get(`${USER_AUTH_BASE_URL}/getAllUsers`);
 export const GetUserByUserId = (userId) => api.get(`${USER_AUTH_BASE_URL}/getuserbyuserid/${userId}`);
 
 export const SaveUser = (data) => axios.post(`${USER_PROFILE_MANAGEMENT_BASE_URL}/saveUser`, data);
