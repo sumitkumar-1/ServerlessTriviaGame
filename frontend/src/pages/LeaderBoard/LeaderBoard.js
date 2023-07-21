@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Dropdown, Table } from "react-bootstrap";
+import { Container, Row, Col, Dropdown, Table } from "react-bootstrap";
 import leaderBoardService from "../../services/leaderboard.service";
 
 const LeaderboardPage = () => {

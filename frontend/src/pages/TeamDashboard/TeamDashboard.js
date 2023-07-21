@@ -262,7 +262,7 @@ const TeamDashboardPage = () => {
                     <tbody>
                     {teamMembers ? (
                         teamMembers
-                          .filter((member) => member.status != "accepted")
+                          .filter((member) => member.status !== "accepted")
                           .map((member) => {
                             return (
                               <tr key={member.userId}>
@@ -323,7 +323,7 @@ const TeamDashboardPage = () => {
                           <Form.Control as="select" value={selectedActionUser} onChange={(e) => setSelectedActionUser(e.target.value)}>
                             <option value="">Select a user...</option>
                             {teamMembers
-                              .filter((member) => member.status == 'accepted')
+                              .filter((member) => member.status === 'accepted')
                               .map((member) => (
                               <option key={member.id} value={member.id}>
                                 {`${member.email}`}

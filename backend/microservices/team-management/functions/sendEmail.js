@@ -35,13 +35,14 @@ exports.main = async (event) => {
       let emailBody = emailTemplate;
 
       for (const [key, value] of Object.entries(params)) {
-        emailBody = emailBody.replace(`{${key}}`, value);
+        const regex = new RegExp(`{${key}}`, 'g');
+        emailBody = emailBody.replace(regex, value);
       }
 
       const mailOptions = {
         from: process.env.EMAIL,
         to: params.email,
-        subject: 'Trivia Team Notification',
+        subject: '[Trivia Titans] Notification',
         html: emailBody
       };
 

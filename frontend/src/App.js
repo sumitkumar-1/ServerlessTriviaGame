@@ -17,6 +17,7 @@ import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
 import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
 import LeaderboardPage from "./pages/LeaderBoard/LeaderBoard";
 import DetailedStatisticsPage from "./pages/DetailedLeaderBoard/DetailedLeaderBoard";
+import TeamList from "./pages/TeamList/TeamList";
 
 const App = () => {
   return (
@@ -38,10 +39,14 @@ const App = () => {
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/cms" element={<Forms />} />
-            <Route path="/createTeam" element={<CreateTeamPage />} />
-            <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
-          <Route path="/detailedleaderboard" element={<DetailedStatisticsPage />} />
+          <Route path="/createTeam" element={<CreateTeamPage />} />
+          <Route path="/teamlist" element={<TeamList />} />
+          <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route
+            path="/detailedleaderboard"
+            element={<DetailedStatisticsPage />}
+          />
         </Route>
       </Routes>
     </Fragment>

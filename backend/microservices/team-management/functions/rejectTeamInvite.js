@@ -8,12 +8,24 @@ const rejectInvite = async (teamId, memberId) => {
     if (member && member.status === "pending") {
       member.status = "declined";
       await team.save();
-      await SnsService.sendInvitation(teamId, member.id, member);
+      await SnsService.sendInvitation("TeamInvitationFailure", {
+        teamName: team.name,
+        teamId: team.id,
+        memberId: member.id,
+        email: member.email,
+        role: member.role,
+        status: member.status,
+      });
       return team;
     } else {
-      throw new Error(member && member.status !== "pending" ? "Invalid member status" : "Member not found in the team");
+      throw new Error(
+        member && member.status !== "pending"
+          ? "Invalid member status"
+          : "Member not found in the team"
+      );
     }
   } catch (error) {
+    console.log(error);
     throw new Error("Failed to reject the invite.");
   }
 };

@@ -6,7 +6,7 @@ const generateTeamName = () => api.get(`${BASE_URL}/generate/teamName`);
 const createTeam = (data) => api.post(`${BASE_URL}/`, data);
 const getAllTeams = () => api.get(`${BASE_URL}/`);
 const getTeamById = (id) => api.get(`${BASE_URL}/get/${id}`);
-const deleteTeam = (id) => api.delete(`${BASE_URL}/${id}`);
+const deleteTeam = (id) => api.delete(`${BASE_URL}/delete/${id}`);
 
 const sendInvite = (teamId, data) => api.post(`${BASE_URL}/sendinvites/${teamId}`, data);
 const acceptInvite = (teamId, memberId) => api.post(`${BASE_URL}/${teamId}/invites/${memberId}/accept`);

@@ -8,7 +8,14 @@ const acceptInvite = async (teamId, memberId) => {
     if (member && member.status === "pending") {
       member.status = "accepted";
       await team.save();
-      await SnsService.sendInvitation(teamId, member.id, member);
+      await SnsService.sendInvitation("TeamInvitationSuccess", {
+        teamName: team.name,
+        teamId: team.id,
+        memberId: member.id,
+        email: member.email,
+        role: member.role,
+        status: member.status,
+      });
       return team;
     } else {
       throw new Error(member && member.status !== "pending" ? "Invalid member status" : "Member not found in the team");
