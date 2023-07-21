@@ -316,10 +316,11 @@ exports.getAllUsers = async (req, res) => {
 exports.makeAdmin = async (req, res) => {
   try {
     const params = {
-      AccessToken: req.headers.authorization,
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.body.id,
       UserAttributes: [{ Name: "custom:isAdmin", Value: "true" }],
     };
-    const response = await UserServices.updateUser(params);
+    const response = await UserServices.updateUserAdmin(params);
     if (!response.error) {
       res.send({
         message: `${req.user.family_name} ${req.user.given_name} is now an Admin.`,
@@ -339,10 +340,11 @@ exports.makeAdmin = async (req, res) => {
 exports.removeAdmin = async (req, res) => {
   try {
     const params = {
-      AccessToken: req.headers.authorization,
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.body.id,
       UserAttributes: [{ Name: "custom:isAdmin", Value: "false" }],
     };
-    const response = await UserServices.updateUser(params);
+    const response = await UserServices.updateUserAdmin(params);
     if (!response.error) {
       res.send({
         message: `${req.user.family_name} ${req.user.given_name} is now removed from Admin.`,

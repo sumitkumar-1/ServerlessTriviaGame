@@ -53,3 +53,7 @@ exports.getUserById = async (params) => {
 exports.getAllUsers = async (params) => {
   return await cognito.listUsers(params).promise();
 };
+
+exports.updateUserAdmin = async (params) => {
+  return await cognito.adminUpdateUserAttributes(params).promise();
+};
