@@ -16,6 +16,8 @@ module.exports.main = async event => {
             statusCode: 200,
             headers: {
                 "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify(games),
         };
@@ -23,6 +25,11 @@ module.exports.main = async event => {
         console.error("Error getting games:", error);
         return {
             statusCode: 500,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
             body: JSON.stringify(error),
         };
     }

@@ -25,13 +25,32 @@ module.exports.main = async (event) => {
     if (existingGame) {
         try {
             await deleteGame(gameId);
-            return { statusCode: 200, body: `Game with ID ${gameId} deleted.` };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: `Game with ID ${gameId} deleted.`
+            };
         } catch (error) {
-            return { statusCode: 500, body: JSON.stringify(error) };
+            return {
+                statusCode: 500,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(error)
+            };
         }
     } else {
         return {
             statusCode: 404,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
             body: `Game with ID ${gameId} not found.`,
         };
     }

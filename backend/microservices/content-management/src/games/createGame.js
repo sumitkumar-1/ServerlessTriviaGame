@@ -93,9 +93,23 @@ module.exports.main = async (event) => {
         try {
             await createGame(gameData);
             await notifyClients(gameData);
-            return { statusCode: 200, body: JSON.stringify(requestBody) };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(requestBody)
+            };
         } catch (error) {
-            return { statusCode: 500, body: JSON.stringify(error) };
+            return {
+                statusCode: 500,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(error)
+            };
         }
     }
 };

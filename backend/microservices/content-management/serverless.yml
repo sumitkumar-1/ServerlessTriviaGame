@@ -11,7 +11,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   iam:
-    role: arn:aws:iam::558280373626:role/LabRole
+    role: arn:aws:iam::309206448713:role/LabRole
+  apiGateway:
+    shouldStartNameWithService: true
 
 functions:
   getGames:
@@ -21,6 +23,10 @@ functions:
           path: /games
           method: GET
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   createGame:
     handler: src/games/createGame.main
     events:
@@ -28,6 +34,10 @@ functions:
           path: /games
           method: POST
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   editGame:
     handler: src/games/editGame.main
     events:
@@ -35,6 +45,10 @@ functions:
           path: /games/{id}
           method: PUT
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   deleteGame:
     handler: src/games/deleteGame.main
     events:
@@ -42,6 +56,10 @@ functions:
           path: /games/{id}
           method: DELETE
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   
   getQuestions:
     handler: src/questions/getQuestions.main
@@ -50,6 +68,10 @@ functions:
           path: /questions
           method: GET
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   createQuestion:
     handler: src/questions/createQuestion.main
     events:
@@ -57,6 +79,10 @@ functions:
           path: /questions
           method: POST
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   editQuestion:
     handler: src/questions/editQuestion.main
     events:
@@ -64,6 +90,10 @@ functions:
           path: /questions/{id}
           method: PUT
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   deleteQuestion:
     handler: src/questions/deleteQuestion.main
     events:
@@ -71,3 +101,55 @@ functions:
           path: /questions/{id}
           method: DELETE
           cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
+resources:
+  Resources:
+    TriviaGamesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TriviaGames
+        AttributeDefinitions:
+          - AttributeName: gameId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: gameId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    TriviaQuestionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TriviaQuestions
+        AttributeDefinitions:
+          - AttributeName: questionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: questionId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

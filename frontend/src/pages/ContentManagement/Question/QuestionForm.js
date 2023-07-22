@@ -1,9 +1,9 @@
-// This is a questions form built using react bootstrap and mui v5
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import questionCategories from "../questionCategories";
+import axios from "axios";
 
 const QuestionForm = () => {
     const [questionData, setQuestionData] = useState({
@@ -17,11 +17,19 @@ const QuestionForm = () => {
     const handleQuestionChange = (e) => {
         setQuestionData({ ...questionData, [e.target.name]: e.target.value });
     }
+    useEffect(() => {
+        getQuestions();
+    }, [])
+
+       async function getQuestions() {
+        const response = await axios.get("https://ioznpk5b6f.execute-api.us-east-1.amazonaws.com/dev/questions");
+        console.log(response);
+    }
 
     const submitQuestionData = (e) => {
         e.preventDefault();
         console.log(questionData);
-        // API call to create a question with the questionData object
+
     };
 
     return (
@@ -65,7 +73,7 @@ const QuestionForm = () => {
                         <Form.Group controlId="questionOptions">
                             <Form.Label>Options</Form.Label>
                             <Form.Group controlId="options">
-                            <Form.Label>Option 1</Form.Label>
+                                <Form.Label>Option 1</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}

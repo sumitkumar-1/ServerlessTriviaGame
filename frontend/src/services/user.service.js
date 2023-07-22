@@ -18,14 +18,12 @@ export const GetUserById = (id) => axios.get(`${USER_AUTH_BASE_URL}/getuserbyuse
 export const GetAllUsers = () => axios.get(`${USER_AUTH_BASE_URL}/getAllUsers`);
 export const MakeAdmin = (data) => axios.post(`${USER_AUTH_BASE_URL}/makeAdmin`, data);
 export const RemoveAdmin = (data) => axios.post(`${USER_AUTH_BASE_URL}/removeAdmin`, data)
-
 export const GetUser = () => api.get(`${USER_AUTH_BASE_URL}/getUser`);
 export const UpdateUser = (data) => api.post(`${USER_AUTH_BASE_URL}/updateUser`, data);
 export const SignOut = () => api.get(`${USER_AUTH_BASE_URL}/signout`);
 export const DeleteUser = () => api.get(`${USER_AUTH_BASE_URL}/deleteUser`);
 export const QuestionAnswerValidationWithAuth = (data) => api.post(`${USER_AUTH_BASE_URL}/questionAnswerValidation`, data);
 export const GetUserByUserId = (userId) => api.get(`${USER_AUTH_BASE_URL}/getuserbyuserid/${userId}`);
-
 export const SaveUser = (data) => axios.post(`${USER_PROFILE_MANAGEMENT_BASE_URL}/saveUser`, data);
 export const UpdateGameData = (data) => api.post(`${USER_PROFILE_MANAGEMENT_BASE_URL}/updateGameData`, data);
 export const GetAllGameData = () => api.get(`${USER_PROFILE_MANAGEMENT_BASE_URL}/getGameData`);
