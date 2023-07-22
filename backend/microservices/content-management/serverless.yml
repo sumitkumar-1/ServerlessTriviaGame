@@ -72,6 +72,17 @@ functions:
             headers:
               Access-Control-Allow-Origin: "'*'"
               Access-Control-Allow-Credentials: true
+  getQuestion:
+    handler: src/questions/getQuestion.main
+    events:
+      - http:
+          path: /questions/{id}
+          method: GET
+          cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Credentials: true
   createQuestion:
     handler: src/questions/createQuestion.main
     events:
