@@ -9,7 +9,6 @@ import { LoginValidationSchema } from "../../utils/validationSchema";
 import { LoginSocialGoogle } from "reactjs-social-login";
 import {
   CreateUser,
-  SaveUser,
   VerifyEmailWithoutCode,
 } from "../../services/user.service";
 
@@ -85,22 +84,9 @@ const LoginPage = () => {
             const loginResponse = await auth.login(loginRequestData);
             if (loginResponse) {
               localStorage.setItem("mfaVerified", true);
-              const saveUserRequestBody = {
-                id: localStorage.getItem("UserId"),
-              };
-              const saveUserResponse = await SaveUser(saveUserRequestBody);
-              if (!saveUserResponse?.data?.error) {
-                toast.success("Login Success!");
-                navigate("/");
-                setIsLoading(false);
-              } else {
-                setIsLoading(false);
-                toast.error(
-                  saveUserResponse?.data?.error
-                    ? saveUserResponse?.data?.error?.message
-                    : "Internal Server Error."
-                );
-              }
+              toast.success("Login Success!");
+              navigate("/");
+              setIsLoading(false);
             } else {
               toast.error("Internal Server Error.");
               setIsLoading(false);

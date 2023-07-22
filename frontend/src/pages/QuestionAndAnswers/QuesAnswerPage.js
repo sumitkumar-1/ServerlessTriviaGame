@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./QuesAnswerPage.css";
 import Questions from "../../utils/questionsArray";
 import { useNavigate } from "react-router-dom";
-import { SaveUser, StoreUserResponse } from "../../services/user.service";
+import { StoreUserResponse } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
 
@@ -41,23 +41,9 @@ const QuesAnswerPage = () => {
     };
     const response = await StoreUserResponse(requestBody);
     if (!response?.data?.response?.error) {
-      const saveUserRequestBody = {
-        id: localStorage.getItem("UserId"),
-      };
-
-      const response = await SaveUser(saveUserRequestBody);
-      console.log(response);
-      if (!response?.data?.error) {
-        navigate("/login");
-        toast.success("Registration Success!");
-        setIsLoading(false);
-      } else {
-        toast.error(
-          response?.data?.error
-            ? response?.data?.error?.message
-            : "Internal Server Error."
-        );
-      }
+      navigate("/login");
+      toast.success("Registration Success!");
+      setIsLoading(false);
     } else {
       toast.error("Internal Server Error.");
       navigate("/signuppage");

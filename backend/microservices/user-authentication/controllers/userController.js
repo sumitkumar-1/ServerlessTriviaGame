@@ -18,7 +18,15 @@ exports.create = async (req, res) => {
       ],
     };
     const response = await UserServices.create(params);
-    res.send(response);
+    if (!response?.error) {
+      const requestBody = {
+        id: response?.UserSub
+      }
+      const saveUserResponse = await UserServices.saveUserToDynamo(requestBody);
+      if (!saveUserResponse?.data?.error) {
+        res.send(response);
+      }
+    }
   } catch (error) {
     const errorMessage = {
       message: "Internal Server Error.",
