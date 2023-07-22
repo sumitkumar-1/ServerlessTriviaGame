@@ -6,11 +6,10 @@ const generateTeamName = () => api.get(`${BASE_URL}/generate/teamName`);
 const createTeam = (data) => api.post(`${BASE_URL}/`, data);
 const getAllTeams = () => api.get(`${BASE_URL}/`);
 const getTeamById = (id) => api.get(`${BASE_URL}/get/${id}`);
-const deleteTeam = (id) => api.delete(`${BASE_URL}/${id}`);
+const deleteTeam = (id) => api.delete(`${BASE_URL}/delete/${id}`);
 
 const sendInvite = (teamId, data) => api.post(`${BASE_URL}/sendinvites/${teamId}`, data);
-const acceptInvite = (teamId, memberId) => api.post(`${BASE_URL}/${teamId}/invites/${memberId}/accept`);
-const rejectInvite = (teamId, memberId) => api.post(`${BASE_URL}/${teamId}/invites/${memberId}/reject`);
+const acceptRejectInvite = (teamId, memberId, option) => api.post(`${BASE_URL}/acceptreject/${teamId}/${memberId}/${option}`);
 
 const deleteMember = (teamId, memberId) => api.delete(`${BASE_URL}/deletemembers/${teamId}/${memberId}`);
 const updateMember = (teamId, memberId, data) => api.post(`${BASE_URL}/updatemembers/${teamId}/${memberId}`, data);
@@ -28,8 +27,7 @@ export default {
   getTeamById,
   deleteTeam,
   sendInvite,
-  acceptInvite,
-  rejectInvite,
+  acceptRejectInvite,
   deleteMember,
   updateMember,
   updateTeamStat,

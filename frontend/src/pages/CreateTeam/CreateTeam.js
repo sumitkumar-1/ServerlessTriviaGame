@@ -27,9 +27,8 @@ const CreateTeamPage = () => {
     try {
       const userId = localStorage.getItem('UserId');
       const userResponse = await GetUserByUserId(userId);
-      const response = await teamManagementService.createTeam({name: teamName, userId: userId, email: userResponse.data.email});
-      const teamId = response.data.id;
-      navigate(`/teamdashboard/${teamId}`);
+      await teamManagementService.createTeam({name: teamName, userId: userId, email: userResponse.data.email});
+      navigate(`/teamlist`);
     } catch (error) {
       console.log("Failed to create Team");
     }
