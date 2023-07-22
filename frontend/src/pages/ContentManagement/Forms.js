@@ -55,7 +55,9 @@ const Forms = () => {
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={questionCategories}
+                options={questionCategories()}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.label === value.label}
                 onChange={handleGameChange}
                 sx={{ width: 300 }}
                 renderInput={(params) => <TextField {...params} label="Select" />}

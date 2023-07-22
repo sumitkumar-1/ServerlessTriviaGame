@@ -25,14 +25,32 @@ module.exports.main = async (event) => {
     if (existingQuestion) {
         try {
             await deleteQuestion(questionId);
-            return { statusCode: 200, body: `Question with ID ${questionId} deleted.` };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: `Question with ID ${questionId} deleted.`
+            };
         } catch (error) {
-            return { statusCode: 500, body: JSON.stringify(error) };
+            return {
+                statusCode: 500,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(error)
+            };
         }
     } else {
         return {
             statusCode: 404,
-            body: `Question with ID ${questionId} not found.`,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            }, body: `Question with ID ${questionId} not found.`,
         };
     }
 };

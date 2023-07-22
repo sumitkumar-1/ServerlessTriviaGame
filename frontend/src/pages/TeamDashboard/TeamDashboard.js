@@ -148,9 +148,10 @@ const TeamDashboardPage = () => {
       };
   
       try {
-        const response = await teamManagementService.sendInvite(id, newInvitation);
+        await teamManagementService.sendInvite(id, newInvitation);
+        const response = await fetchTeamData(id);
         console.log(response);
-        setTeamMembers(response.data.members);
+        setTeamMembers(response.members);
         setSelectedUser("");
         setShowInviteModal(false);
       } catch (error) {
@@ -262,7 +263,7 @@ const TeamDashboardPage = () => {
                     <tbody>
                     {teamMembers ? (
                         teamMembers
-                          .filter((member) => member.status != "accepted")
+                          .filter((member) => member.status !== "accepted")
                           .map((member) => {
                             return (
                               <tr key={member.userId}>
@@ -323,7 +324,7 @@ const TeamDashboardPage = () => {
                           <Form.Control as="select" value={selectedActionUser} onChange={(e) => setSelectedActionUser(e.target.value)}>
                             <option value="">Select a user...</option>
                             {teamMembers
-                              .filter((member) => member.status == 'accepted')
+                              .filter((member) => member.status === 'accepted')
                               .map((member) => (
                               <option key={member.id} value={member.id}>
                                 {`${member.email}`}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Team Invitation</title>
+    <title>Team Invitation Status</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,16 +15,16 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .team-info {
-            margin-bottom: 20px;
-        }
-        .team-name {
+        .status-message {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
         }
-        .team-description {
-            margin-bottom: 10px;
+        .team-name {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
         }
         .button-container {
             text-align: center;
@@ -32,30 +32,35 @@
         .button {
             display: inline-block;
             padding: 10px 20px;
-            margin: 5px;
             font-size: 16px;
             text-align: center;
             text-decoration: none;
             border-radius: 5px;
             color: #fff;
         }
-        .accept {
-            background-color: #4CAF50;
+        .back {
+            background-color: #2196F3;
         }
-        .reject {
+        .success {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .failure {
             background-color: #F44336;
+            color: #fff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="team-info">
-            <p class="team-name">{teamName}</p>
-            <p class="team-description">Your friend has invited you to join trivia challenges</p>
+        <div class="team-name">
+            {teamName}
+        </div>
+        <div class="status-message success">
+            Congratulations! You have successfully accepted the invitation to join the team.
         </div>
         <div class="button-container">
-            <a href="https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev/api/teams/acceptreject/{teamId}/{memberId}/accept" class="button accept">Accept</a>
-            <a href="https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev/api/teams/acceptreject/{teamId}/{memberId}/reject" class="button reject">Reject</a>
+            <a href="#" class="button back">Visit Trivia Titan</a>
         </div>
     </div>
 </body>

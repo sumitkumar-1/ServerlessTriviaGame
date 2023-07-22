@@ -20,14 +20,21 @@ async function tagQuestion(question) {
         return response.data;
     } catch (error) {
         console.error(`Error tagging question:`, error);
-        return null;
+        return error;
     }
 }
 
 
 async function createQuestion(questionData) {
-    // TODO: Tag question via Fenil's API (Send question string in the request body)
-    let tags = await tagQuestion(questionData.question).split("/");
+    let tags = [];
+    try {
+        let resp = await tagQuestion(questionData.question);
+        tags = resp.split("/");
+    }
+    catch (error) {
+        console.error(`Error tagging question:`, error);
+        return error;
+    }
     if (tags) {
         const marshalledItem = marshall(questionData);
         const params = {
@@ -69,8 +76,22 @@ module.exports.main = async (event) => {
 
     try {
         await createQuestion(questionData);
-        return { statusCode: 200, body: JSON.stringify(questionData) };
+        return {
+            statusCode: 200,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            }, body: JSON.stringify(questionData)
+        };
     } catch (error) {
-        return { statusCode: 500, body: JSON.stringify(error) };
+        return {
+            statusCode: 500,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            }, body: JSON.stringify(error)
+        };
     }
 };

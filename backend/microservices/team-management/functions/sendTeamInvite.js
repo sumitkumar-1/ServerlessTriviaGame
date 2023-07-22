@@ -17,7 +17,7 @@ const sendInvite = async (teamId, userId, addedBy, email, status, role) => {
     await team.save();
 
     // Send invitation using SNS
-    await SnsService.sendInvitation("TeamInvite", {
+    await SnsService.sendInvitationNotification("TeamInvite", {
       teamName: team.name,
       teamId: team.id,
       memberId: member.id,
@@ -34,16 +34,22 @@ const sendInvite = async (teamId, userId, addedBy, email, status, role) => {
 
 module.exports.main = async (event) => {
   try {
-    const { teamId } = event.pathParameters;
-    const { userId, addedBy, email, status, role } = JSON.parse(event.body);
+    const messages = event.Records.map((record) => {
+      return JSON.parse(record.body);
+    });
 
-    const team = await sendInvite(teamId, userId, addedBy, email, status, role);
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(team),
-    };
+    console.log("All Messages:" + JSON.stringify(messages));
 
-    return response;
+    for (const message of messages) {
+      console.log('Received message:', message.Message);
+      const data = JSON.parse(message.Message);
+      const team = await sendInvite(data.teamId, data.userId, data.addedBy, data.email, data.status, data.role);
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify(team),
+      };
+      return response;
+    }
   } catch (error) {
     const response = {
       statusCode: 500,
