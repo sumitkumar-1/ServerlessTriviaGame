@@ -111,21 +111,22 @@
 					"response": []
 				},
 				{
-					"name": "acceptInvite",
+					"name": "acceptRejectInvite",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/acceptinvites/:teamId/:memberId",
+							"raw": "{{teamUrl}}/api/teams/acceptreject/:teamId/:memberId/:option",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"acceptinvites",
+								"acceptreject",
 								":teamId",
-								":memberId"
+								":memberId",
+								":option"
 							],
 							"variable": [
 								{
@@ -135,37 +136,10 @@
 								{
 									"key": "memberId",
 									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "rejectInvite",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{teamUrl}}/api/teams/rejectinvites/:teamId/:memberId",
-							"host": [
-								"{{teamUrl}}"
-							],
-							"path": [
-								"api",
-								"teams",
-								"rejectinvites",
-								":teamId",
-								":memberId"
-							],
-							"variable": [
-								{
-									"key": "teamId",
-									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
 								},
 								{
-									"key": "memberId",
-									"value": "3965ad0f-7280-44e0-8e2a-f46db8fc7701"
+									"key": "option",
+									"value": ""
 								}
 							]
 						}

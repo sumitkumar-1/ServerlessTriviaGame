@@ -11,7 +11,21 @@ const publishTeamInvitation = async(message) => {
     await sns.publish(snsParams).promise();
   } catch (error) {
     console.log(error);
-    console.log("Error publishing message");
+    console.log("Error publishing team invitation message");
+    throw error;
+  }
+}
+
+const publishAcceptRejectInvitation = async(message) => {
+  try {
+    const snsParams = {
+      Message: JSON.stringify(message),
+      TopicArn: process.env.TEAM_ACCEPT_REJECT_TOPIC_ARN,
+    };
+    await sns.publish(snsParams).promise();
+  } catch (error) {
+    console.log(error);
+    console.log("Error publishing team accept/reject message");
     throw error;
   }
 }
@@ -72,6 +86,7 @@ const unsubscribeEmailNotification = async (email) => {
 
 module.exports = {
   publishTeamInvitation,
+  publishAcceptRejectInvitation,
   sendInvitationNotification,
   subscribeEmailNotification,
   unsubscribeEmailNotification
