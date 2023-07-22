@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "370dbb53-e130-445f-9081-2e0f9f33a015",
+		"_postman_id": "2f2fdb94-d8e7-40d2-822e-3474a2a24dfa",
 		"name": "serverless-trivia-game",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -316,62 +316,6 @@
 									"key": "teamId",
 									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "subscribeEmailNotification",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{teamUrl}}/api/teams/subscribenotification",
-							"host": [
-								"{{teamUrl}}"
-							],
-							"path": [
-								"api",
-								"teams",
-								"subscribenotification"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "unsubscribeEmailNotification",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{teamUrl}}/api/teams/unsubscribenotification",
-							"host": [
-								"{{teamUrl}}"
-							],
-							"path": [
-								"api",
-								"teams",
-								"unsubscribenotification"
 							]
 						}
 					},
@@ -1320,7 +1264,7 @@
 	"variable": [
 		{
 			"key": "teamUrl",
-			"value": "https://nabqrjr5x1.execute-api.us-east-1.amazonaws.com/dev/",
+			"value": "https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev",
 			"type": "default"
 		},
 		{

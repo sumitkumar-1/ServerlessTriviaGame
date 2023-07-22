@@ -110,20 +110,6 @@ functions:
           path: /api/teams/getstats/{teamId}
           method: GET
           cors: true
-  subscribeTeamEmailNotification:
-    handler: functions/subscribeTeamEmailNotification.main
-    events:
-      - http:
-          path: /api/teams/subscribenotification
-          method: POST
-          cors: true
-  unsubscribeTeamEmailNotification:
-    handler: functions/unsubscribeTeamEmailNotification.main
-    events:
-      - http:
-          path: /api/teams/unsubscribenotification
-          method: POST
-          cors: true
   teamEmailNotification:
     handler: functions/sendEmail.main
     events:
