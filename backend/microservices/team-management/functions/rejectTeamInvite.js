@@ -8,7 +8,7 @@ const rejectInvite = async (teamId, memberId) => {
     if (member && member.status === "pending") {
       member.status = "declined";
       await team.save();
-      await SnsService.sendInvitation("TeamInvitationFailure", {
+      await SnsService.sendInvitationNotification("TeamInvitationFailure", {
         teamName: team.name,
         teamId: team.id,
         memberId: member.id,

@@ -2,7 +2,21 @@ const AWS = require("aws-sdk");
 
 const sns = new AWS.SNS({ region: process.env.REGION });
 
-const sendInvitation = async (template, params) => {
+const publishTeamInvitation = async(message) => {
+  try {
+    const snsParams = {
+      Message: JSON.stringify(message),
+      TopicArn: process.env.TEAM_INVITATION_TOPIC_ARN,
+    };
+    await sns.publish(snsParams).promise();
+  } catch (error) {
+    console.log(error);
+    console.log("Error publishing message");
+    throw error;
+  }
+}
+
+const sendInvitationNotification = async (template, params) => {
   try {
     const message = {
       templateName: template,
@@ -57,7 +71,8 @@ const unsubscribeEmailNotification = async (email) => {
 };
 
 module.exports = {
-  sendInvitation,
+  publishTeamInvitation,
+  sendInvitationNotification,
   subscribeEmailNotification,
   unsubscribeEmailNotification
 };

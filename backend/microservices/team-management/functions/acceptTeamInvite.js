@@ -8,7 +8,7 @@ const acceptInvite = async (teamId, memberId) => {
     if (member && member.status === "pending") {
       member.status = "accepted";
       await team.save();
-      await SnsService.sendInvitation("TeamInvitationSuccess", {
+      await SnsService.sendInvitationNotification("TeamInvitationSuccess", {
         teamName: team.name,
         teamId: team.id,
         memberId: member.id,

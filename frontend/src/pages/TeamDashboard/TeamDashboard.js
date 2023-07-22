@@ -148,9 +148,10 @@ const TeamDashboardPage = () => {
       };
   
       try {
-        const response = await teamManagementService.sendInvite(id, newInvitation);
+        await teamManagementService.sendInvite(id, newInvitation);
+        const response = await fetchTeamData(id);
         console.log(response);
-        setTeamMembers(response.data.members);
+        setTeamMembers(response.members);
         setSelectedUser("");
         setShowInviteModal(false);
       } catch (error) {

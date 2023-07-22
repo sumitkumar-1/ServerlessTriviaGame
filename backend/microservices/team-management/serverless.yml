@@ -11,6 +11,7 @@ provider:
   region: us-east-1
   environment:
     SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:377747625142:team-notification-topic'
+    TEAM_INVITATION_TOPIC_ARN: 'arn:aws:sns:us-east-1:377747625142:team-invitation-topic'
     SQS_ARN: 'arn:aws:sqs:us-east-1:377747625142:team-notification-queue'
     REGION: us-east-1
     OPENAI_API_KEY: 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
@@ -53,13 +54,20 @@ functions:
           path: /api/teams/generate/teamName
           method: GET
           cors: true
-  sendTeamInvite:
-    handler: functions/sendTeamInvite.main
+  handleTeamInvitation:
+    handler: functions/handleTeamInvitation.main
     events:
       - http:
           path: /api/teams/sendinvites/{teamId}/
           method: POST
           cors: true
+  sendTeamInvite:
+    handler: functions/sendTeamInvite.main
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:377747625142:team-invitation-queue
+    environment:
+      TeamInvitationQueueUrl: 'https://sqs.us-east-1.amazonaws.com/377747625142/team-invitation-queue'
   acceptTeamInvite:
     handler: functions/acceptTeamInvite.main
     events:
@@ -128,6 +136,41 @@ functions:
 
 resources:
   Resources:
+    TeamInvitationTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: team-invitation-topic
+        DisplayName: Trivia Team Invitation
+    
+    TeamInvitationQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: team-invitation-queue
+
+    TeamInvitationSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        TopicArn: !Ref TeamInvitationTopic
+        Endpoint: !GetAtt TeamInvitationQueue.Arn
+
+    TeamInvitationQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: sqs:SendMessage
+              Resource: !GetAtt TeamInvitationQueue.Arn
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn':
+                    - !Ref TeamInvitationTopic
+        Queues:
+          - !Ref TeamInvitationQueue
+
     TeamNotificationTopic:
       Type: AWS::SNS::Topic
       Properties:
