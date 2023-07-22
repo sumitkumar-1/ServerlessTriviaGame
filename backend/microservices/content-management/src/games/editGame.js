@@ -48,14 +48,32 @@ module.exports.main = async (event) => {
     if (existingGame) {
         try {
             await editGame(gameId, requestBody);
-            return { statusCode: 200, body: JSON.stringify(requestBody) };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(requestBody)
+            };
         } catch (error) {
-            return { statusCode: 500, body: JSON.stringify(error) };
+            return {
+                statusCode: 500,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                }, body: JSON.stringify(error)
+            };
         }
     } else {
         return {
             statusCode: 404,
-            body: `Game with ID ${gameId} not found.`,
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            }, body: `Game with ID ${gameId} not found.`,
         };
     }
 };
