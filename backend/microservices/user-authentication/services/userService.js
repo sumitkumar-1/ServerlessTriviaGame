@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
-
+const axios = require("axios");
 const cognito = new AWS.CognitoIdentityServiceProvider();
+require("dotenv").config();
 
 exports.create = async (params) => {
   return cognito.signUp(params).promise();
@@ -57,3 +58,7 @@ exports.getAllUsers = async (params) => {
 exports.updateUserAdmin = async (params) => {
   return await cognito.adminUpdateUserAttributes(params).promise();
 };
+
+exports.saveUserToDynamo = async (data) => {
+  return await axios.post(`${process.env.USER_PROFILE_BASE_URL}/saveUser`, data);
+}

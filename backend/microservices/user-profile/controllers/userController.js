@@ -70,3 +70,18 @@ exports.updateGameDataById = async (req, res) => {
     res.send(errorMessage);
   }
 };
+
+exports.getGameDataByUserId = async (req, res) => {
+  try {
+    const gameData = await UserService.get(req.params.id);
+    const userData = await UserService.getCognitoUser(req.params.id);
+    const response = {
+      userData: userData.data,
+      gameData: gameData,
+    };
+    res.json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(404).json({ message: "Not Found.", error: err });
+  }
+};
