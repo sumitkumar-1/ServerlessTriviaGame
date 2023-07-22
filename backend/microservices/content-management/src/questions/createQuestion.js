@@ -36,7 +36,6 @@ async function createQuestion(questionData) {
         return error;
     }
     if (tags) {
-        questionData.points = 0;
         const marshalledItem = marshall(questionData);
         const params = {
             TableName: process.env.DYNAMODB_QUESTIONS_TABLE,
