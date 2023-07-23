@@ -58,7 +58,7 @@ const LoginPage = () => {
         if (loginResponse) {
           localStorage.setItem("mfaVerified", true);
           toast.success("Login Success!");
-          navigate("/");
+          navigate("/profile");
           setIsLoading(false);
         } else {
           toast.error("Internal Server Error.");
@@ -85,7 +85,7 @@ const LoginPage = () => {
             if (loginResponse) {
               localStorage.setItem("mfaVerified", true);
               toast.success("Login Success!");
-              navigate("/");
+              navigate("/profile");
               setIsLoading(false);
             } else {
               toast.error("Internal Server Error.");
@@ -123,7 +123,7 @@ const LoginPage = () => {
         if (loginResponse) {
           localStorage.setItem("mfaVerified", true);
           toast.success("Login Success!");
-          navigate("/");
+          navigate("/profile");
           setIsLoading(false);
         } else {
           toast.error("Internal Server Error.");
@@ -150,7 +150,7 @@ const LoginPage = () => {
             if (loginResponse) {
               localStorage.setItem("mfaVerified", true);
               toast.success("Login Success!");
-              navigate("/");
+              navigate("/profile");
               setIsLoading(false);
             } else {
               toast.error("Internal Server Error.");
