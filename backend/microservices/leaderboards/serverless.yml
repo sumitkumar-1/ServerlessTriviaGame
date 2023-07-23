@@ -40,15 +40,15 @@ functions:
   filterLeaderboardByTimeFrame:
     handler: filterLeaderboardByTimeFrame
     events:
-      - http: GET /
+      - http: POST /
   getEntityStatistics:
     handler: getEntityStatistics
     events:
-      - http: GET /
+      - http: POST /
   getLeaderboardByEntityId:
     handler: getLeaderboardByEntityId
     events:
-      - http: GET /
+      - http: POST /
 
 custom:
   scripts:
