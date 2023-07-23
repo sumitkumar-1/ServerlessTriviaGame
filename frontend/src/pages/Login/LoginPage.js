@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner/Spinner";
 import { useFormik } from "formik";
 import { LoginValidationSchema } from "../../utils/validationSchema";
-import { LoginSocialGoogle } from "reactjs-social-login";
+import { LoginSocialGoogle, LoginSocialFacebook } from "reactjs-social-login";
 import {
   CreateUser,
   VerifyEmailWithoutCode,
@@ -101,6 +101,71 @@ const LoginPage = () => {
     }
   };
 
+  const handlefacebookLogin = async (response) => {
+    try {
+      setIsLoading(true);
+      const requestBody = {
+        email: response?.email,
+        password: "Xyzab@123",
+        family_name: response?.first_name,
+        given_name: response?.last_name,
+        gender: "",
+        phone_number: "",
+      };
+      const responseData = await CreateUser(requestBody);
+
+      if (responseData?.data?.error?.code === "UsernameExistsException") {
+        const loginRequestData = {
+          email: response?.email,
+          password: "Xyzab@123",
+        };
+        const loginResponse = await auth.login(loginRequestData);
+        if (loginResponse) {
+          localStorage.setItem("mfaVerified", true);
+          toast.success("Login Success!");
+          navigate("/");
+          setIsLoading(false);
+        } else {
+          toast.error("Internal Server Error.");
+          setIsLoading(false);
+          navigate("/login");
+          setIsLoading(false);
+        }
+      } else {
+        if (!responseData?.data?.error) {
+          const verifyEmailRequestBody = {
+            email: response?.email,
+          };
+
+          const verifyEmailResponse = await VerifyEmailWithoutCode(
+            verifyEmailRequestBody
+          );
+
+          if (verifyEmailResponse?.data?.success) {
+            const loginRequestData = {
+              email: response?.email,
+              password: "Xyzab@123",
+            };
+            const loginResponse = await auth.login(loginRequestData);
+            if (loginResponse) {
+              localStorage.setItem("mfaVerified", true);
+              toast.success("Login Success!");
+              navigate("/");
+              setIsLoading(false);
+            } else {
+              toast.error("Internal Server Error.");
+              setIsLoading(false);
+              navigate("/login");
+              setIsLoading(false);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      toast.error("Internal Server Error.");
+    }
+  }
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -185,6 +250,17 @@ const LoginPage = () => {
                   alt="googleicon"
                 />
               </LoginSocialGoogle>
+              <LoginSocialFacebook
+                appId="281913144333006"
+                onResolve={(response) => {
+                  handlefacebookLogin(response.data)
+                }}
+                onReject={(error) => {
+                  console.log(error)
+                }}
+              >
+                <img className="loginwithfacebook" src={require("../../assets/facebook.png")} alt="facebook" />
+              </LoginSocialFacebook>
             </div>
           </form>
         </div>
