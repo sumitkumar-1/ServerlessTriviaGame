@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Form, Table, Modal, Tabs, Tab } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  Table,
+  Modal,
+  Tabs,
+  Tab,
+} from "react-bootstrap";
 import { Bar, Line, Pie } from "react-chartjs-2";
-import teamManagementService from '../../services/team.management.service';
+import teamManagementService from "../../services/team.management.service";
+import leaderboardService from "../../services/leaderboard.service";
 import { GetAllUsers } from "../../services/user.service";
 import { useParams } from "react-router-dom";
 
@@ -21,6 +32,8 @@ const TeamDashboardPage = () => {
     pointsEarned: 0,
   });
   const [gameHistory, setGameHistory] = useState([]);
+  const [gameLabels, setGameLabels] = useState([]);
+  const [gamePoints, setGamePoints] = useState([]);
 
   useEffect(() => {
     // Fetch team data by id and populate the state
@@ -64,15 +77,25 @@ const TeamDashboardPage = () => {
     }
   };
 
+  const convertTimestampToDate = (timestamp) => {
+    const seconds = timestamp._seconds;
+    const milliseconds = timestamp._nanoseconds / 1000000; // Convert nanoseconds to milliseconds
+    const totalMilliseconds = seconds * 1000 + milliseconds;
+    return new Date(totalMilliseconds);
+  };
+
   const fetchGameHistory = async (teamId) => {
-    return [];
-    //try {
-    //  const response = await teamManagementService.getGameHistory(teamId);
-    //  return response;
-    //} catch (error) {
-    //  console.error("Error fetching game history:", error);
-    //  return [];
-    //}
+    try {
+      const response = await leaderboardService.getLeaderboardByEntityId({
+        entityId: teamId,
+      });
+      setGameLabels(response.data[0].statistics.map((game, index) => `Game ${index + 1}`));
+      setGamePoints(response.data[0].statistics.map((game) => game.totalScore));
+      return response.data[0].statistics;
+    } catch (error) {
+      console.error("Error fetching game history:", error);
+      return [];
+    }
   };
 
   const chartOptions = {
@@ -109,11 +132,11 @@ const TeamDashboardPage = () => {
   };
 
   const lineChartData = {
-    labels: ["Game 1", "Game 2", "Game 3", "Game 4", "Game 5"],
+    labels: gameLabels,
     datasets: [
       {
         label: "Points Earned",
-        data: [100, 150, 120, 200, 180],
+        data: gamePoints,
         fill: false,
         borderColor: "rgba(75, 192, 192, 1)",
         tension: 0.1,
@@ -143,10 +166,10 @@ const TeamDashboardPage = () => {
         userId: user.id,
         email: user.email,
         addedBy: currentUserId,
-        role: 'user',
-        status: 'pending'
+        role: "user",
+        status: "pending",
       };
-  
+
       try {
         await teamManagementService.sendInvite(id, newInvitation);
         const response = await fetchTeamData(id);
@@ -155,7 +178,7 @@ const TeamDashboardPage = () => {
         setSelectedUser("");
         setShowInviteModal(false);
       } catch (error) {
-        console.error('Error sending invitation:', error);
+        console.error("Error sending invitation:", error);
       }
     }
   };
@@ -163,19 +186,23 @@ const TeamDashboardPage = () => {
   const handleActionExecute = async () => {
     if (selectedActionUser && selectedAction) {
       try {
-        if (selectedAction === 'remove') {
+        if (selectedAction === "remove") {
           await teamManagementService.deleteMember(id, selectedActionUser);
-        } else if (selectedAction === 'promote') {
-          await teamManagementService.updateMember(id, selectedActionUser, { role: 'admin' });
-        } else if (selectedAction === 'user') {
-          await teamManagementService.updateMember(id, selectedActionUser, { role: 'user' });
+        } else if (selectedAction === "promote") {
+          await teamManagementService.updateMember(id, selectedActionUser, {
+            role: "admin",
+          });
+        } else if (selectedAction === "user") {
+          await teamManagementService.updateMember(id, selectedActionUser, {
+            role: "user",
+          });
         }
 
         setSelectedActionUser("");
         setSelectedAction("");
         setShowActionModal(false);
       } catch (error) {
-        console.error('API Error:', error);
+        console.error("API Error:", error);
       }
     }
   };
@@ -220,17 +247,27 @@ const TeamDashboardPage = () => {
             <Tab eventKey="members" title="Manage Members">
               <Row className="mt-3">
                 <Col xs={12} md={6}>
-                  <Button variant="primary" onClick={() => setShowInviteModal(true)}>
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowInviteModal(true)}
+                  >
                     Invite Member
                   </Button>
-                  <Modal show={showInviteModal} onHide={() => setShowInviteModal(false)}>
+                  <Modal
+                    show={showInviteModal}
+                    onHide={() => setShowInviteModal(false)}
+                  >
                     <Modal.Header closeButton>
                       <Modal.Title>Invite Team Member</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       <Form.Group>
                         <Form.Label>Select a user to invite</Form.Label>
-                        <Form.Control as="select" value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
+                        <Form.Control
+                          as="select"
+                          value={selectedUser}
+                          onChange={(e) => setSelectedUser(e.target.value)}
+                        >
                           <option value="">Select a user...</option>
                           {allUsers.map((user) => (
                             <option key={user.id} value={user.id}>
@@ -241,7 +278,12 @@ const TeamDashboardPage = () => {
                       </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
-                      <Button variant="secondary" onClick={() => setShowInviteModal(false)} >Cancel</Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setShowInviteModal(false)}
+                      >
+                        Cancel
+                      </Button>
                       <Button variant="primary" onClick={handleInviteMember}>
                         Send Invitation
                       </Button>
@@ -261,7 +303,7 @@ const TeamDashboardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                    {teamMembers ? (
+                      {teamMembers ? (
                         teamMembers
                           .filter((member) => member.status !== "accepted")
                           .map((member) => {
@@ -285,7 +327,9 @@ const TeamDashboardPage = () => {
               <Row className="mt-5">
                 <Col>
                   <h4>Team Members</h4>
-                  <Button onClick={() => setShowActionModal(true)}>Perform Action</Button>
+                  <Button onClick={() => setShowActionModal(true)}>
+                    Perform Action
+                  </Button>
                   <Table striped bordered hover>
                     <thead>
                       <tr>
@@ -298,8 +342,12 @@ const TeamDashboardPage = () => {
                         teamMembers
                           .filter((member) => member.status === "accepted")
                           .map((member) => {
-                            const user = allUsers.find((user) => user.id === member.userId);
-                            const memberName = user ? `${user.given_name} ${user.family_name}` : "Unknown User";
+                            const user = allUsers.find(
+                              (user) => user.id === member.userId
+                            );
+                            const memberName = user
+                              ? `${user.given_name} ${user.family_name}`
+                              : "Unknown User";
                             return (
                               <tr key={member.id}>
                                 <td>{memberName}</td>
@@ -314,40 +362,61 @@ const TeamDashboardPage = () => {
                       )}
                     </tbody>
                   </Table>
-                  <Modal show={showActionModal} onHide={() => setShowActionModal(false)}>
+                  <Modal
+                    show={showActionModal}
+                    onHide={() => setShowActionModal(false)}
+                  >
                     <Modal.Header closeButton>
                       <Modal.Title>Perform Action</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       <Form.Group>
                         <Form.Label>Select User:</Form.Label>
-                          <Form.Control as="select" value={selectedActionUser} onChange={(e) => setSelectedActionUser(e.target.value)}>
-                            <option value="">Select a user...</option>
-                            {teamMembers
-                              .filter((member) => member.status === 'accepted')
-                              .map((member) => (
+                        <Form.Control
+                          as="select"
+                          value={selectedActionUser}
+                          onChange={(e) =>
+                            setSelectedActionUser(e.target.value)
+                          }
+                        >
+                          <option value="">Select a user...</option>
+                          {teamMembers
+                            .filter((member) => member.status === "accepted")
+                            .map((member) => (
                               <option key={member.id} value={member.id}>
                                 {`${member.email}`}
                               </option>
                             ))}
-                          </Form.Control>
-                        </Form.Group>
-                        <div className="mt-3"></div>
-                        <Form.Group>
-                          <Form.Label>Select Action:</Form.Label>
-                          <Form.Control as="select" value={selectedAction || ""} onChange={(e) => setSelectedAction(e.target.value)}>
-                            <option value="">Select an action</option>
-                            <option value="remove">Remove</option>
-                            <option value="user">User</option>
-                            <option value="promote">Promote to Admin</option>
-                          </Form.Control>
-                        </Form.Group>
+                        </Form.Control>
+                      </Form.Group>
+                      <div className="mt-3"></div>
+                      <Form.Group>
+                        <Form.Label>Select Action:</Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={selectedAction || ""}
+                          onChange={(e) => setSelectedAction(e.target.value)}
+                        >
+                          <option value="">Select an action</option>
+                          <option value="remove">Remove</option>
+                          <option value="user">User</option>
+                          <option value="promote">Promote to Admin</option>
+                        </Form.Control>
+                      </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
-                      <Button variant="secondary" onClick={() => setShowActionModal(false)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setShowActionModal(false)}
+                      >
                         Cancel
                       </Button>
-                      <Button variant={selectedAction === 'remove' ? 'danger' : 'info'} onClick={handleActionExecute}>
+                      <Button
+                        variant={
+                          selectedAction === "remove" ? "danger" : "info"
+                        }
+                        onClick={handleActionExecute}
+                      >
                         Confirm
                       </Button>
                     </Modal.Footer>
@@ -364,21 +433,27 @@ const TeamDashboardPage = () => {
                       <tr>
                         <th>#</th>
                         <th>Date</th>
-                        <th>Opponent</th>
+                        <th>Category</th>
                         <th>Result</th>
                         <th>Points</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {gameHistory.map((game) => (
-                        <tr key={game.id}>
-                          <td>{game.id}</td>
-                          <td>{game.date}</td>
-                          <td>{game.opponent}</td>
-                          <td>{game.result}</td>
-                          <td>{game.points}</td>
+                      {gameHistory ? (
+                        gameHistory.map((game) => (
+                          <tr key={game.id}>
+                            <td>{game.id.substr(game.id.length - 6)}</td>
+                            <td>{convertTimestampToDate(game.created_at).toLocaleString()}</td>
+                            <td>{game.category}</td>
+                            <td>{game.result}</td>
+                            <td>{game.totalScore}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5">No games played so far</td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </Table>
                 </Col>
