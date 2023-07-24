@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Dropdown, Table } from "react-bootstrap";
 import leaderBoardService from "../../services/leaderboard.service";
+import teamManagementService from "../../services/team.management.service";
+import { GetUserById } from "../../services/user.service";
 
 const LeaderboardPage = () => {
   const [leaderboardType, setLeaderboardType] = useState("individual");
@@ -11,15 +13,54 @@ const LeaderboardPage = () => {
     fetchLeaderboard();
   }, [leaderboardType, timeInterval]);
 
-  const fetchLeaderboard = () => {
-    // TODO?
-    leaderBoardService.getGlobalLeaderboard()
-      .then((response) => {
-        setLeaderboardData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching leaderboard:", error);
+  const fetchLeaderboard = async () => {
+    try {
+      const response = await leaderBoardService.filterLeaderboardByTimeFrame({timeFrame: timeInterval});
+      const filteredData = response.data.filter(
+        (item) => item.entityType === leaderboardType
+      );
+
+      const fetchEntityDetails = filteredData.map(async (entry) => {
+        if (entry.entityType === "team") {
+          const tresponse = await teamManagementService.getTeamById(
+            entry.entityId
+          );
+          return {
+            id: entry.entityId,
+            name: tresponse.data ? tresponse.data.name : "Unknown Team",
+            gamesPlayed: entry.gamesPlayed,
+            totalPoints: entry.totalPoints,
+            wins: entry.wins,
+            winPercentage: entry.winPercentage,
+          };
+        } else {
+          const tresponse = await GetUserById(entry.entityId);
+          return {
+            id: entry.entityId,
+            name: tresponse.data
+              ? `${tresponse.data.given_name} ${tresponse.data.family_name}`
+              : "Unknown User",
+            gamesPlayed: entry.gamesPlayed,
+            totalPoints: entry.totalPoints,
+            wins: entry.wins,
+            winPercentage: entry.winPercentage,
+          };
+        }
       });
+
+      const resolvedEntityDetails = await Promise.all(fetchEntityDetails);
+
+      // Sort the resolvedEntityDetails by totalPoints in descending order
+      const sortedLeaderboardData = resolvedEntityDetails.sort(
+        (a, b) => b.totalPoints - a.totalPoints
+      );
+
+      console.log(sortedLeaderboardData);
+
+      setLeaderboardData(sortedLeaderboardData);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    }
   };
 
   const handleLeaderboardTypeChange = (type) => {
@@ -42,13 +83,18 @@ const LeaderboardPage = () => {
         <Col>
           <Dropdown>
             <Dropdown.Toggle variant="secondary">
-              {leaderboardType === "individual" ? "Individual" : "Team"} Leaderboard
+              {leaderboardType === "individual" ? "Individual" : "Team"}{" "}
+              Leaderboard
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => handleLeaderboardTypeChange("individual")}>
+              <Dropdown.Item
+                onClick={() => handleLeaderboardTypeChange("individual")}
+              >
                 Individual
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleLeaderboardTypeChange("team")}>
+              <Dropdown.Item
+                onClick={() => handleLeaderboardTypeChange("team")}
+              >
                 Team
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -58,7 +104,9 @@ const LeaderboardPage = () => {
         <Col>
           <Dropdown>
             <Dropdown.Toggle variant="secondary">
-              {timeInterval === "all-time" ? "All Time" : timeInterval.charAt(0).toUpperCase() + timeInterval.slice(1)}
+              {timeInterval === "all-time"
+                ? "All Time"
+                : timeInterval.charAt(0).toUpperCase() + timeInterval.slice(1)}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => handleTimeIntervalChange("daily")}>
@@ -67,10 +115,14 @@ const LeaderboardPage = () => {
               <Dropdown.Item onClick={() => handleTimeIntervalChange("weekly")}>
                 Weekly
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleTimeIntervalChange("monthly")}>
+              <Dropdown.Item
+                onClick={() => handleTimeIntervalChange("monthly")}
+              >
                 Monthly
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleTimeIntervalChange("all-time")}>
+              <Dropdown.Item
+                onClick={() => handleTimeIntervalChange("all-time")}
+              >
                 All Time
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -80,13 +132,19 @@ const LeaderboardPage = () => {
 
       <Row className="mt-4">
         <Col>
-          <h3>{leaderboardType === "individual" ? "Individual" : "Team"} Leaderboard</h3>
+          <h3>
+            {leaderboardType === "individual" ? "Individual" : "Team"}{" "}
+            Leaderboard
+          </h3>
           <Table striped bordered>
             <thead>
               <tr>
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
+                <th>GamesPlayed</th>
+                <th>Wins</th>
+                <th>WinsPecentage</th>
               </tr>
             </thead>
             <tbody>
@@ -94,7 +152,10 @@ const LeaderboardPage = () => {
                 <tr key={entry.id}>
                   <td>{index + 1}</td>
                   <td>{entry.name}</td>
-                  <td>{entry.score}</td>
+                  <td>{entry.totalPoints}</td>
+                  <td>{entry.gamesPlayed}</td>
+                  <td>{entry.wins}</td>
+                  <td>{entry.winPercentage.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

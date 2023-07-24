@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2f2fdb94-d8e7-40d2-822e-3474a2a24dfa",
+		"_postman_id": "2d88fe4f-00c0-4a98-a456-fc79cb06336c",
 		"name": "serverless-trivia-game",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28713742"
 	},
 	"item": [
 		{
@@ -390,7 +391,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n    \"entityId\": \"02692f91-a100-469a-8482-97563a84938f\",\r\n    \"category\": \"Space\"\r\n}",
+							"raw": "{\r\n\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"category\": \"Space\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -413,7 +414,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entityId\": \"02692f91-a100-469a-8482-97563a84938f\"\r\n}",
+							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -436,7 +437,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entityId\": \"02692f91-a100-469a-8482-97563a84938f\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk12\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"win\",\r\n    \"totalScore\": 100\r\n}",
+							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"entityType\": \"team\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk29\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"loss\",\r\n    \"totalScore\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1219,7 +1220,7 @@
 		},
 		{
 			"key": "leaderboardUrl",
-			"value": "https://us-central1-b009040970-serverless.cloudfunctions.net/leaderboards-dev",
+			"value": "https://us-central1-b009040970-serverless-393804.cloudfunctions.net/leaderboards-dev",
 			"type": "default"
 		},
 		{

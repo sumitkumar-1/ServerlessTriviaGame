@@ -5,7 +5,7 @@ provider:
   stage: dev
   runtime: nodejs14
   region: us-central1
-  project: b009040970-serverless
+  project: b009040970-serverless-393804
 
 frameworkVersion: '3'
 
@@ -25,13 +25,13 @@ functions:
     events:
       - event:
           eventType: providers/cloud.pubsub/eventTypes/topic.publish
-          resource: 'projects/b009040970-serverless/topics/leaderboard-topic'
+          resource: 'projects/b009040970-serverless-393804/topics/leaderboard-topic'
   publishLeaderboardUpdate:
     handler: publishLeaderboardUpdate
     events:
       - http: POST /
     environment:
-      PROJECT_ID: b009040970-serverless
+      PROJECT_ID: b009040970-serverless-393804
       LEADERBOARD_TOPIC_NAME: leaderboard-topic
   getGlobalLeaderboard:
     handler: getGlobalLeaderboard
