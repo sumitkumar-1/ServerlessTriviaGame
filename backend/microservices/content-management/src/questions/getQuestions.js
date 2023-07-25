@@ -11,7 +11,6 @@ module.exports.main = async event => {
     try {
         const result = await client.send(scanCommand);
         const questions = result.Items.map((item) => unmarshall(item));
-        console.log(questions);
         return {
             statusCode: 200,
             headers: {
