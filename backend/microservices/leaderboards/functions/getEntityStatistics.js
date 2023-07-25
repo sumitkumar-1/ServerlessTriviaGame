@@ -33,25 +33,12 @@ const getEntityStatistics = async (entityId, category) => {
   }
 };
 
-module.exports.main = async (event) => {
+module.exports.main = async (request, response) => {
   try {
-    const { entityId, category } = event.pathParameters;
-
+    const { entityId, category } = request.body;
     const statistics = await getEntityStatistics(entityId, category);
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(statistics),
-    };
-
-    return response;
+    return response.status(200).json(statistics);
   } catch (error) {
-    const response = {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: "Failed to retrieve entity statistics by category.",
-      }),
-    };
-
-    return response;
+    return response.status(500).send({error: "Failed to retrieve entity statistics by category."});
   }
 };

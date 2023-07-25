@@ -24,21 +24,11 @@ const getGlobalLeaderboard = async () => {
   }
 };
 
-module.exports.main = async (event) => {
+module.exports.main = async (request, response) => {
   try {
     const leaderboard = await getGlobalLeaderboard();
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(leaderboard),
-    };
-
-    return response;
+    return response.status(200).json(leaderboard);
   } catch (error) {
-    const response = {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Failed to retrieve global leaderboard." }),
-    };
-
-    return response;
+    return response.status(500).send({error: "Failed to retrieve global leaderboard."});
   }
 };

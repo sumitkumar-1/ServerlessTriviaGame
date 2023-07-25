@@ -27,25 +27,12 @@ const getLeaderboardByEntityId = async (entityId) => {
   }
 };
 
-module.exports.main = async (event) => {
+module.exports.main = async (request, response) => {
   try {
-    const { entityId } = event.pathParameters;
-
+    const { entityId } = request.body;
     const leaderboard = await getLeaderboardByEntityId(entityId);
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(leaderboard),
-    };
-
-    return response;
+    return response.status(200).json(leaderboard);
   } catch (error) {
-    const response = {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: "Failed to retrieve leaderboard by Entity Id.",
-      }),
-    };
-
-    return response;
+    return response.status(500).json({message: "Failed to retrieve leaderboard by Entity Id.", error});
   }
 };

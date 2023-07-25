@@ -48,7 +48,7 @@ const VerifyQuestionAnswersPage = () => {
       toast.error("Security Authentication Failed!")
     } else {
       localStorage.setItem("mfaVerified", true);
-      navigate("/");
+      navigate("/profile");
       setIsLoading(false);
       toast.success("Login Success!")
     }

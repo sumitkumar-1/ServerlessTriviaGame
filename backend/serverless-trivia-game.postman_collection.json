@@ -438,14 +438,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/getAll",
+							"raw": "{{leaderboardUrl}}-getGlobalLeaderboard",
 							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"getAll"
+								"{{leaderboardUrl}}-getGlobalLeaderboard"
 							]
 						}
 					},
@@ -454,24 +449,21 @@
 				{
 					"name": "filterLeaderboardByTimeFrame",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/filter/:timeFrame",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"filter",
-								":timeFrame"
-							],
-							"variable": [
-								{
-									"key": "timeFrame",
-									"value": "daily"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"timeFrame\": \"monthly\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-filterLeaderboardByTimeFrame",
+							"host": [
+								"{{leaderboardUrl}}-filterLeaderboardByTimeFrame"
 							]
 						}
 					},
@@ -480,29 +472,21 @@
 				{
 					"name": "getEntityStatistics",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/statistics/:entityId/:category",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"statistics",
-								":entityId",
-								":category"
-							],
-							"variable": [
-								{
-									"key": "entityId",
-									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
-								},
-								{
-									"key": "category",
-									"value": "Education"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"category\": \"Space\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-getEntityStatistics",
+							"host": [
+								"{{leaderboardUrl}}-getEntityStatistics"
 							]
 						}
 					},
@@ -511,24 +495,21 @@
 				{
 					"name": "getLeaderboardByEntityId",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/entity/:entityId",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"entity",
-								":entityId"
-							],
-							"variable": [
-								{
-									"key": "entityId",
-									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-getLeaderboardByEntityId",
+							"host": [
+								"{{leaderboardUrl}}-getLeaderboardByEntityId"
 							]
 						}
 					},
@@ -549,14 +530,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/update",
+							"raw": "{{leaderboardUrl}}-publishLeaderboardUpdate",
 							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"update"
+								"{{leaderboardUrl}}-publishLeaderboardUpdate"
 							]
 						}
 					},
@@ -930,8 +906,8 @@
 			"type": "default"
 		},
 		{
-			"key": "tournamentUrl",
-			"value": "",
+			"key": "leaderboardUrl",
+			"value": "https://us-central1-b009040970-serverless-393804.cloudfunctions.net/leaderboards-dev",
 			"type": "default"
 		},
 		{

@@ -13,7 +13,14 @@ const filterLeaderboardByTimeFrame = async (timeFrame) => {
   try {
     let startDate;
 
-    if (timeFrame === "daily") {
+    if (timeFrame === "all-time") {
+      const leaderboardSnapshot = await db.collection("leaderboard").get();
+      const leaderboard = [];
+      leaderboardSnapshot.forEach((doc) => {
+        leaderboard.push(doc.data());
+      });
+      return leaderboard;
+    } else if (timeFrame === "daily") {
       startDate = new Date();
       startDate.setHours(0, 0, 0, 0);
     } else if (timeFrame === "weekly") {
@@ -22,6 +29,8 @@ const filterLeaderboardByTimeFrame = async (timeFrame) => {
     } else if (timeFrame === "monthly") {
       startDate = new Date();
       startDate.setMonth(startDate.getMonth() - 1);
+    } else {
+      throw new Error("Invalid time frame provided.");
     }
 
     const leaderboardSnapshot = await db
@@ -30,7 +39,6 @@ const filterLeaderboardByTimeFrame = async (timeFrame) => {
       .get();
 
     const leaderboard = [];
-
     leaderboardSnapshot.forEach((doc) => {
       leaderboard.push(doc.data());
     });
@@ -41,23 +49,12 @@ const filterLeaderboardByTimeFrame = async (timeFrame) => {
   }
 };
 
-module.exports.main = async (event) => {
+module.exports.main = async (request, response) => {
   try {
-    const { timeFrame } = event.pathParameters;
-
+    const { timeFrame } = request.body;
     const leaderboard = await filterLeaderboardByTimeFrame(timeFrame);
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(leaderboard),
-    };
-
-    return response;
+    return response.status(200).json(leaderboard);
   } catch (error) {
-    const response = {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Failed to filter leaderboard by time frame." }),
-    };
-
-    return response;
+    return response.status(500).send({ error: "Failed to filter leaderboard by time frame." });
   }
 };

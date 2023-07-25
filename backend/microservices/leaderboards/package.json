@@ -12,12 +12,14 @@
     "serverless-google-cloudfunctions": "^4.6.0"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^3.7.1",
     "aws-sdk": "^2.1312.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firebase-admin": "^11.9.0",
     "serverless": "^3.32.2",
+    "serverless-plugin-scripts": "^1.0.2",
     "uuid": "^9.0.0"
   },
   "repository": {
