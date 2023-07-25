@@ -1302,7 +1302,7 @@
 		},
 		{
 			"key": "cms_base_url",
-			"value": "https://n6nqalk347.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com",
 			"type": "string"
 		}
 	]
