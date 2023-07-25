@@ -1,5 +1,5 @@
 service: content-management
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 plugins:
   - serverless-dotenv-plugin
@@ -11,111 +11,82 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   iam:
-    role: arn:aws:iam::309206448713:role/LabRole
+    role: arn:aws:iam::558280373626:role/LabRole
   apiGateway:
     shouldStartNameWithService: true
+    resourcePolicy:
+      - Effect: Allow
+        Principal: "*"
+        Action: execute-api:Invoke
+        Resource:
+          - execute-api:/*/*/*
+  httpApi:
+    cors: true
 
 functions:
   getGames:
     handler: src/games/getGames.main
     events:
-      - http:
+      - httpApi:
           path: /games
           method: GET
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   createGame:
     handler: src/games/createGame.main
     events:
-      - http:
+      - httpApi:
           path: /games
           method: POST
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   editGame:
     handler: src/games/editGame.main
     events:
-      - http:
+      - httpApi:
           path: /games/{id}
           method: PUT
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   deleteGame:
     handler: src/games/deleteGame.main
     events:
-      - http:
+      - httpApi:
           path: /games/{id}
           method: DELETE
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
-  
+
   getQuestions:
     handler: src/questions/getQuestions.main
     events:
-      - http:
+      - httpApi:
           path: /questions
           method: GET
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   getQuestion:
     handler: src/questions/getQuestion.main
     events:
-      - http:
+      - httpApi:
           path: /questions/{id}
           method: GET
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   createQuestion:
     handler: src/questions/createQuestion.main
     events:
-      - http:
+      - httpApi:
           path: /questions
           method: POST
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   editQuestion:
     handler: src/questions/editQuestion.main
     events:
-      - http:
+      - httpApi:
           path: /questions/{id}
           method: PUT
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
   deleteQuestion:
     handler: src/questions/deleteQuestion.main
     events:
-      - http:
+      - httpApi:
           path: /questions/{id}
           method: DELETE
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Access-Control-Allow-Credentials: true
+
 resources:
   Resources:
     TriviaGamesTable:
@@ -144,23 +115,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    GatewayResponseDefault4XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
-        ResponseType: DEFAULT_4XX
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-    GatewayResponseDefault5XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
-        ResponseType: DEFAULT_5XX
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'

@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "2d88fe4f-00c0-4a98-a456-fc79cb06336c",
+		"_postman_id": "ab3b7920-3254-401b-9501-b73ac43358bf",
 		"name": "serverless-trivia-game",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28713742"
+		"_exporter_id": "24824996",
+		"_collection_link": "https://bold-water-700163.postman.co/workspace/My-Workspace~c9d5edf1-84af-4e40-82a7-490f7e5d8513/collection/24824996-ab3b7920-3254-401b-9501-b73ac43358bf?action=share&creator=24824996&source=collection_link"
 	},
 	"item": [
 		{
@@ -16,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Ethereal Warriors\",\r\n    \"userId\": \"1\"\r\n}",
+							"raw": "{\r\n    \"name\": \"ThunderBoltsUnited\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -83,7 +84,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"4321443241211fdfdsfdf\",\r\n    \"addedBy\": \"woh21wo21h3o2132131\"\r\n}",
+							"raw": "{\r\n    \"addedBy\": \"7e33d2c8-d94a-452c-8ed5-f19e337ce5ac\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -91,20 +92,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/sendinvites/:teamId",
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"sendinvites",
-								":teamId"
+								":teamId",
+								"invites"
 							],
 							"variable": [
 								{
 									"key": "teamId",
-									"value": "e41f414f-f63d-4d1f-8101-61c935f45085"
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
 								}
 							]
 						}
@@ -112,22 +113,22 @@
 					"response": []
 				},
 				{
-					"name": "acceptRejectInvite",
+					"name": "acceptInvite",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/acceptreject/:teamId/:memberId/:option",
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/accept",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"acceptreject",
 								":teamId",
+								"invites",
 								":memberId",
-								":option"
+								"accept"
 							],
 							"variable": [
 								{
@@ -137,10 +138,38 @@
 								{
 									"key": "memberId",
 									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rejectInvite",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/:teamId/invites/:memberId/reject",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								":teamId",
+								"invites",
+								":memberId",
+								"reject"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "89a8aea0-f574-4233-9d6a-a2ae1f14f2bb"
 								},
 								{
-									"key": "option",
-									"value": ""
+									"key": "memberId",
+									"value": "3965ad0f-7280-44e0-8e2a-f46db8fc7701"
 								}
 							]
 						}
@@ -153,15 +182,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/deletemembers/:teamId/:memberId",
+							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"deletemembers",
 								":teamId",
+								"members",
 								":memberId"
 							],
 							"variable": [
@@ -184,15 +213,15 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/updatemembers/:teamId/:memberId",
+							"raw": "{{teamUrl}}/api/teams/:teamId/members/:memberId",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"updatemembers",
 								":teamId",
+								"members",
 								":memberId"
 							],
 							"variable": [
@@ -224,20 +253,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/updatestats/:teamId",
+							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"updatestats",
-								":teamId"
+								":teamId",
+								"stats"
 							],
 							"variable": [
 								{
 									"key": "teamId",
-									"value": "e41f414f-f63d-4d1f-8101-61c935f45085"
+									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
 								}
 							]
 						}
@@ -250,15 +279,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/getstats/:teamId",
+							"raw": "{{teamUrl}}/api/teams/:teamId/stats",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"getstats",
-								":teamId"
+								":teamId",
+								"stats"
 							],
 							"variable": [
 								{
@@ -276,21 +305,78 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/get/:teamId",
+							"raw": "{{teamUrl}}/api/teams/:id",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"get",
-								":teamId"
+								":id"
 							],
 							"variable": [
 								{
-									"key": "teamId",
+									"key": "id",
 									"value": "7e33d2c8-d94a-452c-8ed5-f19e337ce5ac"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subscribeEmailNotification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/notification/subscribe",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"notification",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unsubscribeEmailNotification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sumit.kumar@dal.ca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teamUrl}}/api/teams/notification/unsubscribe",
+							"host": [
+								"{{teamUrl}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"notification",
+								"unsubscribe"
 							]
 						}
 					},
@@ -302,14 +388,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{teamUrl}}/api/teams/delete/:id",
+							"raw": "{{teamUrl}}/api/teams/:id",
 							"host": [
 								"{{teamUrl}}"
 							],
 							"path": [
 								"api",
 								"teams",
-								"delete",
 								":id"
 							],
 							"variable": [
@@ -437,7 +522,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"entityType\": \"team\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk29\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"loss\",\r\n    \"totalScore\": 0\r\n}",
+							"raw": "{\r\n    \"entityId\": \"jeoqjeowqjeowqeowqejowqjeowqe\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk2\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"win\",\r\n    \"totalScore\": 100\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -457,466 +542,11 @@
 		},
 		{
 			"name": "User Authentication",
-			"item": [
-				{
-					"name": "Create User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manavbhikadiya@gmail.com\",\r\n    \"password\":\"Manav@123\",\r\n    \"family_name\":\"Bhikadiya\",\r\n    \"given_name\": \"Manav\",\r\n    \"gender\": \"Male\",\r\n    \"phone_number\": \"+17828824703\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/users/create",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"users",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verify Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manavbhikadiya@gmail.com\",\r\n    \"code\": \"192612\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/users/verifyEmail",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"users",
-								"verifyEmail"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"manavbhikadiya@gmail.com\",\r\n    \"password\": \"Manav@123\" \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/login",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manavbhikadiya@gmail.com\",\r\n    \"family_name\":\"Bhikadiya\",\r\n    \"given_name\": \"Manavbhai\",\r\n    \"gender\": \"Male\",\r\n    \"phone_number\": \"+17828824703\",\r\n    \"picture\": \"https://www.google.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/updateUser",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"updateUser"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get user",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{userAuthUrl}}/getUser",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"getUser"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Sign out",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{userAuthUrl}}/signout",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"signout"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "username",
-								"value": "0274d151-0f4d-49eb-b31f-2e72a115be08",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{userAuthUrl}}/deleteUser",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"deleteUser"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Forgot Password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manavbhikadiya@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/forgot-password",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"forgot-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Confirm Password Reset",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manavbhikadiya@gmail.com\",\r\n    \"verificationCode\": \"842204\",\r\n    \"newPassword\": \"Manav@1234\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/confirm-password-reset",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"confirm-password-reset"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Qestion to firestore",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"question\": \"What is your favourite Color?\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/addQuestion",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"addQuestion"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Store User Response",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"7aa85e83-aed1-4097-ba49-0f995cc23e1a\",\r\n    \"question\": \"What is your favourite Color?\",\r\n    \"answer\": \"Black\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/storeUserResponse",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"storeUserResponse"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Validation Q & A",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"question\": \"What is your favourite Color?\",\r\n    \"answer\": \"Black\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userAuthUrl}}/questionAnswerValidation",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"questionAnswerValidation"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verify Token",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{userAuthUrl}}/verifyToken",
-							"host": [
-								"{{userAuthUrl}}"
-							],
-							"path": [
-								"verifyToken"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Question Answer",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"7aa85e83-aed1-4097-ba49-0f995cc23e1a\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/getQuestionAnswer",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"getQuestionAnswer"
-							]
-						}
-					},
-					"response": []
-				}
-			]
+			"item": []
 		},
 		{
 			"name": "User Profile Management",
-			"item": [
-				{
-					"name": "Save User",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{userProfileManagementUrl}}/saveUser",
-							"host": [
-								"{{userProfileManagementUrl}}"
-							],
-							"path": [
-								"saveUser"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Game Data of User",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"totalGamePlayed\": 2,\r\n    \"win\": 2,\r\n    \"loss\": 0,\r\n    \"totalPoints\": 1000,\r\n    \"achievements\": \"Bronze\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{userProfileManagementUrl}}/updateGameData",
-							"host": [
-								"{{userProfileManagementUrl}}"
-							],
-							"path": [
-								"updateGameData"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all Game Data",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{userAuthAccessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{userProfileManagementUrl}}/getGameData",
-							"host": [
-								"{{userProfileManagementUrl}}"
-							],
-							"path": [
-								"getGameData"
-							]
-						}
-					},
-					"response": []
-				}
-			]
+			"item": []
 		},
 		{
 			"name": "Trivia Game Lobby",
@@ -1101,13 +731,31 @@
 					"response": []
 				},
 				{
+					"name": "Get Question by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/questions/91ef41a34a910d3952f924eaf2a53524",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"questions",
+								"91ef41a34a910d3952f924eaf2a53524"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Question",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"category\": \"Science\",\r\n    \"difficulty\": \"Medium\",\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"correctAnswer\": \"H\"\r\n}",
+							"raw": "{\r\n    \"category\": \"Science\",\r\n    \"difficulty\": \"Medium\",\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"correctAnswer\": \"H\",\r\n    \"explanation\": \"It is what it is\",\r\n    \"points\":\"0\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1131,14 +779,23 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"correctAnswer\": \"H\",\r\n    \"points\": 50,\r\n    \"category\": \"Science\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"difficulty\": \"Medium\",\r\n    \"explanation\": \"It is what it is\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{cms_base_url}}/games/{id}",
+							"raw": "{{cms_base_url}}/questions/30b05bdee6ee32d96da883ab77ce959a",
 							"host": [
 								"{{cms_base_url}}"
 							],
 							"path": [
-								"games",
-								"{id}"
+								"questions",
+								"30b05bdee6ee32d96da883ab77ce959a"
 							]
 						}
 					},
@@ -1170,7 +827,37 @@
 		},
 		{
 			"name": "Automated Question Tagging",
-			"item": []
+			"item": [
+				{
+					"name": "Tagging",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "What is the chemical symbol for the element Hydrogen?",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://us-central1-sigma-rarity-378302.cloudfunctions.net/automaticQuestionTagging",
+							"protocol": "https",
+							"host": [
+								"us-central1-sigma-rarity-378302",
+								"cloudfunctions",
+								"net"
+							],
+							"path": [
+								"automaticQuestionTagging"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Virtual Assistance",
@@ -1215,27 +902,12 @@
 	"variable": [
 		{
 			"key": "teamUrl",
-			"value": "https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "",
 			"type": "default"
 		},
 		{
 			"key": "leaderboardUrl",
 			"value": "https://us-central1-b009040970-serverless-393804.cloudfunctions.net/leaderboards-dev",
-			"type": "default"
-		},
-		{
-			"key": "userAuthUrl",
-			"value": "https://ulf9citxu9.execute-api.us-east-1.amazonaws.com",
-			"type": "default"
-		},
-		{
-			"key": "userAuthAccessToken",
-			"value": "eyJraWQiOiJxcnJxbCtqbFwvWHFUN253ektKS2pYODRROWxZbllualBBQkhaR0dPU0d0az0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiNDE2MWQ4Mi1jN2NmLTQ3ZTAtODQyZS0xOGYxNjYxNDNkNTYiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9DRU1iejE3S2giLCJjbGllbnRfaWQiOiIycWx0cG8zbG1lNHA5MjU3dmt2cW52NmZodCIsIm9yaWdpbl9qdGkiOiJjNGQyYWY1Ny1mMGE1LTRkYzUtOGI4Ny0wMzUyMTM3MjhhMTIiLCJldmVudF9pZCI6IjgzNWQ0ODM4LWMxMTUtNGViYi04MGFkLTA0NmRmNDFjMTI3NCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2ODY4NjYxNjcsImV4cCI6MTY4Njg2OTc2NywiaWF0IjoxNjg2ODY2MTY3LCJqdGkiOiJjN2RhOTc4Yi03ZThjLTQ4NzItYmY4NC1jMjYyY2M4NWVjNWMiLCJ1c2VybmFtZSI6ImI0MTYxZDgyLWM3Y2YtNDdlMC04NDJlLTE4ZjE2NjE0M2Q1NiJ9.EOSIzoMD-aaxK6LAbsbfkXoeLBeJiQvt8Up1ZM8KWPcSEgIUuMMrNlZUlEVg5FCYhHDgsyLrpliVb9iT1Ky10a58MPXGCFKfHxmkoT23O1hLYxT5FUUFSVxetCJDOLGs55st1bLrFtdKwOKdqekynfi0Msli9ZghSwpeHfZN85km1knp9F7cOv78446DiKESLZluyiR7didespOZRy_yhUJkaw2YA2QMt3PHDJx7KOrx8MDOn5APNpfsnwgZ_SHTf8cGCqiWjI1Ec6_h9bFQboiEgXCJGkfgCJwh5OSDxkBRDPNqaf7PNj-QwJ9eacfIeKonXvaIFVEqvJqxpvVQmw",
-			"type": "default"
-		},
-		{
-			"key": "userProfileManagementUrl",
-			"value": "https://vbruuow5aj.execute-api.us-east-1.amazonaws.com",
 			"type": "default"
 		},
 		{
@@ -1245,7 +917,7 @@
 		},
 		{
 			"key": "cms_base_url",
-			"value": "https://n6nqalk347.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com",
 			"type": "string"
 		}
 	]

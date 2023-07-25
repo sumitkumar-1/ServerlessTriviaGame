@@ -6,6 +6,7 @@ const { marshall } = require("@aws-sdk/util-dynamodb");
 const { isRequestValid } = require('../utils/questionValidation');
 const crypto = require('crypto');
 
+
 async function tagQuestion(question) {
     const url = process.env.TAGGING_API_URL;
     const body = question;
@@ -14,13 +15,11 @@ async function tagQuestion(question) {
             'Content-Type': 'text/plain',
         },
     };
-
     try {
         const response = await axios.post(url, body, config);
         return response.data;
     } catch (error) {
-        console.error(`Error tagging question:`, error);
-        return error;
+        throw new Error("Invalid question format.");
     }
 }
 
@@ -29,37 +28,39 @@ async function createQuestion(questionData) {
     let tags = [];
     try {
         let resp = await tagQuestion(questionData.question);
-        tags = resp.split("/");
+        tags = resp.split("/").filter((tag) => tag !== "");
     }
     catch (error) {
-        console.error(`Error tagging question:`, error);
-        return error;
+        throw new Error("Invalid question format.");
     }
-    if (tags) {
-        const marshalledItem = marshall(questionData);
-        const params = {
-            TableName: process.env.DYNAMODB_QUESTIONS_TABLE,
-            Item: marshalledItem,
-        };
-
-        try {
-            await client.send(new PutItemCommand(params));
-
-        } catch (error) {
-            console.error("Error creating a new question:", error);
-            throw error;
-        }
-    }
-    else {
+    if (tags.length === 0) {
         tags = ["General", questionData.category];
+    }
+    const marshalledItem = marshall(questionData);
+    const params = {
+        TableName: process.env.DYNAMODB_QUESTIONS_TABLE,
+        Item: marshalledItem,
+    };
+
+    try {
+        console.log('Marshalled Item: ', marshalledItem);
+        console.log('DynamoDB put parameters: ', params);
+        await client.send(new PutItemCommand(params));
+
+    } catch (error) {
+        throw new Error("Error inserting question to table.");
     }
 }
 
 module.exports.main = async (event) => {
     const requestBody = JSON.parse(event.body);
-
     if (!isRequestValid(requestBody, "create")) {
-        return { statusCode: 400, body: "Invalid request format." };
+        return {
+            statusCode: 400,
+            headers: {
+                "Content-Type": "application/json",
+            }, body: "Invalid request format."
+        };
     }
 
     const questionId = crypto
@@ -73,25 +74,24 @@ module.exports.main = async (event) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
     };
-
     try {
         await createQuestion(questionData);
         return {
             statusCode: 200,
             headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': true,
+                "content-Type": "application/json",
             }, body: JSON.stringify(questionData)
         };
     } catch (error) {
+        console.error("Error in create Question procedure: ", error);
         return {
             statusCode: 500,
             headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': true,
-            }, body: JSON.stringify(error)
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                "Content-Type": "application/json"
+            }, body: JSON.stringify({ message: error.message })
         };
     }
 };
