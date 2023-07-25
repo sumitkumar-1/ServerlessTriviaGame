@@ -101,24 +101,20 @@ const updateLeaderboard = async (
   }
 };
 
-module.exports.main = async (event) => {
+module.exports.main = async (message, context) => {
   try {
-    const {
-      entityId,
-      entityType,
-      gameId,
-      category,
-      result,
-      totalScore,
-    } = JSON.parse(event.body);
+    const messagePayload = JSON.parse(
+      Buffer.from(message.data, "base64").toString()
+    );
+    console.log(messagePayload);
 
     const leaderboardUpdate = await updateLeaderboard(
-      entityId,
-      entityType,
-      gameId,
-      category,
-      result,
-      totalScore
+      messagePayload.entityId,
+      messagePayload.entityType,
+      messagePayload.gameId,
+      messagePayload.category,
+      messagePayload.result,
+      messagePayload.totalScore
     );
 
     const response = {

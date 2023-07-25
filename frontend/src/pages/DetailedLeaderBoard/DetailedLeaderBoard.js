@@ -73,7 +73,10 @@ const DetailedStatisticsPage = () => {
     leaderboardService
       .getGlobalLeaderboard()
       .then((response) => {
-        setTeamStatistics(response.data);
+        const filteredData = response.data.filter(
+          (item) => item.entityType === 'team'
+        );
+        setTeamStatistics(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching team statistics:", error);
@@ -84,7 +87,10 @@ const DetailedStatisticsPage = () => {
     leaderboardService
       .getGlobalLeaderboard()
       .then((response) => {
-        setPlayerStatistics(response.data);
+        const filteredData = response.data.filter(
+          (item) => item.entityType === 'player'
+        );
+        setPlayerStatistics(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching player statistics:", error);
@@ -188,6 +194,12 @@ const DetailedStatisticsPage = () => {
       <Row>
         <Col>
           <h1>Detailed Statistics</h1>
+        </Col>
+      </Row>
+
+      <Row className="mt-4">
+        <Col>
+          <iframe width="100%" height="450" src="https://lookerstudio.google.com/embed/reporting/97face70-ed72-4309-83cd-5821c2d6610b/page/PgxXD" frameBorder="0" style={{border:0}} allowFullScreen></iframe>
         </Col>
       </Row>
 
