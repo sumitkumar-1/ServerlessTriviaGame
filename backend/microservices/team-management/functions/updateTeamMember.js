@@ -24,6 +24,10 @@ module.exports.main = async (event) => {
     const team = await updateMember(teamId, memberId, role);
     const response = {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify(team),
     };
 
@@ -31,6 +35,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: error.message.includes("Member not found") ? 404 : 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ error: error.message }),
     };
 

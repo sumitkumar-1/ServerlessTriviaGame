@@ -18,6 +18,8 @@ import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
 import LeaderboardPage from "./pages/LeaderBoard/LeaderBoard";
 import DetailedStatisticsPage from "./pages/DetailedLeaderBoard/DetailedLeaderBoard";
 import TeamList from "./pages/TeamList/TeamList";
+import QuestionForm from "./pages/ContentManagement/Question/QuestionForm";
+import GameForm from "./pages/ContentManagement/Game/GameForm";
 
 const App = () => {
   return (
@@ -38,7 +40,9 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby" element={<LobbyView />} />
           <Route path="/editProfile" element={<EditProfile />} />
-          <Route path="/cms" element={<Forms />} />
+          {/* <Route path="/question-pool" element={<Forms />} /> */}
+          <Route path="/create-game" element={<GameForm />} />
+          <Route path="/create-question" element={<QuestionForm />} />
           <Route path="/createTeam" element={<CreateTeamPage />} />
           <Route path="/teamlist" element={<TeamList />} />
           <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />

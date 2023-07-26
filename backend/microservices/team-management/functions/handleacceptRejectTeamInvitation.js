@@ -19,6 +19,10 @@ module.exports.main = async (event) => {
     await publishAcceptReject(teamId, memberId, option);
     const response = {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({
         message: `Successfully published team ${option} message`,
       }),
@@ -28,6 +32,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({
         error: "Error publishing team accept/reject message",
       }),

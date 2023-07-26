@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2f2fdb94-d8e7-40d2-822e-3474a2a24dfa",
+		"_postman_id": "2d88fe4f-00c0-4a98-a456-fc79cb06336c",
 		"name": "serverless-trivia-game",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28713742"
 	},
 	"item": [
 		{
@@ -15,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Ethereal Warriors\",\r\n    \"userId\": \"1\"\r\n}",
+							"raw": "{\r\n    \"name\": \"ThunderBoltsUnited\",\r\n    \"userId\": \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +83,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"4321443241211fdfdsfdf\",\r\n    \"addedBy\": \"woh21wo21h3o2132131\"\r\n}",
+							"raw": "{\r\n    \"userId\": \"e41f414f-f63d-4d1f-8101-61c935f45085\",\r\n    \"addedBy\": \"7e33d2c8-d94a-452c-8ed5-f19e337ce5ac\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -236,7 +237,7 @@
 							"variable": [
 								{
 									"key": "teamId",
-									"value": "e41f414f-f63d-4d1f-8101-61c935f45085"
+									"value": "517d329a-e4c8-4326-89ce-7e72979a47f7"
 								}
 							]
 						}
@@ -352,14 +353,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/getAll",
+							"raw": "{{leaderboardUrl}}-getGlobalLeaderboard",
 							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"getAll"
+								"{{leaderboardUrl}}-getGlobalLeaderboard"
 							]
 						}
 					},
@@ -368,24 +364,21 @@
 				{
 					"name": "filterLeaderboardByTimeFrame",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/filter/:timeFrame",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"filter",
-								":timeFrame"
-							],
-							"variable": [
-								{
-									"key": "timeFrame",
-									"value": "daily"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"timeFrame\": \"monthly\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-filterLeaderboardByTimeFrame",
+							"host": [
+								"{{leaderboardUrl}}-filterLeaderboardByTimeFrame"
 							]
 						}
 					},
@@ -394,29 +387,21 @@
 				{
 					"name": "getEntityStatistics",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/statistics/:entityId/:category",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"statistics",
-								":entityId",
-								":category"
-							],
-							"variable": [
-								{
-									"key": "entityId",
-									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
-								},
-								{
-									"key": "category",
-									"value": "Education"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"category\": \"Space\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-getEntityStatistics",
+							"host": [
+								"{{leaderboardUrl}}-getEntityStatistics"
 							]
 						}
 					},
@@ -425,24 +410,21 @@
 				{
 					"name": "getLeaderboardByEntityId",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/entity/:entityId",
-							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"entity",
-								":entityId"
-							],
-							"variable": [
-								{
-									"key": "entityId",
-									"value": "jeoqjeowqjeowqeowqejowqjeowqe"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{leaderboardUrl}}-getLeaderboardByEntityId",
+							"host": [
+								"{{leaderboardUrl}}-getLeaderboardByEntityId"
 							]
 						}
 					},
@@ -455,7 +437,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"entityId\": \"jeoqjeowqjeowqeowqejowqjeowqe\",\r\n    \"entityType\": \"player\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk2\",\r\n    \"teamA\": \"Team A\",\r\n    \"teamB\": \"Team B\",\r\n    \"teamAScore\": 100,\r\n    \"teamBScore\": 0,\r\n    \"category\": \"Space\"\r\n}",
+							"raw": "{\r\n    \"entityId\": \"fbe4ebba-a9d1-4c87-9021-c290a7ca1641\",\r\n    \"entityType\": \"team\",\r\n    \"gameId\": \"dwnqkdnwqdkwqdnkwqdnkwqdnk29\",\r\n    \"category\": \"Space\",\r\n    \"result\": \"loss\",\r\n    \"totalScore\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -463,14 +445,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{tournamentUrl}}/api/leaderboard/update",
+							"raw": "{{leaderboardUrl}}-publishLeaderboardUpdate",
 							"host": [
-								"{{tournamentUrl}}"
-							],
-							"path": [
-								"api",
-								"leaderboard",
-								"update"
+								"{{leaderboardUrl}}-publishLeaderboardUpdate"
 							]
 						}
 					},
@@ -861,6 +838,76 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Make Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"9ffc655c-cf8d-43c9-aadc-866d7515a927\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userAuthUrl}}/makeAdmin",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"makeAdmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"9ffc655c-cf8d-43c9-aadc-866d7515a927\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userAuthUrl}}/removeAdmin",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"removeAdmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{userAuthUrl}}/getuserbyuserid/9ffc655c-cf8d-43c9-aadc-866d7515a927",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"getuserbyuserid",
+								"9ffc655c-cf8d-43c9-aadc-866d7515a927"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -934,6 +981,57 @@
 							],
 							"path": [
 								"getGameData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Game data By Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalGamePlayed\": 2,\n    \"win\": 2,\n    \"loss\": 0,\n    \"totalPoints\": 1000,\n    \"achievements\": \"Bronze\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userProfileManagementUrl}}/updateGameDataById/:id",
+							"host": [
+								"{{userProfileManagementUrl}}"
+							],
+							"path": [
+								"updateGameDataById",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get gamedata by user id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{userProfileManagementUrl}}/getGamedataByUserId/ac624b30-4d86-47db-8b6e-941ddb07b40e",
+							"host": [
+								"{{userProfileManagementUrl}}"
+							],
+							"path": [
+								"getGamedataByUserId",
+								"ac624b30-4d86-47db-8b6e-941ddb07b40e"
 							]
 						}
 					},
@@ -1124,13 +1222,31 @@
 					"response": []
 				},
 				{
+					"name": "Get Question by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cms_base_url}}/questions/91ef41a34a910d3952f924eaf2a53524",
+							"host": [
+								"{{cms_base_url}}"
+							],
+							"path": [
+								"questions",
+								"91ef41a34a910d3952f924eaf2a53524"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Question",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"category\": \"Science\",\r\n    \"difficulty\": \"Medium\",\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"correctAnswer\": \"H\"\r\n}",
+							"raw": "{\r\n    \"category\": \"Science\",\r\n    \"difficulty\": \"Medium\",\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"correctAnswer\": \"H\",\r\n    \"explanation\": \"It is what it is\",\r\n    \"points\":\"0\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1154,14 +1270,23 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"What is the chemical symbol for the element Hydrogen?\",\r\n    \"correctAnswer\": \"H\",\r\n    \"points\": 50,\r\n    \"category\": \"Science\",\r\n    \"options\": [\r\n        \"Hg\",\r\n        \"He\",\r\n        \"H\",\r\n        \"H2\"\r\n    ],\r\n    \"difficulty\": \"Medium\",\r\n    \"explanation\": \"It is what it is\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{cms_base_url}}/games/{id}",
+							"raw": "{{cms_base_url}}/questions/30b05bdee6ee32d96da883ab77ce959a",
 							"host": [
 								"{{cms_base_url}}"
 							],
 							"path": [
-								"games",
-								"{id}"
+								"questions",
+								"30b05bdee6ee32d96da883ab77ce959a"
 							]
 						}
 					},
@@ -1193,7 +1318,37 @@
 		},
 		{
 			"name": "Automated Question Tagging",
-			"item": []
+			"item": [
+				{
+					"name": "Tagging",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "What is the chemical symbol for the element Hydrogen?",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://us-central1-sigma-rarity-378302.cloudfunctions.net/automaticQuestionTagging",
+							"protocol": "https",
+							"host": [
+								"us-central1-sigma-rarity-378302",
+								"cloudfunctions",
+								"net"
+							],
+							"path": [
+								"automaticQuestionTagging"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Virtual Assistance",
@@ -1242,8 +1397,8 @@
 			"type": "default"
 		},
 		{
-			"key": "tournamentUrl",
-			"value": "",
+			"key": "leaderboardUrl",
+			"value": "https://us-central1-b009040970-serverless-393804.cloudfunctions.net/leaderboards-dev",
 			"type": "default"
 		},
 		{
@@ -1268,7 +1423,7 @@
 		},
 		{
 			"key": "cms_base_url",
-			"value": "https://n6nqalk347.execute-api.us-east-1.amazonaws.com/dev",
+			"value": "https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com",
 			"type": "string"
 		}
 	]

@@ -1,13 +1,20 @@
-module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v3.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-};
+const express = require("express");
+const serverless = require("serverless-http");
+const gamesRouter = require('./routes/games.route');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use('/api/games', gamesRouter);
+app.use((req, res, next) => {
+  return res.status(404).json({
+    error: "Not Found",
+  });
+});
+
+module.exports.handler = serverless(app);
+
+
+
+

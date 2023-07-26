@@ -1,10 +1,25 @@
 service: virtual-assistance
 frameworkVersion: '3'
 
+
 provider:
   name: aws
   runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'sns:*'
+      Resource: '*'
+  role: arn:aws:iam::493846474184:role/LabRole
 
 functions:
-  function1:
-    handler: index.handler
+  getScoreInquiry:
+    handler: index.getScoreInquiry
+  getNavigation:
+    handler: index.getNavigation    
+    # events:
+      
+
+

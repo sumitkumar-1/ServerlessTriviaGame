@@ -44,6 +44,10 @@ module.exports.main = async (event) => {
       const team = await acceptInvite(data.teamId, data.memberId, data.option);
       const response = {
         statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: JSON.stringify(team),
       };
       return response;
@@ -51,6 +55,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: error.message.includes("Invalid member status") ? 400 : 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ error: error.message }),
     };
     return response;
