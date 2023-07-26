@@ -1,34 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import teamManagementService from '../../services/team.management.service';
-import { Card, Button, Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import teamManagementService from "../../services/team.management.service";
+import { Card, Button, Modal, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchTeams();
   }, []);
 
   const fetchTeams = async () => {
+    setIsLoading(true);
     try {
       const response = await teamManagementService.getAllTeams();
       setTeams(response.data);
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching teams:', error);
+      console.error("Error fetching teams:", error);
+      setIsLoading(false);
     }
   };
 
   const handleDeleteTeam = async () => {
     try {
       await teamManagementService.deleteTeam(selectedTeam.id);
-      setTeams((prevTeams) => prevTeams.filter((team) => team.id !== selectedTeam.id));
+      setTeams((prevTeams) =>
+        prevTeams.filter((team) => team.id !== selectedTeam.id)
+      );
       setSelectedTeam(null);
       setShowModal(false);
     } catch (error) {
-      console.error('Error deleting team:', error);
+      console.error("Error deleting team:", error);
     }
   };
 
@@ -49,21 +55,35 @@ const TeamList = () => {
           Create New Team
         </Link>
       </div>
-      {teams.map((team) => (
-        <div key={team.id} className="col-md-4">
-          <Card className="mb-4">
-            <Card.Body>
-              <Card.Title>{team.name}</Card.Title>
-              <Link to={`/teamdashboard/${team.id}`} className="btn btn-primary mr-2">
-                View
-              </Link>
-              <Button variant="danger" onClick={() => openConfirmationModal(team)}>
-                Delete
-              </Button>
-            </Card.Body>
-          </Card>
+      {isLoading ? (
+        <div className="spinnerContainer">
+          <Spinner/>
         </div>
-      ))}
+      ) : (
+        <>
+          {teams?.map((team) => (
+            <div key={team.id} className="col-md-4">
+              <Card className="mb-4">
+                <Card.Body>
+                  <Card.Title>{team.name}</Card.Title>
+                  <Link
+                    to={`/teamdashboard/${team.id}`}
+                    className="btn btn-primary mr-2"
+                  >
+                    View
+                  </Link>
+                  <Button
+                    variant="danger"
+                    onClick={() => openConfirmationModal(team)}
+                  >
+                    Delete
+                  </Button>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </>
+      )}
 
       {/* Confirmation Modal */}
       <Modal show={showModal} onHide={closeConfirmationModal}>
@@ -72,7 +92,8 @@ const TeamList = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Are you sure you want to delete <strong>{selectedTeam?.name}</strong>?
+            Are you sure you want to delete{" "}
+            <strong>{selectedTeam?.name}</strong>?
           </p>
         </Modal.Body>
         <Modal.Footer>
