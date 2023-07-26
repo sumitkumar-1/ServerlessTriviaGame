@@ -1,6 +1,7 @@
 service: virtual-assistance
 frameworkVersion: '3'
 
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -9,48 +10,16 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 'lex:*'
+        - 'sns:*'
       Resource: '*'
-  role: ${env:LAB_ROLE_ARN}
+  role: arn:aws:iam::493846474184:role/LabRole
 
 functions:
-  api:
-    handler: index.handler
-    events:
-      - httpApi: '*'
-  chatbot:
-    handler: index.handler
-    role: "arn:aws:iam::<account-id>:role/<role-name>"
-    events:
-      - http:
-          path: /your-path
-          method: get
+  getScoreInquiry:
+    handler: index.getScoreInquiry
+  getNavigation:
+    handler: index.getNavigation    
+    # events:
+      
 
 
-
-  Resources:
-    ChatBot:
-      Type: "AWS::Lex::Bot"
-      Properties:
-        BotName: "YourBotName"
-        Description: "Your bot description"
-        AbortStatement: 
-          Messages: 
-            - 
-              Content: "Sorry, I could not understand. Please try again."
-              ContentType: "PlainText"
-        ClarificationPrompt: 
-          MaxAttempts: 2
-          Messages: 
-            - 
-              Content: "I did not understand that, can you please rephrase?"
-              ContentType: "PlainText"
-        IdleSessionTTLInSeconds: 300
-        Intents: 
-          - 
-            IntentName: "YourIntentName"
-            IntentVersion: "$LATEST"
-        Locale: "en-US"
-        ProcessBehavior: "BUILD"
-        VoiceId: "Salli"
-        ChildDirected: false

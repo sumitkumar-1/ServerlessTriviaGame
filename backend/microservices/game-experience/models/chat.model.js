@@ -2,9 +2,6 @@ const dynamoose = require("dynamoose");
 const { DynamoDB } = require("@aws-sdk/client-dynamodb");
 require("dotenv").config();
 
-
-
-
 // Initialize a DynamoDB client instance
 const dynamodb = new DynamoDB({
   region: process.env.region,
@@ -14,6 +11,7 @@ const dynamodb = new DynamoDB({
     sessionToken: process.env.sessionToken
   }
 });
+
 
 dynamoose.aws.sdk = dynamodb;
 
