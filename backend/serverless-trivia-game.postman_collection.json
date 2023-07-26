@@ -861,6 +861,76 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Make Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"9ffc655c-cf8d-43c9-aadc-866d7515a927\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userAuthUrl}}/makeAdmin",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"makeAdmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"9ffc655c-cf8d-43c9-aadc-866d7515a927\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userAuthUrl}}/removeAdmin",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"removeAdmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{userAuthUrl}}/getuserbyuserid/9ffc655c-cf8d-43c9-aadc-866d7515a927",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"getuserbyuserid",
+								"9ffc655c-cf8d-43c9-aadc-866d7515a927"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -934,6 +1004,57 @@
 							],
 							"path": [
 								"getGameData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Game data By Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalGamePlayed\": 2,\n    \"win\": 2,\n    \"loss\": 0,\n    \"totalPoints\": 1000,\n    \"achievements\": \"Bronze\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userProfileManagementUrl}}/updateGameDataById/:id",
+							"host": [
+								"{{userProfileManagementUrl}}"
+							],
+							"path": [
+								"updateGameDataById",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get gamedata by user id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{userProfileManagementUrl}}/getGamedataByUserId/ac624b30-4d86-47db-8b6e-941ddb07b40e",
+							"host": [
+								"{{userProfileManagementUrl}}"
+							],
+							"path": [
+								"getGamedataByUserId",
+								"ac624b30-4d86-47db-8b6e-941ddb07b40e"
 							]
 						}
 					},
