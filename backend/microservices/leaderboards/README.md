@@ -1,72 +1,109 @@
-<!--
-title: 'AWS NodeJS Example'
-description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Leaderboard App
 
+This is a leaderboard application that allows users to view global and category-specific leaderboards for teams and individual players. Users can also filter leaderboards by time frame (e.g., daily, weekly, monthly, or all-time) and view detailed statistics for top-performing teams and players.
 
-# Serverless Framework AWS NodeJS Example
+## Features
 
-This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
+The leaderboard app offers the following features:
 
-## Usage
+1. **Global and Category-Specific Leaderboards**: Users can view both global leaderboards that include all teams and players, as well as category-specific leaderboards that focus on specific criteria or categories.
 
-### Deployment
+2. **Filter by Time Frame**: Users can filter leaderboards based on different time frames such as daily, weekly, monthly, or all-time. This allows users to see how teams and players are performing within specific periods.
 
-In order to deploy the example, you need to run the following command:
+3. **Detailed Statistics**: The app provides detailed statistics for the top-performing teams and players. Users can gain insights into their performance, including metrics like win rate, average score, or any other relevant statistics.
+
+## Deployment
+
+Update Environment Variables:
+
+> Note: Before deploying the application, make sure to update the provider variables in the serverless.yml file. Set the values for project to your Google project identifier. This variables are required for the proper functioning of the Leaderboard feature.
+
+Install dependencies with:
 
 ```
-$ serverless deploy
+npm install
+```
+
+and then deploy with:
+
+```
+serverless deploy
 ```
 
 After running deploy, you should see output similar to:
 
 ```bash
-Deploying aws-node-project to stage dev (us-east-1)
+Deploying google-node-express-api-project to stage dev (us-east-1)
 
-✔ Service deployed to stack aws-node-project-dev (112s)
+✔ Service deployed to stack google-node-express-api-project-dev (196s)
 
+endpoint: ANY - https://us-central1-xxxxxxxxxx.cloudfunctions.net/leaderboards-dev-service
 functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
+  api: google-node-express-api-project-dev-api (766 kB)
 ```
 
-### Invocation
+## APIs
 
-After successful deployment, you can invoke the deployed function by using the following command:
+The following APIs are available for interacting with the Leaderboard feature. Please use the provided Postman collection file to access these APIs.
+
+> Note: To make API requests, import the provided Postman collection file `serverless-trivia-game.postman_collection.json` into Postman. The collection includes pre-configured requests for each API endpoint, making it easy to test and interact with the Leaderboard feature.
+
+### `POST /update`
+
+Update the leaderboard.
+
+- Requires authentication: Yes (API User)
+- Controller: `LeaderboardController.updateLeaderboard`
+
+### `GET /getAll`
+
+Get the global leaderboard.
+
+- Requires authentication: Yes (API User)
+- Controller: `LeaderboardController.getGlobalLeaderboard`
+
+### `GET /filter/:timeFrame`
+
+Filter the leaderboard by a specific time frame.
+
+- Requires authentication: Yes (API User)
+- Parameters:
+  - `timeFrame`: The time frame to filter the leaderboard by.
+- Controller: `LeaderboardController.filterLeaderboardByTimeFrame`
+
+### `GET /statistics/:entityId/:category`
+
+Get statistics for a specific entity and category.
+
+- Requires authentication: Yes (API User)
+- Parameters:
+  - `entityId`: The ID of the entity.
+  - `category`: The category to get statistics for.
+- Controller: `LeaderboardController.getEntityStatistics`
+
+### `GET /entity/:entityId`
+
+Get the leaderboard for a specific entity.
+
+- Requires authentication: Yes (API User)
+- Parameters:
+  - `entityId`: The ID of the entity.
+- Controller: `LeaderboardController.getLeaderboardByEntityId`
+
+## Local development
+
+It is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
 
 ```bash
-serverless invoke --function hello
+serverless plugin install -n serverless-offline
 ```
 
-Which should result in response similar to the following:
+It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
 
-```json
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
+After installation, you can start local emulation with:
 
 ```
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
+serverless offline
 ```
+
+To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).

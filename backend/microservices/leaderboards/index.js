@@ -1,13 +1,15 @@
-module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v3.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const updateLeaderboard = require('./functions/updateLeaderboard');
+const getGlobalLeaderboard = require('./functions/getGlobalLeaderboard');
+const filterLeaderboardByTimeFrame = require('./functions/filterLeaderboardByTimeFrame');
+const getEntityStatistics = require('./functions/getEntityStatistics');
+const getLeaderboardByEntityId = require('./functions/getLeaderboardByEntityId');
+const publishLeaderboardUpdate = require('./functions/publishLeaderboardUpdate');
+
+module.exports = {
+  publishLeaderboardUpdate: publishLeaderboardUpdate.main,
+  updateLeaderboard: updateLeaderboard.main,
+  getGlobalLeaderboard: getGlobalLeaderboard.main,
+  filterLeaderboardByTimeFrame: filterLeaderboardByTimeFrame.main,
+  getEntityStatistics: getEntityStatistics.main,
+  getLeaderboardByEntityId: getLeaderboardByEntityId.main,
 };

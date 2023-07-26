@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment } from "react";
+import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoutes";
+import HomePage from "./pages/HomePage";
+import VerifyQuestionAnswersPage from "./pages/QuestionAndAnswers/VerifyQuestionAnswersPage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ForgotPasswordPage from "./pages/Forgotpassword/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/Forgotpassword/ResetPasswordPage";
+import SignUpPage from "./pages/Signup/SignUpPage";
+import LobbyView from "./components/Lobby/LobbyView";
+import ProfilePage from "./pages/profile/ProfilePage";
+import LoginPage from "./pages/Login/LoginPage";
+import EditProfile from "./pages/EditProfile/EditProfile";
+import Forms from "./pages/ContentManagement/Forms";
+import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
+import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
+import LeaderboardPage from "./pages/LeaderBoard/LeaderBoard";
+import DetailedStatisticsPage from "./pages/DetailedLeaderBoard/DetailedLeaderBoard";
+import TeamList from "./pages/TeamList/TeamList";
+import QuestionForm from "./pages/ContentManagement/Question/QuestionForm";
+import GameForm from "./pages/ContentManagement/Game/GameForm";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Trivia Titans frontend!
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <ToastContainer />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="verifyQuestionAnswers"
+          element={<VerifyQuestionAnswersPage />}
+        />
+        <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
+        <Route path="/resetPassword" element={<ResetPasswordPage />} />
+        <Route path="/signuppage" element={<SignUpPage />} />
+        <Route path="/cms" element={<Forms />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/lobby" element={<LobbyView />} />
+          <Route path="/editProfile" element={<EditProfile />} />
+          {/* <Route path="/question-pool" element={<Forms />} /> */}
+          <Route path="/create-game" element={<GameForm />} />
+          <Route path="/create-question" element={<QuestionForm />} />
+          <Route path="/createTeam" element={<CreateTeamPage />} />
+          <Route path="/teamlist" element={<TeamList />} />
+          <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route
+            path="/detailedleaderboard"
+            element={<DetailedStatisticsPage />}
+          />
+        </Route>
+      </Routes>
+    </Fragment>
   );
-}
+};
 
 export default App;
