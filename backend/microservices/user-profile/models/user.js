@@ -60,7 +60,11 @@ class User {
 
     item["win"] = (item["win"] || 0) + userData.win;
     item["loss"] = (item["loss"] || 0) + userData.loss;
-    item["totalPoints"] = (item["totalPoints"] || 0) + userData.totalPoints;
+    if(typeof(userData.totalPoints) === "string") {
+      item["totalPoints"] = (item["totalPoints"] || 0) + parseInt(userData.totalPoints);
+    } else {
+      item["totalPoints"] = (item["totalPoints"] || 0) + userData.totalPoints;
+    }
     item["totalGamePlayed"] =
       (item["totalGamePlayed"] || 0) + userData.totalGamePlayed;
     item["achievements"] = userData.achievements;
