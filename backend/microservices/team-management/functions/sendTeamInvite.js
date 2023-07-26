@@ -46,6 +46,10 @@ module.exports.main = async (event) => {
       const team = await sendInvite(data.teamId, data.userId, data.addedBy, data.email, data.status, data.role);
       const response = {
         statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: JSON.stringify(team),
       };
       return response;
@@ -53,6 +57,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ message: "Failed to send the invite." }),
     };
 
