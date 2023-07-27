@@ -28,6 +28,18 @@ const getLeaderboardByEntityId = async (entityId) => {
 };
 
 module.exports.main = async (request, response) => {
+  response.set('Access-Control-Allow-Origin', '*');
+  response.set("Access-Control-Allow-Methods", "*");
+  response.set("Access-Control-Allow-Headers", "*");
+  response.set("Access-Control-Max-Age", "3600");
+
+  if(request.method === "OPTIONS") {
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return response.status(200).send();
+  }
+
   try {
     const { entityId } = request.body;
     const leaderboard = await getLeaderboardByEntityId(entityId);
