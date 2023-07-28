@@ -1,7 +1,8 @@
 import React from "react";
 import "./Statistics.css";
-
+import { useNavigate } from 'react-router-dom';
 const Statistics = (props) => {
+  const navigate = useNavigate();
   return (
     <div className="container">
       <div className="row">
@@ -18,7 +19,10 @@ const Statistics = (props) => {
           <button className="btn btn-primary">
             Game Statistics
           </button>
-          <button className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate('/chatbot')}
+          >
             Virtual Assistance
           </button>
         </div>

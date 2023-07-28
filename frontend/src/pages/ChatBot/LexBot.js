@@ -41,7 +41,7 @@ const Header = styled.div`
   margin-bottom: 20px;
 `;
 
-const Home = () => {
+const LexBot = () => {
   const [chatStarted, setChatStarted] = useState(false);
   const navigate = useNavigate(); // get the useNavigate function from react-router-dom
 
@@ -77,4 +77,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LexBot;

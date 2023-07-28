@@ -22,7 +22,8 @@ import QuestionForm from "./pages/ContentManagement/Question/QuestionForm";
 import GameForm from "./pages/ContentManagement/Game/GameForm";
 import ChatInterface from "./pages/ChatBot/ChatInterface";
 import Game from "./pages/InGameExperince/Game";
-import Home from "./pages/ChatBot/Home";
+import LexBot from "./pages/ChatBot/LexBot";
+
 
 const App = () => {
   return (
@@ -55,7 +56,7 @@ const App = () => {
             element={<DetailedStatisticsPage />}
           />
           {/* In game part*/}
-          <Route path="/chatbot" element={<Home />} />
+          <Route path="/chatbot" element={<LexBot/>} />
 
           {/* <Route path="/chat" element={<ChatInterface />} />
 
