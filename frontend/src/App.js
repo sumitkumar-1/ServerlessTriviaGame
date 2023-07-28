@@ -20,6 +20,9 @@ import DetailedStatisticsPage from "./pages/DetailedLeaderBoard/DetailedLeaderBo
 import TeamList from "./pages/TeamList/TeamList";
 import QuestionForm from "./pages/ContentManagement/Question/QuestionForm";
 import GameForm from "./pages/ContentManagement/Game/GameForm";
+import ChatInterface from "./pages/ChatBot/ChatInterface";
+import Game from "./pages/InGameExperince/Game";
+import Home from "./pages/ChatBot/Home";
 
 const App = () => {
   return (
@@ -51,6 +54,14 @@ const App = () => {
             path="/detailedleaderboard"
             element={<DetailedStatisticsPage />}
           />
+          {/* In game part*/}
+          <Route path="/chatbot" element={<Home />} />
+
+          {/* <Route path="/chat" element={<ChatInterface />} />
+
+          <Route path="/chat" element={<ChatInterface />} /> */}
+
+          <Route path="/game/:teamId/:gameId" element={<Game />} />
         </Route>
       </Routes>
     </Fragment>
