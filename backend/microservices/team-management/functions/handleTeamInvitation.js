@@ -16,6 +16,10 @@ module.exports.main = async (event) => {
     await publishInvitation(teamId, userId, addedBy, email, status, role);
     const response = {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({message: "Invitation sent successfully"}),
     };
 
@@ -23,6 +27,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ message: "Failed to send to the team invite topic." }),
     };
 
