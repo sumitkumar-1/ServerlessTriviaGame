@@ -5,7 +5,6 @@ import {
   getTeams,
   getTeamById,
   getGameById,
-  getQuestions,
 } from "../../services/games.service";
 import {
   CircularProgress,
@@ -80,7 +79,7 @@ const Game = () => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [timeRemaining, setTimeRemaining] = useState(10);
+  const [timeRemaining, setTimeRemaining] = useState(20);
   const [scores, setScores] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
@@ -92,6 +91,8 @@ const Game = () => {
   const [teams, setTeams] = useState(null);
   const [currentTeam, setCurrentTeam] = useState(null); // assume the first team is playing initially
   const [isWaiting, setIsWaiting] = useState(false);
+  const [gameTimeRemaining, setGameTimeRemaining] = useState(300);
+
 
   // Define refs for scores and teams
   const scoresRef = useRef(0);
@@ -99,7 +100,7 @@ const Game = () => {
 
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const { teamId, gameId } = useParams();
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -109,7 +110,7 @@ const Game = () => {
         const fetchedQuestions = gameData.data.questions;  // Use 'questions' key from gameData directly.
         // const fetchedQuestions=await getQuestions();
         setQuestions(fetchedQuestions);
-        setIsLoading(false); 
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -118,9 +119,21 @@ const Game = () => {
     fetchQuestions();
   }, [gameId]);
 
-  // if (isLoading) {
-  //   return <CircularProgress />;
-  // }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGameTimeRemaining((prevTime) => {
+        if (prevTime > 0) {
+          return prevTime - 1;
+        } else {
+          setGameOver(true);
+          return 0;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -192,6 +205,7 @@ const Game = () => {
           setAnswerSubmitted(false); // added this
 
         } else {
+          setGameTimeRemaining(0);
           setGameOver(true);
         }
       }, 7000);
@@ -202,7 +216,7 @@ const Game = () => {
 
 
 
-  
+
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
     setIsWaiting(true);
@@ -285,13 +299,19 @@ const Game = () => {
   };
 
   if (gameOver) {
-    // return <GlobalLeaderboard teams={teams} currentTeam={currentTeam} />;
+
     return <GlobalLeaderboard teams={teamsRef.current} currentTeam={currentTeam} />;
 
   }
 
   return (
     <StyledContainer>
+      {!gameOver && (
+        <Typography variant="h4" css={css`
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+`}>Game Time Remaining: {gameTimeRemaining}</Typography>
+      )}
       <StyledQuestionContainer>
         <Typography
           variant="h2"
@@ -368,6 +388,4 @@ const Game = () => {
 };
 
 export default Game;
-
-
 
