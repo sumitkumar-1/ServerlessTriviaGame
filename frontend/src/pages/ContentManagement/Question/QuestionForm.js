@@ -3,6 +3,8 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import questionCategories from "../questionCategories";
 import axios from "axios";
 
+const BASE_URL = `${process.env.REACT_APP_CONTENT_MANAGEMENT_BASE_URL}`;
+
 const QuestionForm = () => {
     const [formData, setFormData] = useState({
         category: "",
@@ -60,7 +62,7 @@ const QuestionForm = () => {
         }
 
         try {
-            const url = "https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com/questions";
+            const url = `${BASE_URL}/questions`;
             const response = await axios.post(url, formData, {
                 headers: {
                     "Content-Type": "application/json",

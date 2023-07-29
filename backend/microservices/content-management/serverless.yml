@@ -30,6 +30,12 @@ functions:
       - httpApi:
           path: /games
           method: GET
+  getGame:
+    handler: src/games/getGame.main
+    events:
+      - httpApi:
+          path: /games/{id}
+          method: GET
 
   createGame:
     handler: src/games/createGame.main
@@ -64,6 +70,12 @@ functions:
     events:
       - httpApi:
           path: /questions/{id}
+          method: GET
+  getQuestionByCategory:
+    handler: src/questions/getQuestionByCategory.main
+    events:
+      - httpApi:
+          path: /questions/category/{category}
           method: GET
 
   createQuestion:
@@ -109,9 +121,21 @@ resources:
         AttributeDefinitions:
           - AttributeName: questionId
             AttributeType: S
+          - AttributeName: category
+            AttributeType: S
         KeySchema:
           - AttributeName: questionId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: CategoryIndex
+            KeySchema:
+              - AttributeName: category
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1

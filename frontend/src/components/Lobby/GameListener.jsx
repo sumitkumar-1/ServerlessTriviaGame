@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 
+const BASE_URL = process.env.REACT_APP_LOBBY_BASE_URL;
+
 const GameListener = ({ onMessage, onError, onClose }) => {
   useEffect(() => {
-    const eventSource = new EventSource('https://ys6m7oxeaa.execute-api.us-east-1.amazonaws.com/dev/api/sse');
+    const eventSource = new EventSource(`${BASE_URL}/api/sse`);
 
     eventSource.onmessage = (event) => {
       const gameData = JSON.parse(event.data);
