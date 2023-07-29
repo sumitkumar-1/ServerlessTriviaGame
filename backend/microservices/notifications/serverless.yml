@@ -3,8 +3,105 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'sns:*'
+        - 'sqs:*'
+        - 'lambda:*'
+        - 'dynamodb:*'
+      Resource: '*'
+  role: arn:aws:iam::356089859282:role/LabRole
 
 functions:
-  function1:
-    handler: index.handler
+  TriviaGameNotificationHandler:
+    handler: functions/TriviaGameNotificationHandler.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - NotificationQueue
+              - Arn
+
+  TriviaGameNotificationFetchingFromDb:
+    handler: functions/TriviaGameNotificationFetchingFromDb.handler
+    events:
+      - http:
+          path: /notifications
+          method: GET
+          cors: true
+
+  TriviaGameNotificationReadStatus:
+    handler: functions/TriviaGameNotificationReadStatus.handler
+    events:
+      - http:
+          path: /notifications/mark-read
+          method: PUT
+          cors: true
+
+resources:
+  Resources:
+    NotificationTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: 'TriviaGameNotificationAlertsTopic'
+
+    NotificationQueue:
+      Type: 'AWS::SQS::Queue'
+      Properties:
+        QueueName: 'TriviaGameNotificationAlertsQueue'
+        SqsManagedSseEnabled: false
+
+    NotificationQueueSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn:
+          Ref: 'NotificationTopic'
+        Protocol: 'sqs'
+        Endpoint:
+          Fn::GetAtt:
+            - NotificationQueue
+            - Arn
+        RawMessageDelivery: false
+
+    NotificationQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: sqs:SendMessage
+              Resource: !GetAtt NotificationQueue.Arn
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn':
+                    - !Ref NotificationTopic
+        Queues:
+          - !Ref NotificationQueue
+
+    NotificationTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'NotificationAlert'
+        AttributeDefinitions:
+          - AttributeName: 'notificationId'
+            AttributeType: 'S'
+          - AttributeName: 'type'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'type'
+            KeyType: 'HASH'
+          - AttributeName: 'notificationId'
+            KeyType: 'RANGE'
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        SSESpecification:
+          SSEEnabled: true
+
+
