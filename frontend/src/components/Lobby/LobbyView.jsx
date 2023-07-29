@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import './LobbyView.scss';
-// import GameListener from './GameListener';
+
+const BASE_URL = process.env.REACT_APP_LOBBY_BASE_URL;
 
 const animatedComponents = makeAnimated();
 
 const LobbyView = () => {
   const [games, setGames] = useState([]);
+  const { teamId } = useParams();
   const [filteredGames, setFilteredGames] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
@@ -44,7 +46,7 @@ const LobbyView = () => {
     const fetchGames = async () => {
       try {
         const response = await axios.get(
-          'https://ys6m7oxeaa.execute-api.us-east-1.amazonaws.com/dev/api/fetch-games',
+          `${BASE_URL}/api/fetch-games`,
           {
             headers: {
               Authorization: 'Bearer dummy-token'
@@ -129,14 +131,13 @@ const LobbyView = () => {
                   <Card.Text>Host: {game.host || ''}</Card.Text>
                   <Card.Text>Game ID: {game.id || ''}</Card.Text>
                   <Card.Text>Remaining Time: {game.remainingTime || '0'}</Card.Text>
-                  <Link to={`/game/${game.gameId}`} className="btn btn-primary">Join Game</Link>
+                  <Link to={`/game/${teamId}/${game.gameId}`} className="btn btn-primary">Join Game</Link>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
       </Container>
-      {/* <GameListener onMessage={handleMessage} onError={handleError} /> */}
     </div>
   );
 };

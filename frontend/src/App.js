@@ -42,7 +42,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/lobby" element={<LobbyView />} />
+          <Route path="/lobby/:teamId" element={<LobbyView />} />
           <Route path="/editProfile" element={<EditProfile />} />
           {/* <Route path="/question-pool" element={<Forms />} /> */}
           <Route path="/create-game" element={<GameForm />} />
@@ -50,6 +50,7 @@ const App = () => {
           <Route path="/createTeam" element={<CreateTeamPage />} />
           <Route path="/teamlist" element={<TeamList />} />
           <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route
             path="/detailedleaderboard"

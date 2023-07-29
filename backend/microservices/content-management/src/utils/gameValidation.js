@@ -5,8 +5,6 @@ const isRequestValid = (requestBody, type) => {
         "questions",
         "timeLimit",
         "name",
-        "participants",
-        "maxParticipants",
         "status",
     ];
 
