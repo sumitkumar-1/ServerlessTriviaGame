@@ -2,9 +2,25 @@ service: question-tagging
 frameworkVersion: '3'
 
 provider:
-  name: aws
-  runtime: nodejs18.x
+  name: google
+  runtime: nodejs20
+  region: us-central1
+  project: sigma-rarity-378302
+
+plugins:
+  - serverless-google-cloudfunctions
 
 functions:
-  function1:
-    handler: index.handler
+  automaticQuestionTagging:
+    handler: main
+    events:
+      - http: POST /tagQuestion
+
+package:
+  include:
+    - functions/**
+    - package.json
+  exclude:
+    - node_modules/**
+
+
