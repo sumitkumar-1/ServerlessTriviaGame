@@ -31,7 +31,13 @@
     "reactjs-social-login": "^2.6.2",
     "sass": "^1.63.1",
     "web-vitals": "^2.1.4",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "@aws-sdk/client-lex-runtime-v2": "^3.363.0",
+    "@aws-sdk/credential-provider-env": "^3.363.0",
+    "@mui/icons-material": "^5.11.16",
+    "dotenv": "^16.3.1",
+    "uuidv4": "^6.2.13"
+ 
   },
   "scripts": {
     "start": "react-scripts start",

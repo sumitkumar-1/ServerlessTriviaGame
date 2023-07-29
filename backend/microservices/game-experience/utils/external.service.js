@@ -1,9 +1,10 @@
 const axios = require('axios')
 
-module.exports.getQuestions = async () => {
+module.exports.getQuestions = async (gameId) => {
     try {
-        const response = await axios.get('https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com/questions');
-        return response.data;
+       
+        const response = await axios.get(`https://8ea7cy4wb9.execute-api.us-east-1.amazonaws.com/games/${gameId}`);
+        return response.data.questions;
     } catch (error) {
         console.error(error);
     }
@@ -41,12 +42,13 @@ module.exports.getTeamById = async (id) => {
 // not working for now
 module.exports.getQuestionById = async (id) => {
     try {
-        const response = await axios.get(`https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com/questions/${id}`);
+        const response = await axios.get(`https://8ea7cy4wb9.execute-api.us-east-1.amazonaws.com/questions/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
     }
 };
+
 
 module.exports.updateUserScore = async (id, data) => {
     try {
@@ -59,9 +61,8 @@ module.exports.updateUserScore = async (id, data) => {
 
 module.exports.updateTeamScore = async (id, data) => {
     try {
-        console.log(`https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev/api/teams/updatestats/${id}`, data);
-        const response = await axios.post(`https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev/api/teams/updatestats/${id}`, data);
-        console.log(response);
+               const response = await axios.post(`https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev/api/teams/updatestats/${id}`, data);
+
         return response.data;
     } catch (error) {
         console.error(error);

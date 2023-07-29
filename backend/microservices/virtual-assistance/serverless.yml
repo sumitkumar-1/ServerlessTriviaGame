@@ -14,12 +14,17 @@ provider:
       Resource: '*'
   role: arn:aws:iam::493846474184:role/LabRole
 
+# functions:
+#   getScoreInquiry:
+#     handler: index.getScoreInquiry
+#   getNavigation:
+#     handler: index.getNavigation  
+
 functions:
-  getScoreInquiry:
-    handler: index.getScoreInquiry
-  getNavigation:
-    handler: index.getNavigation    
-    # events:
+  lexFulfillment:
+    handler: index.lexFulfillment
+      
+
       
 
 

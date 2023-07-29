@@ -10,37 +10,45 @@ module.exports.realTimeScore = async (event) => {
     let team = null;
     try {
         // questions = await getQuestions();
-        question=await getQuestionById(event.pathParameters.questionId);
+        question = await getQuestionById(event.pathParameters.questionId);
         // const question = questions.find(q => q.questionId === event.pathParameters.questionId);
         if (!question) throw new Error('Question not found');
         let body = JSON.parse(event.body);
         team = await getTeamById(body.teamId);
-       
+        let pointsToAdd = Number(question.points);
         let newScore = Number(team.pointsEarned);
 
-        if (body.answer === question.correctAnswer) {
-            newScore += Number(question.points);
+        if (body.answer === question.correctAnswer && !isNaN(pointsToAdd)) {
+
+            newScore += pointsToAdd;
             // newScore += question.points;
 
             for (let member of team.members) {
-                user = await getUserById(member.userId);
-               
-                user.totalPoints += Number(question.points);
+                let user = await getUserById(member.userId);
+
+                // Ensure user.totalPoints is a number
+                if (!user.totalPoints || isNaN(user.totalPoints)) {
+                    user.totalPoints = 0;
+                }
+
+                user.totalPoints += pointsToAdd;
+                let newUserScore=Number(user.totalPoints)
+
+
                 let data = {
                     totalGamePlayed: 0,
                     win: 0,
                     loss: 0,
-                    totalPoints: user.totalPoints,
+                    totalPoints: newUserScore,
                     achievements: ""
                 };
 
-                console.log("team line 38:", member.userId);
                 const userUpdatedData = await updateUserScore(member.userId, data);
-                console.log("team line 40:", userUpdatedData);
             }
+
             let data = { pointsEarned: newScore }
             const teamUpdatedData = await updateTeamScore(team.id, data);
-            console.log("team line 45:", teamUpdatedData);
+
         }
 
         return {
@@ -51,7 +59,6 @@ module.exports.realTimeScore = async (event) => {
                 newTeamScore: team.pointsEarned,
                 members: team.members.map(member => ({
                     userId: member.userId,
-                    // newScore: member.individualScores
                 }))
             })
         };

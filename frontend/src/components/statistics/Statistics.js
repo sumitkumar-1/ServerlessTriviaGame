@@ -1,13 +1,33 @@
 import React from "react";
 import "./Statistics.css";
-
+import { useNavigate } from 'react-router-dom';
 const Statistics = (props) => {
-
+  const navigate = useNavigate();
   return (
     <div className="container">
       <div className="row">
+        <div className="playButtons">
+          <button className="btn btn-primary">
+            Explore Team
+          </button>
+          <button className="btn btn-primary">
+            Create Game
+          </button>
+          <button className="btn btn-primary">
+            Leader Board
+          </button>
+          <button className="btn btn-primary">
+            Game Statistics
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate('/chatbot')}
+          >
+            Virtual Assistance
+          </button>
+        </div>
         <div className="sectionTitle">
-          <h1>Game Statistics</h1>
+          <h1>Achievements</h1>
         </div>
         <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3">
           <div className="statisticCard">

@@ -25,6 +25,10 @@ module.exports.main = async (event) => {
     const teamName = await generateTeamName();
     const response = {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify(teamName),
     };
 
@@ -32,6 +36,10 @@ module.exports.main = async (event) => {
   } catch (error) {
     const response = {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ error: error.message }),
     };
 
