@@ -1,7 +1,6 @@
 service: virtual-assistance
 frameworkVersion: '3'
 
-
 provider:
   name: aws
   runtime: nodejs18.x
@@ -13,12 +12,6 @@ provider:
         - 'sns:*'
       Resource: '*'
   role: arn:aws:iam::493846474184:role/LabRole
-
-# functions:
-#   getScoreInquiry:
-#     handler: index.getScoreInquiry
-#   getNavigation:
-#     handler: index.getNavigation  
 
 functions:
   lexFulfillment:

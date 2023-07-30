@@ -25,16 +25,6 @@ const chatSchema = new dynamoose.Schema({
   timestamp: { type: Date, default: Date.now }, // The time the message was sent
 });
 
-// Define a schema for chat messages
-// const chatSchema = new dynamoose.Schema({
-//   chatId: { type: String, hashKey: true, required: true, index: true }, // The primary key of the Chat table
-//   teamId: { type: String, required: true, index: { global: true, rangeKey: 'timestamp', name: 'TeamIndex' }}, // The team where the chat message was sent
-//   senderId: { type: String, required: true }, // The sender of the chat message
-//   senderName: { type: String, required: true },
-//   message: { type: String, required: true }, // The chat message
-//   timestamp: { type: Date, default: Date.now }, // The time the message was sent
-// });
-
 
 // Create a Chat model using the schema
 const Chat = dynamoose.model("Chat", chatSchema);
