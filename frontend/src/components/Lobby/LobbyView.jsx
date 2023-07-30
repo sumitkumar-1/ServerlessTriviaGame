@@ -131,7 +131,7 @@ const LobbyView = () => {
                   <Card.Text>Host: {game.host || ''}</Card.Text>
                   <Card.Text>Game ID: {game.id || ''}</Card.Text>
                   <Card.Text>Remaining Time: {game.remainingTime || '0'}</Card.Text>
-                  <Link to={`/game/${teamId}/${game.gameId}`} className="btn btn-primary">Join Game</Link>
+                  <Link to={`/game/${teamId}/${game.id}`} className="btn btn-primary">Join Game</Link>
                 </Card.Body>
               </Card>
             </Col>

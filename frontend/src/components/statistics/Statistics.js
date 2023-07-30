@@ -7,16 +7,19 @@ const Statistics = (props) => {
     <div className="container">
       <div className="row">
         <div className="playButtons">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/teamlist')}>
             Explore Team
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/create-question')}>
+            Create Questions
+          </button>
+          <button className="btn btn-primary" onClick={() => navigate('/create-game')}>
             Create Game
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/leaderboard')}>
             Leader Board
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/detailedleaderboard')}>
             Game Statistics
           </button>
           <button
