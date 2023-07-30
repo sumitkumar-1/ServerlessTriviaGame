@@ -92,6 +92,8 @@ const Game = () => {
   const [currentTeam, setCurrentTeam] = useState(null); // assume the first team is playing initially
   const [isWaiting, setIsWaiting] = useState(false);
   const [gameTimeRemaining, setGameTimeRemaining] = useState(300);
+  const [isScoreUpdated, setIsScoreUpdated] = useState(false);
+
 
 
   // Define refs for scores and teams
@@ -254,6 +256,7 @@ const Game = () => {
         console.log(scoreResponse);
         const { data: scoreData } = scoreResponse;
         setScores(scoreData.newTeamScore);
+        setIsScoreUpdated(true); 
         setTeams((prevTeams) => {
           return prevTeams.map((team) => {
             if (team.id === currentTeam.id) {
@@ -343,7 +346,7 @@ const Game = () => {
         </StyledInfoContainer>
       )}
       {isSubmitting && <CircularProgress />}
-      {!isSubmitting && showScore && (
+      {!isSubmitting && showScore && isScoreUpdated && (
         <Typography variant="h4">Score: {scores}</Typography>
       )}
       {!isSubmitting && showScore && isCorrect !== null && (
@@ -354,9 +357,6 @@ const Game = () => {
             <Typography variant="h4">Wrong!</Typography>
           )}
           {explanation && <Typography variant="h6">{explanation}</Typography>}
-          {/* {showScore && <ScoreBoard teams={teamsRef.current} currentTeam={currentTeam} />} */}
-          {/* 
-          {showScore && <ScoreBoard teams={teams} currentTeam={currentTeam} />} */}
         </>
       )}
       <StyledButtonContainer>
