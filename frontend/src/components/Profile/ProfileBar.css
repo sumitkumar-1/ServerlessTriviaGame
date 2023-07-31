@@ -85,6 +85,18 @@ p {
     align-items: center;
 }
 
+.nameContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.notification {
+    color: #27374D;
+    margin-left: 30px;
+    cursor: pointer;
+}
 
 @media screen and (max-width: 480px) {
     .profileimagecontainer {

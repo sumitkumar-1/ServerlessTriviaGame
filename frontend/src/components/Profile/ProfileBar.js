@@ -3,6 +3,8 @@ import "./ProfileBar.css";
 import MetricChart from "../Chart/MetricChart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import Badge from "@mui/material/Badge";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const ProfileBar = (props) => {
   const navigate = useNavigate();
@@ -16,6 +18,10 @@ const ProfileBar = (props) => {
     if (logout) {
       navigate("/login");
     }
+  };
+
+  const handleNotification = () => {
+    console.log("Notification Button Clicked");
   };
 
   return (
@@ -40,11 +46,22 @@ const ProfileBar = (props) => {
                 </div>
                 <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                   <div className="profileDescription">
-                    <h6>
-                      {props?.userData?.family_name +
-                        " " +
-                        props?.userData?.given_name}
-                    </h6>
+                    <div className="nameContainer">
+                      <h6>
+                        {props?.userData?.family_name +
+                          " " +
+                          props?.userData?.given_name}
+                      </h6>
+                      <div
+                        className="notification"
+                        onClick={handleNotification}
+                      >
+                        <Badge color="secondary" badgeContent={23}>
+                          <NotificationsIcon fontSize="large" />
+                        </Badge>
+                      </div>
+                    </div>
+
                     <p>{props.userData.email}</p>
                     <p className="mobile">{props.userData.phone_number}</p>
                     <div className="profileButtons">
