@@ -68,7 +68,7 @@ const LexBot = () => {
           <StyledButton variant="contained" color="primary" onClick={handleButtonClick}>
             Start a Chat
           </StyledButton>
-          <StyledButton variant="contained" color="secondary" onClick={handleGoToGameClick}>
+          <StyledButton variant="contained" color="secondary" hidden="true" onClick={handleGoToGameClick}>
             Go To Game
           </StyledButton>
         </>
