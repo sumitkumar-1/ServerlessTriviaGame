@@ -15,7 +15,7 @@ const client = new LexRuntimeV2Client({
 });
 
 const ChatBox = styled.div`
-  height: 500px;  /* Adjust the height as you want */
+  height: 400px;  /* Adjust the height as you want */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
