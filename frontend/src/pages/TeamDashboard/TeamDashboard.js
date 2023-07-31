@@ -14,7 +14,7 @@ import { Bar, Line, Pie } from "react-chartjs-2";
 import teamManagementService from "../../services/team.management.service";
 import leaderboardService from "../../services/leaderboard.service";
 import { GetAllUsers } from "../../services/user.service";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const TeamDashboardPage = () => {
   const currentUserId = localStorage.getItem("UserId");
@@ -34,6 +34,7 @@ const TeamDashboardPage = () => {
   const [gameHistory, setGameHistory] = useState([]);
   const [gameLabels, setGameLabels] = useState([]);
   const [gamePoints, setGamePoints] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch team data by id and populate the state
@@ -456,6 +457,17 @@ const TeamDashboardPage = () => {
                       )}
                     </tbody>
                   </Table>
+                </Col>
+              </Row>
+            </Tab>
+            <Tab eventKey="exploreLobby" title="Explore Game Lobby">
+              <Row className="mt-5">
+                <Col className="d-flex justify-content-center">
+                  <div>
+                    <button className="btn btn-primary" onClick={() => navigate('/lobby/' + id)}>
+                      View Lobby
+                    </button>
+                  </div>
                 </Col>
               </Row>
             </Tab>

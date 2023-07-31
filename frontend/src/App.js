@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoutes";
-import HomePage from "./pages/HomePage";
 import VerifyQuestionAnswersPage from "./pages/QuestionAndAnswers/VerifyQuestionAnswersPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,8 +38,8 @@ const App = () => {
         <Route path="/resetPassword" element={<ResetPasswordPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
         <Route path="/cms" element={<Forms />} />
+        <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lobby/:teamId" element={<LobbyView />} />
           <Route path="/editProfile" element={<EditProfile />} />
@@ -50,7 +49,6 @@ const App = () => {
           <Route path="/createTeam" element={<CreateTeamPage />} />
           <Route path="/teamlist" element={<TeamList />} />
           <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
-          <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route
             path="/detailedleaderboard"

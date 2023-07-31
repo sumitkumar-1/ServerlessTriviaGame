@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ProfileBar.css";
 import MetricChart from "../Chart/MetricChart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import Badge from "@mui/material/Badge";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ProfileBar = (props) => {
+  const [isNotificationOpen, setIsNotitifcationOpen] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
   const EditProfile = async (e) => {
@@ -16,6 +20,15 @@ const ProfileBar = (props) => {
     if (logout) {
       navigate("/login");
     }
+  };
+
+  const handleNotification = () => {
+    if (isNotificationOpen) {
+      setIsNotitifcationOpen(false);
+    } else {
+      setIsNotitifcationOpen(true);
+    }
+    console.log("Notification Button Clicked");
   };
 
   return (
@@ -40,11 +53,41 @@ const ProfileBar = (props) => {
                 </div>
                 <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                   <div className="profileDescription">
-                    <h6>
-                      {props?.userData?.family_name +
-                        " " +
-                        props?.userData?.given_name}
-                    </h6>
+                    <div className="nameContainer">
+                      <h6>
+                        {props?.userData?.family_name +
+                          " " +
+                          props?.userData?.given_name}
+                      </h6>
+                      <div
+                        className="notification"
+                        onClick={handleNotification}
+                      >
+                        <div
+                          onClick={handleNotification}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Badge color="secondary" badgeContent={1}>
+                            <NotificationsIcon fontSize="large" />
+                          </Badge>
+                        </div>
+                        {isNotificationOpen ? (
+                          <div className="notificationContent">
+                            <p>
+                              Welcome to the Trivia Game. Let's get you on
+                              Board.
+                            </p>
+                            <hr />
+                            <div className="deleteNotificationContainer">
+                              <DeleteIcon />
+                            </div>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+
                     <p>{props.userData.email}</p>
                     <p className="mobile">{props.userData.phone_number}</p>
                     <div className="profileButtons">

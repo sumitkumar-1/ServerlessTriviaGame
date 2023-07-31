@@ -11,7 +11,7 @@ const generateTeamName = async (context = "Generate a unique team name.") => {
     });
     
     const teamName = res.data.choices[0].message.content;
-    console.log("Generated team name: " + teamName); // TODO: Verify if team name is already used
+    console.log("Generated team name: " + teamName);
     return teamName;
   } catch (error) {
     console.log(error);

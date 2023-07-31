@@ -15,7 +15,9 @@ const LeaderboardPage = () => {
 
   const fetchLeaderboard = async () => {
     try {
-      const response = await leaderBoardService.filterLeaderboardByTimeFrame({timeFrame: timeInterval});
+      const response = await leaderBoardService.filterLeaderboardByTimeFrame({
+        timeFrame: timeInterval,
+      });
       const filteredData = response.data.filter(
         (item) => item.entityType === leaderboardType
       );
@@ -136,7 +138,7 @@ const LeaderboardPage = () => {
             {leaderboardType === "individual" ? "Individual" : "Team"}{" "}
             Leaderboard
           </h3>
-          <Table striped bordered>
+          <Table striped bordered style={{ marginTop: "30px" }}>
             <thead>
               <tr>
                 <th>Rank</th>
@@ -150,7 +152,29 @@ const LeaderboardPage = () => {
             <tbody>
               {leaderboardData.map((entry, index) => (
                 <tr key={entry.id}>
-                  <td>{index + 1}</td>
+                  <td>
+                    {index + 1 === 1 ? (
+                      <img
+                        style={{ width: "30px", height: "30px" }}
+                        src={require("../../assets/gold.png")}
+                        alt="trophy"
+                      />
+                    ) : index + 1 === 2 ? (
+                      <img
+                        style={{ width: "30px", height: "30px" }}
+                        src={require("../../assets/silver.png")}
+                        alt="trophy"
+                      />
+                    ) : index + 1 === 3 ? (
+                      <img
+                        style={{ width: "30px", height: "30px" }}
+                        src={require("../../assets/bronze.png")}
+                        alt="trophy"
+                      />
+                    ) : (
+                      index + 1
+                    )}
+                  </td>
                   <td>{entry.name}</td>
                   <td>{entry.totalPoints}</td>
                   <td>{entry.gamesPlayed}</td>

@@ -85,7 +85,41 @@ p {
     align-items: center;
 }
 
+.nameContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
 
+.notification {
+    color: #27374D;
+    margin-left: 100px;
+    position: relative;
+}
+
+.notificationContent {
+    background-color: #DDE6ED;
+    position: absolute;
+    width: 400px;
+    height: auto;
+    z-index: 1;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    padding: 10px;
+}
+.deleteNotificationContainer {
+    color: #FF5733;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    background-color: #27374D;
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+}
 @media screen and (max-width: 480px) {
     .profileimagecontainer {
         width: 80px;

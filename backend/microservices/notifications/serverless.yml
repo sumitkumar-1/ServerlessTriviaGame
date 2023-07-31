@@ -42,6 +42,16 @@ functions:
           method: PUT
           cors: true
 
+  TriviaGameNotificatoinPublish:
+    handler: functions/TriviaGameNotificationPublish.handler
+    events:
+      - http:
+          path: /notifications/publish
+          method: POST
+          cors: true
+        environment:
+          NotificationTopicARN: 'arn:aws:sns:us-east-1:356089859282:TriviaGameNotificationAlertsTopic'
+
 resources:
   Resources:
     NotificationTopic:
