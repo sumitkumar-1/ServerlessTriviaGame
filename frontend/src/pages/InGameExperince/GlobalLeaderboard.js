@@ -3,7 +3,6 @@ import { Typography, Container, Table, TableBody, TableCell, TableContainer, Tab
 import { css } from "@emotion/react";
 import styled from '@emotion/styled';
 import { getTeams,getUserById } from "../../services/games.service";
-// import { getTeams, getUserById } from '../services/games.service';
 
 
 const HighlightedTableCell = styled(TableCell)`
