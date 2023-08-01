@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import questionCategories from "../questionCategories";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const BASE_URL = `${process.env.REACT_APP_CONTENT_MANAGEMENT_BASE_URL}`;
 
 const QuestionForm = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         category: "",
         difficulty: "",
@@ -53,7 +57,9 @@ const QuestionForm = () => {
             }
             if (typeof value === 'string') return value.trim() !== "";
             if (typeof value === 'number') return value >= 0;
-            return true; 
+            toast.success('Question added successfully!');
+            navigate('/profile');
+            return true;
         });
 
         if (!isFormDataValid) {
@@ -68,16 +74,15 @@ const QuestionForm = () => {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response);
 
             if (response.status !== 200) {
-                alert('There was an issue submitting your form.');
+                toast.error('There was an issue submitting your form.');
                 throw new Error('An error occurred');
             }
-            alert('Your form was submitted successfully!')
+            toast.error('Your form was submitted successfully!')
         } catch (err) {
             console.error(err);
-            alert('There was an issue submitting your form.');
+            toast.error('There was an issue submitting your form.');
         }
     };
 
