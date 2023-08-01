@@ -77,7 +77,7 @@ module.exports.main = async (event) => {
             try {
                 await updateGameStatus(gameId);
                 await notifyClients(existingGame);
-                return { statusCode: 200, body: JSON.stringify(requestBody) };
+                return { statusCode: 200, body: JSON.stringify({"message": "Game created !"}) };
             } catch (error) {
                 return { statusCode: 500, body: JSON.stringify(error) };
             }

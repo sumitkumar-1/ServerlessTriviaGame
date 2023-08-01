@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import questionCategories from "../questionCategories";
 import { MultiSelect } from "react-multi-select-component";
+import { toast } from "react-toastify";
 
 const BASE_URL = process.env.REACT_APP_CONTENT_MANAGEMENT_BASE_URL;
 
@@ -97,17 +98,17 @@ const GameForm = () => {
       name.trim() === "" ||
       participants.trim() === ""
     ) {
-      console.log("All fields are required.");
+      toast.error("All fields are required.");
       return false;
     }
 
     if (isNaN(participants) || isNaN(timeLimit)) {
-      console.log("Participants and Time limit should be numeric value.");
+      toast.error("Participants and Time limit should be numeric value.");
       return false;
     }
 
     if (participants <= 0 || timeLimit <= 0) {
-      console.log("Participants and Time limit should be greater than 0.");
+      toast.error("Participants and Time limit should be greater than 0.");
       return false;
     }
 
@@ -124,7 +125,7 @@ const GameForm = () => {
       const response = await axios.post(url, formData);
 
       if (response.status === 200) {
-        alert("The game has been successfully created!");
+        toast.success(`Game: ${formData.name} created`);
         setFormData({
           category: "",
           difficulty: "",
@@ -138,7 +139,8 @@ const GameForm = () => {
         throw new Error("An error occurred while creating the game.");
       }
     } catch (error) {
-      console.error("An error occurred while creating the game: ", error);
+      toast.error("An error occurred while creating the game");
+      console.error(error);
     }
   };
 
