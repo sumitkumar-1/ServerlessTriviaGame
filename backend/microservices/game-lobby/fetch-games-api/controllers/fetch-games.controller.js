@@ -3,6 +3,11 @@ const app = require('../utils/firebase');
 const { publishMessage } = require('../utils/pubsub');
 
 const getTriviaGames = async (event, context) => {
+    const headers =
+    {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+    }
     try {
         const gamesSnapshot = await app.firestore().collection('games').get();
 
@@ -21,7 +26,9 @@ const getTriviaGames = async (event, context) => {
         return {
             statusCode: 200,
             'headers': {
-                'Authorization': 'Bearer dummy',
+                // 'Authorization': 'Bearer dummy',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify(games)
         };
@@ -29,6 +36,7 @@ const getTriviaGames = async (event, context) => {
         console.error('Error fetching trivia games:', error);
         return {
             statusCode: 500,
+            headers: headers,
             body: JSON.stringify({ message: 'Internal server error', error: error }),
         };
     }

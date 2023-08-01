@@ -4,7 +4,7 @@ const BASE_URL = process.env.REACT_APP_LOBBY_BASE_URL;
 
 const GameListener = ({ onMessage, onError, onClose }) => {
   useEffect(() => {
-    const eventSource = new EventSource(`${BASE_URL}/api/sse`);
+    const eventSource = new EventSource(`${BASE_URL}/sse`);
 
     eventSource.onmessage = (event) => {
       const gameData = JSON.parse(event.data);

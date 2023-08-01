@@ -8,7 +8,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs18.x
-  # stage: dev
+  stage: dev
   region: us-east-1
   iam:
     role: arn:aws:iam::558280373626:role/LabRole
@@ -47,26 +47,48 @@ functions:
     handler: index.handler
     timeout: 30
     events:
-      - http:
-          path: api/fetch-games
-          method: get
-          cors:
-            origin: "*"
-      - http:
-          path: api/sse
-          method: get
-          cors:
-            origin: "*"
-      - http:
-          path: api/publish
-          method: post
-          cors:
-            origin: "*"
+    - http:
+        path: api/fetch-games
+        method: get
+        cors:
+          origin: '*'
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+    - http:
+        path: api/sse
+        method: get
+        cors:
+          origin: '*'
+          headers:
+            - Content-Type   
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+    - http:
+        path: api/publish
+        method: post
+        cors:
+          origin: '*'
+          headers:
+            - Content-Type    
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
 
 custom:
   offline:
     httpPort: 3001
-
+  eventBusArn: arn:aws:events:us-east-1:558280373626:event-bus/game-events
+  
 package:
   include:
     - serviceAccountKey.json
