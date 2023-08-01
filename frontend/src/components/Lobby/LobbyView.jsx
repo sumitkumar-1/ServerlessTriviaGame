@@ -5,6 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import './LobbyView.scss';
+import { PublishNotification } from "../../services/notification.service";
 
 const BASE_URL = process.env.REACT_APP_LOBBY_BASE_URL;
 
@@ -89,6 +90,7 @@ const LobbyView = () => {
 
   const handleMessage = (gameData) => {
     setGames((prevGames) => [...prevGames, gameData]);
+    PublishNotification("New game available!")
   };
 
   return (
