@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ProfileBar.css";
 import MetricChart from "../Chart/MetricChart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ProfileBar = (props) => {
+  const [isNotificationOpen, setIsNotitifcationOpen] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
   const EditProfile = async (e) => {
@@ -21,6 +23,11 @@ const ProfileBar = (props) => {
   };
 
   const handleNotification = () => {
+    if (isNotificationOpen) {
+      setIsNotitifcationOpen(false);
+    } else {
+      setIsNotitifcationOpen(true);
+    }
     console.log("Notification Button Clicked");
   };
 
@@ -56,9 +63,28 @@ const ProfileBar = (props) => {
                         className="notification"
                         onClick={handleNotification}
                       >
-                        <Badge color="secondary" badgeContent={23}>
-                          <NotificationsIcon fontSize="large" />
-                        </Badge>
+                        <div
+                          onClick={handleNotification}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Badge color="secondary" badgeContent={1}>
+                            <NotificationsIcon fontSize="large" />
+                          </Badge>
+                        </div>
+                        {isNotificationOpen ? (
+                          <div className="notificationContent">
+                            <p>
+                              Welcome to the Trivia Game. Let's get you on
+                              Board.
+                            </p>
+                            <hr />
+                            <div className="deleteNotificationContainer">
+                              <DeleteIcon />
+                            </div>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
 

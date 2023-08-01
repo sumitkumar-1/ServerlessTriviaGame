@@ -91,7 +91,7 @@ const Game = () => {
   const [teams, setTeams] = useState(null);
   const [currentTeam, setCurrentTeam] = useState(null); // assume the first team is playing initially
   const [isWaiting, setIsWaiting] = useState(false);
-  const [gameTimeRemaining, setGameTimeRemaining] = useState(300);
+  const [gameTimeRemaining, setGameTimeRemaining] = useState(500);
   const [isScoreUpdated, setIsScoreUpdated] = useState(false);
 
 
@@ -199,7 +199,7 @@ const Game = () => {
       const timer = setTimeout(() => {
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-          setTimeRemaining(10);
+          setTimeRemaining(20);
           setShowScore(false);
           setSelectedAnswer(null);
           setIsCorrect(null);

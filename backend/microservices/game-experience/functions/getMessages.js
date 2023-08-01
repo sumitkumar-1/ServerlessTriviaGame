@@ -73,8 +73,6 @@ exports.getMessages = async (event, context) => {
             return JSON.parse(messageBody.Message);
         });
 
-        console.log(messages);
-
         // Save chat messages to DynamoDB
         for (const message of messages) {
             const chat = new Chat({
