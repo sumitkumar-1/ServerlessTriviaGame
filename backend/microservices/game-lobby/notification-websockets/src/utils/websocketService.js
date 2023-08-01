@@ -1,7 +1,5 @@
 const { ApiGatewayManagementApi } = require('aws-sdk');
-const { dynamoDb } = require('./dynamodb');
 const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 async function sendMessageToAllConnections(connections, messageData) {
   const apiGateway = new ApiGatewayManagementApi({

@@ -19,6 +19,7 @@ async function tagQuestion(question) {
         const response = await axios.post(url, body, config);
         return response.data;
     } catch (error) {
+        console.error("Error tagging question:", error);
         throw new Error("Invalid question format.");
     }
 }
@@ -48,6 +49,7 @@ async function createQuestion(questionData) {
         await client.send(new PutItemCommand(params));
 
     } catch (error) {
+        console.error("Error creating a new question:", error);
         throw new Error("Error inserting question to table.");
     }
 }

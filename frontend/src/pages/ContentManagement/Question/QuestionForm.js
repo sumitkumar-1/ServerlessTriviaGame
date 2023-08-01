@@ -30,7 +30,7 @@ const QuestionForm = () => {
                 }));
             }
         } else if (name.startsWith('option')) {
-            const optionNumber = parseInt(name.slice(-1)); // Get the option number (1, 2, 3, or 4) from the input name
+            const optionNumber = parseInt(name.slice(-1));
             setFormData((prevData) => ({
                 ...prevData,
                 options: [
@@ -79,7 +79,8 @@ const QuestionForm = () => {
                 toast.error('There was an issue submitting your form.');
                 throw new Error('An error occurred');
             }
-            toast.error('Your form was submitted successfully!')
+            toast.success('Your form was submitted successfully!')
+            navigate('/profile');
         } catch (err) {
             console.error(err);
             toast.error('There was an issue submitting your form.');
@@ -177,10 +178,10 @@ const QuestionForm = () => {
                                 onChange={handleChange}
                             >
                                 <option value="">Select correct answer</option>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                                <option value="option4">Option 4</option>
+                                <option value={formData.options[0] ? formData.options[0] : ''}>{formData.options[0]}</option>
+                                <option value={formData.options[1] ? formData.options[1] : ''}>{formData.options[1]}</option>
+                                <option value={formData.options[2] ? formData.options[2] : ''}>{formData.options[2]}</option>
+                                <option value={formData.options[3] ? formData.options[3] : ''}>{formData.options[3]}</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="explanation">
