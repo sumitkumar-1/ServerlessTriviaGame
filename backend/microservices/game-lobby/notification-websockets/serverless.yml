@@ -43,7 +43,25 @@ functions:
   onNewGameAdded:
     handler: functions/firestoreTrigger.onNewGameAdded
 
+resources:
+  Resources:
+    connectionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: connections
+        AttributeDefinitions:
+          - AttributeName: games
+            AttributeType: S
+        KeySchema:
+          - AttributeName: games
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
 custom:
+  dynamodb:
+    table: connections
   eventBusArn: arn:aws:events:${self:provider.region}:558280373626:event-bus/game-events
   offline:
     httpPort: 7070

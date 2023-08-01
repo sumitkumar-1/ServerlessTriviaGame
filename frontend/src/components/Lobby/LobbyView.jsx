@@ -20,7 +20,7 @@ const LobbyView = () => {
   const [wsConnection, setWsConnection] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://djwkdpdytb.execute-api.us-east-1.amazonaws.com/dev');
+    const ws = new WebSocket(process.env.REACT_APP_LOBBY_WEB_SOCKET_URL);
 
     ws.onopen = () => {
       console.log('Connected to WebSocket server');
@@ -47,7 +47,7 @@ const LobbyView = () => {
     const fetchGames = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/api/fetch-games`,
+          `${BASE_URL}/fetch-games`,
           {
             headers: {
               Authorization: 'Bearer dummy-token'
