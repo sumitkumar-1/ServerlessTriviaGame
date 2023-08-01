@@ -11,7 +11,6 @@ import LobbyView from "./components/Lobby/LobbyView";
 import ProfilePage from "./pages/profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import EditProfile from "./pages/EditProfile/EditProfile";
-import Forms from "./pages/ContentManagement/Forms";
 import CreateTeamPage from "./pages/CreateTeam/CreateTeam";
 import TeamDashboardPage from "./pages/TeamDashboard/TeamDashboard";
 import LeaderboardPage from "./pages/LeaderBoard/LeaderBoard";
@@ -37,7 +36,6 @@ const App = () => {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/resetPassword" element={<ResetPasswordPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
-        <Route path="/cms" element={<Forms />} />
         <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
