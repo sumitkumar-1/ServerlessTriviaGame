@@ -250,7 +250,7 @@ const Game = () => {
       setShowScore(true);
 
 
-      if (answerData.isCorrect) {
+     
         const scoreResponse = await realTimeScore(currentQuestion.questionId, currentTeam.id, defaultAnswer);
         console.log(currentQuestion.questionId, currentTeam.id, defaultAnswer);
         console.log(scoreResponse);
@@ -280,7 +280,7 @@ const Game = () => {
             return team;
           }
         });
-      }
+      
     } catch (error) {
       console.error("Error while submitting answer:", error);
     } finally {

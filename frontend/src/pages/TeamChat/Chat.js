@@ -87,6 +87,7 @@ const Chat = ({ isOpen, minimizeChat, setMinimizeChat, currentTeam }) => {
   };
 
   useEffect(() => {
+ 
     fetchMessages();
 
     const interval = setInterval(fetchMessages, 3000);
@@ -94,7 +95,7 @@ const Chat = ({ isOpen, minimizeChat, setMinimizeChat, currentTeam }) => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [currentTeam]);
 
   useEffect(() => {
     scrollToBottom();
@@ -104,8 +105,14 @@ const Chat = ({ isOpen, minimizeChat, setMinimizeChat, currentTeam }) => {
  
 
   const fetchMessages = async () => {
+    if (!currentTeam) {
+      return;  // If currentTeam is not defined, exit the function
+    }
+  
     try {
+      console.log(currentTeam.id);
       const fetchedMessages = await getMsgs(currentTeam.id);
+      console.log(fetchedMessages);
       if (fetchedMessages.status !== 204) {
         setChat(fetchedMessages.data.teamMessages);
       }
@@ -114,11 +121,13 @@ const Chat = ({ isOpen, minimizeChat, setMinimizeChat, currentTeam }) => {
     }
   };
   
+  
 
   // const currentSenderName = "Alice";
 
 
   const sendMessage = async () => {
+    console.log(currentTeam.id);
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage && currentTeam && currentTeam.members.length > 0) {
       const teamId = currentTeam.id;
@@ -201,3 +210,4 @@ const Chat = ({ isOpen, minimizeChat, setMinimizeChat, currentTeam }) => {
   );
 };
 export default Chat;
+
