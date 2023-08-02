@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./ProfileBar.css";
 import MetricChart from "../Chart/MetricChart";
 import { useNavigate } from "react-router-dom";
@@ -6,11 +6,116 @@ import { useAuth } from "../../contexts/AuthContext";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 const ProfileBar = (props) => {
   const [isNotificationOpen, setIsNotitifcationOpen] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
+  const [notifications, setNotifications] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [arrayNotifications, setArrayNotifications] = useState([]);
+
+  // Function to fetch notifications by userId
+  const fetchNotificationsByUserId = async (userId) => {
+    try {
+      const response = await axios.get(
+          `https://5sc20dmgs2.execute-api.us-east-1.amazonaws.com/dev/notifications?userId=${userId}`
+      );
+
+      setNotifications(response.data);
+      if (response && response.data && response.data.length !== 0) {
+        setArrayNotifications((prevArray) => [...prevArray, ...response.data]);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      setLoading(false);
+    }
+  };
+
+  // Function to fetch notifications by type (e.g., 'CreateGame')
+  const fetchNotificationsByType = async (type) => {
+    try {
+      const response = await axios.get(
+          `https://5sc20dmgs2.execute-api.us-east-1.amazonaws.com/dev/notifications?notificationType=${type}`
+      );
+      setNotifications(response.data);
+      if (response && response.data && response.data.length !== 0) {
+        setArrayNotifications((prevArray) => [...prevArray, ...response.data]);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch notifications by userId every 5 seconds
+    const userId = localStorage.getItem("UserId");
+    console.log(userId)// Replace with the actual user id
+    const type = 'gameCreated';
+    const interval = setInterval(() => {
+      fetchNotificationsByUserId(userId);
+      fetchNotificationsByType(type);
+    }, 5000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // Mark fetched notifications as read after displaying them
+    if (notifications.length > 0) {
+      markNotificationsAsRead();
+    }
+  }, [notifications]);
+
+  // Function to mark notifications as read (update ReadStatus)
+  const markNotificationsAsRead = async () => {
+    try {
+      // Extract the notificationIds from the fetched notifications
+      const notificationIds = notifications.map(
+          (notification) => notification.notificationId
+      );
+
+      // Make an API call to update the ReadStatus of these notifications
+      await axios.put(
+          'https://5sc20dmgs2.execute-api.us-east-1.amazonaws.com/dev/notifications/mark-read',
+          {
+            notificationIds: notificationIds, // Pass the notificationIds in the request body
+          }
+      );
+    } catch (error) {
+      console.error('Error updating ReadStatus:', error);
+    }
+  };
+
+  // Function to handle notification icon click
+  const handleNotificationIconClick = () => {
+    // Check if there are new notifications to display the dropdown
+    if (isNotificationOpen) {
+      setIsNotitifcationOpen(false);
+    } else {
+      setIsNotitifcationOpen(true);
+    }
+
+  };
+
+  const handleDeleteNotification = async (notificationId) => {
+    try {
+
+      // Remove the deleted notification from the arrayNotifications state
+      setArrayNotifications((prevArray) =>
+          prevArray.filter((notification) => notification.notificationId !== notificationId)
+      );
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
+  };
+
+
   const EditProfile = async (e) => {
     navigate("/editProfile");
   };
@@ -59,31 +164,22 @@ const ProfileBar = (props) => {
                           " " +
                           props?.userData?.given_name}
                       </h6>
-                      <div
-                        className="notification"
-                        onClick={handleNotification}
-                      >
-                        <div
-                          onClick={handleNotification}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <Badge color="secondary" badgeContent={1}>
-                            <NotificationsIcon fontSize="large" />
-                          </Badge>
-                        </div>
-                        {isNotificationOpen ? (
-                          <div className="notificationContent">
-                            <p>
-                              Welcome to the Trivia Game. Let's get you on
-                              Board.
-                            </p>
-                            <hr />
-                            <div className="deleteNotificationContainer">
-                              <DeleteIcon />
+                      <div className="notification" onClick={handleNotificationIconClick}>
+                        <Badge color="secondary" badgeContent={arrayNotifications.length}>
+                          <NotificationsIcon fontSize="large" />
+                        </Badge>
+                        {isNotificationOpen && (
+                            <div className="notificationContent">
+                              {arrayNotifications.slice().reverse().map((notification) => (
+                                  <div key={notification.notificationId} className="notificationItem">
+                                    <p>{notification.message}</p>
+                                    <hr />
+                                    <div className="deleteNotificationContainer" onClick={() => handleDeleteNotification(notification.notificationId)}>
+                                      <DeleteIcon />
+                                    </div>
+                                  </div>
+                              ))}
                             </div>
-                          </div>
-                        ) : (
-                          ""
                         )}
                       </div>
                     </div>
