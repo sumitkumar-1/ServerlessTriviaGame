@@ -2,6 +2,7 @@ import React from "react";
 import "./Statistics.css";
 import { useNavigate } from 'react-router-dom';
 const Statistics = (props) => {
+  const isAdmin = localStorage.getItem('isAdmin');
   const navigate = useNavigate();
   return (
     <div className="container">
@@ -10,10 +11,10 @@ const Statistics = (props) => {
           <button className="btn btn-primary" onClick={() => navigate('/teamlist')}>
             Explore Team
           </button>
-          <button className="btn btn-primary" onClick={() => navigate('/create-question')}>
+          <button className="btn btn-primary" onClick={() => navigate('/create-question')} disabled={isAdmin !== 'true'}>
             Create Questions
           </button>
-          <button className="btn btn-primary" onClick={() => navigate('/create-game')}>
+          <button className="btn btn-primary" onClick={() => navigate('/create-game')} disabled={isAdmin !== 'true'}>
             Create Game
           </button>
           <button className="btn btn-primary" onClick={() => navigate('/leaderboard')}>

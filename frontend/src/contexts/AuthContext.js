@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
         response?.data?.authDetails?.AuthenticationResult?.AccessToken
       );
       localStorage.setItem("UserId", response?.data?.user?.id);
+      localStorage.setItem("isAdmin", response?.data?.user?.isAdmin);
       setUser(true);
       return true;
     } else {

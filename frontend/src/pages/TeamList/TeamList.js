@@ -16,8 +16,14 @@ const TeamList = () => {
   const fetchTeams = async () => {
     setIsLoading(true);
     try {
+      const currentUserId = localStorage.getItem("UserId");
       const response = await teamManagementService.getAllTeams();
-      setTeams(response.data);
+      const filteredTeams = response.data.filter(
+        (team) =>
+          team.userId === currentUserId ||
+          team.members.some((member) => member.userId === currentUserId)
+      );
+      setTeams(filteredTeams);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching teams:", error);

@@ -22,7 +22,7 @@ const memberSchema = new dynamoose.Schema({
 const teamSchema = new dynamoose.Schema({
   id: { type: String, hashKey: true, index: true },
   name: { type: String, required: true },
-  userId: { type: String, required: true }, // HANDLE THIS JUST NOW ADDED
+  userId: { type: String, required: true },
   members: {
     type: Array,
     default: [],
