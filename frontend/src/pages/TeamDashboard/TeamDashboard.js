@@ -13,6 +13,7 @@ import {
 import { Bar, Line, Pie } from "react-chartjs-2";
 import teamManagementService from "../../services/team.management.service";
 import leaderboardService from "../../services/leaderboard.service";
+import NotificationService from "../../services/notification.service";
 import { GetAllUsers } from "../../services/user.service";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -171,8 +172,21 @@ const TeamDashboardPage = () => {
         status: "pending",
       };
 
+      const currentUser = allUsers.find((user) => user.id === localStorage.getItem('UserId'));
+
+      const notificationMsg = {
+        type: 'sendInvite',
+        userId: user.id,
+        invitationFromUserId:  localStorage.getItem('UserId'),
+        invitationFromUserName: currentUser.given_name + ' ' + currentUser.family_name,
+        teamID: id,
+        teamName: teamName,
+        message: `You are invited by ${currentUser.given_name} ${currentUser.family_name} to join ${teamName} team`
+      };
+
       try {
         await teamManagementService.sendInvite(id, newInvitation);
+        await NotificationService.PublishNotification(notificationMsg);
         const response = await fetchTeamData(id);
         console.log(response);
         setTeamMembers(response.members);

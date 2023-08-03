@@ -49,7 +49,7 @@ functions:
           path: /notifications/publish
           method: POST
           cors: true
-        environment:
+    environment:
           NotificationTopicARN: 'arn:aws:sns:us-east-1:377747625142:TriviaGameNotificationAlertsTopic'
 
 resources:
