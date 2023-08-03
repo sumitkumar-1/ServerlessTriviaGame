@@ -23,10 +23,9 @@ exports.handler = async (event) => {
             // Invalid HTTP method
             return {
                 statusCode: 405,
-                'headers': {
-                    'Access-Control-Allow-Headers': 'Content-Type',
+                headers: {
                     'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                    'Access-Control-Allow-Credentials': true,
                 },
                 body: JSON.stringify({ message: 'Method Not Allowed' }),
             };
@@ -34,10 +33,9 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            'headers': {
-                'Access-Control-Allow-Headers': 'Content-Type',
+            headers: {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify(response),
         };
@@ -45,10 +43,9 @@ exports.handler = async (event) => {
         console.error('Error marking notification as read:', error);
         return {
             statusCode: 500,
-            'headers': {
-                'Access-Control-Allow-Headers': 'Content-Type',
+            headers: {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify({ message: 'Internal Server Error' }),
         };

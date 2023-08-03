@@ -20,12 +20,20 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
             body: JSON.stringify({ message: 'Processed messages successfully' }),
         };
     } catch (error) {
         console.error('Error processing messages:', error);
         return {
             statusCode: 500,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
             body: JSON.stringify({ error: 'Internal Server Error' }),
         };
     }
