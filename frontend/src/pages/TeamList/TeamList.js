@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import teamManagementService from "../../services/team.management.service";
-import { Card, Button, Modal, Spinner } from "react-bootstrap";
+import { Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchTeams();
+    const interval = setInterval(fetchTeams, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchTeams = async () => {
-    setIsLoading(true);
     try {
       const currentUserId = localStorage.getItem("UserId");
       const response = await teamManagementService.getAllTeams();
@@ -24,10 +24,8 @@ const TeamList = () => {
           team.members.some((member) => member.userId === currentUserId)
       );
       setTeams(filteredTeams);
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching teams:", error);
-      setIsLoading(false);
     }
   };
 
@@ -61,35 +59,24 @@ const TeamList = () => {
           Create New Team
         </Link>
       </div>
-      {isLoading ? (
-        <div className="spinnerContainer">
-          <Spinner/>
+      {teams.map((team) => (
+        <div key={team.id} className="col-md-4">
+          <Card className="mb-4">
+            <Card.Body>
+              <Card.Title>{team.name}</Card.Title>
+              <Link
+                to={`/teamdashboard/${team.id}`}
+                className="btn btn-primary mr-2"
+              >
+                View
+              </Link>
+              <Button variant="danger" onClick={() => openConfirmationModal(team)}>
+                Delete
+              </Button>
+            </Card.Body>
+          </Card>
         </div>
-      ) : (
-        <>
-          {teams?.map((team) => (
-            <div key={team.id} className="col-md-4">
-              <Card className="mb-4">
-                <Card.Body>
-                  <Card.Title>{team.name}</Card.Title>
-                  <Link
-                    to={`/teamdashboard/${team.id}`}
-                    className="btn btn-primary mr-2"
-                  >
-                    View
-                  </Link>
-                  <Button
-                    variant="danger"
-                    onClick={() => openConfirmationModal(team)}
-                  >
-                    Delete
-                  </Button>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </>
-      )}
+      ))}
 
       {/* Confirmation Modal */}
       <Modal show={showModal} onHide={closeConfirmationModal}>
