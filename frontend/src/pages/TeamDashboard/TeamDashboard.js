@@ -59,7 +59,7 @@ const TeamDashboardPage = () => {
     fetchAllUsers()
       .then((users) => setAllUsers(users))
       .catch((error) => console.error("Error fetching all users:", error));
-  }, [id]);
+  }, [id, selectedUser, selectedActionUser, currentUserId]);
 
   const fetchTeamData = async (teamId) => {
     const response = await teamManagementService.getTeamById(teamId);

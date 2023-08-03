@@ -199,7 +199,7 @@ const DetailedStatisticsPage = () => {
 
       <Row className="mt-4">
         <Col>
-          <iframe width="100%" height="450" src="https://lookerstudio.google.com/embed/reporting/97face70-ed72-4309-83cd-5821c2d6610b/page/PgxXD" frameBorder="0" style={{border:0}} allowFullScreen></iframe>
+          <iframe width="100%" height="830" src="https://lookerstudio.google.com/embed/reporting/97face70-ed72-4309-83cd-5821c2d6610b/page/PgxXD" frameBorder="0" style={{border:0}} allowFullScreen></iframe>
         </Col>
       </Row>
 
