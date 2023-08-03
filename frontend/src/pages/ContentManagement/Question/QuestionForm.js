@@ -79,7 +79,7 @@ const QuestionForm = () => {
                 toast.error('There was an issue submitting your form.');
                 throw new Error('An error occurred');
             }
-            toast.error('Your form was submitted successfully!')
+            toast.success('Your form was submitted successfully!')
         } catch (err) {
             console.error(err);
             toast.error('There was an issue submitting your form.');

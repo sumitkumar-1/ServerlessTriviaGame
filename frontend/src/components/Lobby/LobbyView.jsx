@@ -5,7 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import './LobbyView.scss';
-import { PublishNotification } from "../../services/notification.service";
+import NotificationService from "../../services/notification.service";
 
 const BASE_URL = process.env.REACT_APP_LOBBY_BASE_URL;
 
@@ -90,7 +90,7 @@ const LobbyView = () => {
 
   const handleMessage = (gameData) => {
     setGames((prevGames) => [...prevGames, gameData]);
-    PublishNotification("New game available!")
+    NotificationService.PublishNotification("New game available!")
   };
 
   return (
@@ -123,7 +123,7 @@ const LobbyView = () => {
       <Container>
         <Row>
           {filteredGames.map((game) => (
-            <Col key={game.id} sm={12} md={6} lg={4}>
+            <Col key={game.gameId} sm={12} md={6} lg={4}>
               <Card className="game-card">
                 <Card.Body>
                   <Card.Title>{game.name}</Card.Title>
@@ -131,9 +131,9 @@ const LobbyView = () => {
                   <Card.Text>Difficulty: {game.difficulty}</Card.Text>
                   <Card.Text>Players: {game.participants ? game.participants.length : '0'}/{game.maxPlayers}</Card.Text>
                   <Card.Text>Host: {game.host || ''}</Card.Text>
-                  <Card.Text>Game ID: {game.id || ''}</Card.Text>
+                  <Card.Text>Game ID: {game.gameId || ''}</Card.Text>
                   <Card.Text>Remaining Time: {game.remainingTime || '0'}</Card.Text>
-                  <Link to={`/game/${teamId}/${game.id}`} className="btn btn-primary">Join Game</Link>
+                  <Link to={`/game/${teamId}/${game.gameId}`} className="btn btn-primary">Join Game</Link>
                 </Card.Body>
               </Card>
             </Col>
