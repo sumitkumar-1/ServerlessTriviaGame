@@ -38,29 +38,39 @@ const TeamDashboardPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch team data by id and populate the state
-    fetchTeamData(id)
-      .then((teamData) => {
-        setTeamName(teamData.name);
-        setTeamMembers(teamData.members);
-        setTeamStatistics({
-          gamesPlayed: teamData.gamesPlayed,
-          wins: teamData.wins,
-          losses: teamData.losses,
-          pointsEarned: teamData.pointsEarned,
-        });
-      })
-      .catch((error) => console.error("Error fetching team data:", error));
+    updateTeamData();
+    const interval = setInterval(() => {
+      // Fetch team data by id and populate the state
+      updateTeamData();
+    }, 5000);
 
-    // Fetch game history data
-    fetchGameHistory(id)
-      .then((historyData) => setGameHistory(historyData))
-      .catch((error) => console.error("Error fetching game history:", error));
-
-    fetchAllUsers()
-      .then((users) => setAllUsers(users))
-      .catch((error) => console.error("Error fetching all users:", error));
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
   }, [id, selectedUser, selectedActionUser, currentUserId]);
+
+  const updateTeamData = async () => {
+    fetchTeamData(id)
+        .then((teamData) => {
+          setTeamName(teamData.name);
+          setTeamMembers(teamData.members);
+          setTeamStatistics({
+            gamesPlayed: teamData.gamesPlayed,
+            wins: teamData.wins,
+            losses: teamData.losses,
+            pointsEarned: teamData.pointsEarned,
+          });
+        })
+        .catch((error) => console.error("Error fetching team data:", error));
+
+      // Fetch game history data
+      fetchGameHistory(id)
+        .then((historyData) => setGameHistory(historyData))
+        .catch((error) => console.error("Error fetching game history:", error));
+
+      fetchAllUsers()
+        .then((users) => setAllUsers(users))
+        .catch((error) => console.error("Error fetching all users:", error));
+  }
 
   const fetchTeamData = async (teamId) => {
     const response = await teamManagementService.getTeamById(teamId);
@@ -91,7 +101,9 @@ const TeamDashboardPage = () => {
       const response = await leaderboardService.getLeaderboardByEntityId({
         entityId: teamId,
       });
-      setGameLabels(response.data[0].statistics.map((game, index) => `Game ${index + 1}`));
+      setGameLabels(
+        response.data[0].statistics.map((game, index) => `Game ${index + 1}`)
+      );
       setGamePoints(response.data[0].statistics.map((game) => game.totalScore));
       return response.data[0].statistics;
     } catch (error) {
@@ -172,16 +184,19 @@ const TeamDashboardPage = () => {
         status: "pending",
       };
 
-      const currentUser = allUsers.find((user) => user.id === localStorage.getItem('UserId'));
+      const currentUser = allUsers.find(
+        (user) => user.id === localStorage.getItem("UserId")
+      );
 
       const notificationMsg = {
-        type: 'sendInvite',
+        type: "sendInvite",
         userId: user.id,
-        invitationFromUserId:  localStorage.getItem('UserId'),
-        invitationFromUserName: currentUser.given_name + ' ' + currentUser.family_name,
+        invitationFromUserId: localStorage.getItem("UserId"),
+        invitationFromUserName:
+          currentUser.given_name + " " + currentUser.family_name,
         teamID: id,
         teamName: teamName,
-        message: `You are invited by ${currentUser.given_name} ${currentUser.family_name} to join ${teamName} team`
+        message: `You are invited by ${currentUser.given_name} ${currentUser.family_name} to join ${teamName} team`,
       };
 
       try {
@@ -458,7 +473,11 @@ const TeamDashboardPage = () => {
                         gameHistory.map((game) => (
                           <tr key={game.id}>
                             <td>{game.id.substr(game.id.length - 6)}</td>
-                            <td>{convertTimestampToDate(game.created_at).toLocaleString()}</td>
+                            <td>
+                              {convertTimestampToDate(
+                                game.created_at
+                              ).toLocaleString()}
+                            </td>
                             <td>{game.category}</td>
                             <td>{game.result}</td>
                             <td>{game.totalScore}</td>
@@ -478,7 +497,10 @@ const TeamDashboardPage = () => {
               <Row className="mt-5">
                 <Col className="d-flex justify-content-center">
                   <div>
-                    <button className="btn btn-primary" onClick={() => navigate('/lobby/' + id)}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/lobby/" + id)}
+                    >
                       View Lobby
                     </button>
                   </div>
