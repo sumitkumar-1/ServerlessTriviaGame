@@ -11,6 +11,7 @@ import {
   CreateUser,
   VerifyEmailWithoutCode,
 } from "../../services/user.service";
+import notificationService from "../../services/notification.service";
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +88,12 @@ const LoginPage = () => {
               toast.success("Login Success!");
               navigate("/profile");
               setIsLoading(false);
+              const notification = {
+                type: "welcomeUser",
+                userId: localStorage.getItem("UserId"),
+                message: `Hi ${response?.family_name}, Welcome To the Trivia Titans.`
+              }
+              await notificationService.PublishNotification(notification)
             } else {
               toast.error("Internal Server Error.");
               setIsLoading(false);
@@ -152,6 +159,12 @@ const LoginPage = () => {
               toast.success("Login Success!");
               navigate("/profile");
               setIsLoading(false);
+              const notification = {
+                type: "welcomeUser",
+                userId: localStorage.getItem("UserId"),
+                message: `Hi ${response?.family_name}, Welcome To the Trivia Titans.`
+              }
+              await notificationService.PublishNotification(notification)
             } else {
               toast.error("Internal Server Error.");
               setIsLoading(false);
