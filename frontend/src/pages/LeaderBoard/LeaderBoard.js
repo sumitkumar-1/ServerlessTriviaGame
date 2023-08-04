@@ -18,6 +18,7 @@ const LeaderboardPage = () => {
       const response = await leaderBoardService.filterLeaderboardByTimeFrame({
         timeFrame: timeInterval,
       });
+      console.log(response.data);
       const filteredData = response.data.filter(
         (item) => item.entityType === leaderboardType
       );

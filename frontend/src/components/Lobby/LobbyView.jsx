@@ -90,7 +90,7 @@ const LobbyView = () => {
 
   const handleMessage = (gameData) => {
     setGames((prevGames) => [...prevGames, gameData]);
-    NotificationService.PublishNotification("New game available!")
+    NotificationService.PublishNotification({type: "gameCreated", message: `A new Game ${gameData.name} is available to Join!`})
   };
 
   return (

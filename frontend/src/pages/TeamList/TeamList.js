@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import teamManagementService from "../../services/team.management.service";
+import NotificationService from "../../services/notification.service";
 import { Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -21,7 +22,7 @@ const TeamList = () => {
       const filteredTeams = response.data.filter(
         (team) =>
           team.userId === currentUserId ||
-          team.members.some((member) => member.userId === currentUserId)
+          team.members.some((member) => member.userId === currentUserId && member.status === "accepted")
       );
       setTeams(filteredTeams);
     } catch (error) {
@@ -29,9 +30,28 @@ const TeamList = () => {
     }
   };
 
+  const notifyMembers = async (teamId) => {
+    try {
+      const teamDetail = teams.find((team) => team.id === teamId);
+      const notifications = teamDetail.members.map(async (member) => {
+        await NotificationService.PublishNotification({
+          type: "deleteTeam",
+          userId: member.userId,
+          teamName: teamDetail.name,
+          message: `The team ${teamDetail.name} has been terminated`
+        });
+      });
+  
+      await Promise.all(notifications);
+    } catch (error) {
+      console.error("Error notifying deleting team:", error);
+    }
+  };  
+
   const handleDeleteTeam = async () => {
     try {
       await teamManagementService.deleteTeam(selectedTeam.id);
+      await notifyMembers(selectedTeam.id);
       setTeams((prevTeams) =>
         prevTeams.filter((team) => team.id !== selectedTeam.id)
       );

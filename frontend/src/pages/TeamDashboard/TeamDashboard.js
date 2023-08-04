@@ -19,6 +19,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const TeamDashboardPage = () => {
   const currentUserId = localStorage.getItem("UserId");
+  const isAdmin = localStorage.getItem('isAdmin');
   const { id } = useParams();
   const [teamName, setTeamName] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
@@ -218,13 +219,34 @@ const TeamDashboardPage = () => {
       try {
         if (selectedAction === "remove") {
           await teamManagementService.deleteMember(id, selectedActionUser);
+          const memInfo = teamMembers.find((member) => member.id === selectedActionUser);
+          await NotificationService.PublishNotification({
+            type:"deleteMember",
+            userId: memInfo.userId,
+            teamName: teamName,
+            message: `You are no longer part of the ${teamName}`
+          });
         } else if (selectedAction === "promote") {
           await teamManagementService.updateMember(id, selectedActionUser, {
             role: "admin",
           });
+          const memInfo = teamMembers.find((member) => member.id === selectedActionUser);
+          await NotificationService.PublishNotification({
+            type:"updateMember",
+            userId: memInfo.userId,
+            teamName: teamName,
+            message: `You have been promoted as admin for team ${teamName}`
+          });
         } else if (selectedAction === "user") {
           await teamManagementService.updateMember(id, selectedActionUser, {
             role: "user",
+          });
+          const memInfo = teamMembers.find((member) => member.id === selectedActionUser);
+          await NotificationService.PublishNotification({
+            type:"updateMember",
+            userId: memInfo.userId,
+            teamName: teamName,
+            message: `You have been demoted as user for team ${teamName}`
           });
         }
 
@@ -357,7 +379,7 @@ const TeamDashboardPage = () => {
               <Row className="mt-5">
                 <Col>
                   <h4>Team Members</h4>
-                  <Button onClick={() => setShowActionModal(true)}>
+                  <Button onClick={() => setShowActionModal(true)} disabled={isAdmin !== 'true'}>
                     Perform Action
                   </Button>
                   <Table striped bordered hover>

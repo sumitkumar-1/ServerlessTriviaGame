@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const axios = require("axios");
 
 if (!admin.apps.length) {
   const serviceAccount = require("../serviceAccountKey.json");
@@ -8,6 +9,93 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+
+const getUserDetails = async () => {
+  try {
+    const response = await axios.get(`${process.env.FETCH_USER_DETAIL_URL}/getAllUsers`);
+    const users = response.data;
+    return users;
+  } catch (error) {
+    console.log("Error fetching user details:", error);
+    console.error("Error fetching user details:", error);
+    throw new Error("Failed to fetch user details.");
+  }
+};
+
+const getTeamDetails = async (teamId) => {
+  try {
+    const response = await axios.get(`${process.env.FETCH_TEAM_DETAIL_URL}/api/teams/get/${teamId}`);
+    const team = response.data;
+    return team;
+  } catch (error) {
+    console.log("Error fetching team details:", error);
+    console.error("Error fetching team details:", error);
+    throw new Error("Failed to fetch team details.");
+  }
+};
+
+const publishNotification = async (message) => {
+  try {
+    await axios.post(`${process.env.NOTIFICATION_URL}`, message, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return "successfully sent leaderboard notifications";
+  } catch (error) {
+    console.log("Error sending leaderboard notification:", error);
+    console.error("Error sending leaderboard notification:", error);
+    throw new Error("Error sending leaderboard notification.");
+  }
+};
+
+const notifyPodiumUpdate = async (entityId, entityType, currentRank, updatedRank) => {
+  const allUsers = await getUserDetails();
+  
+  let teamDetails;
+  let playerDetails;
+
+  if(entityType == "team"){
+    teamDetails = await getTeamDetails(entityId);
+  }else {
+    playerDetails = allUsers.filter((player) => player.id == entityId)[0]; // Use [0] to get the first matching player
+  }
+
+  const notifications = allUsers.map(async (user) => {
+    const entityName = entityType == "team" ? teamDetails.name : playerDetails.given_name + ' ' + playerDetails.family_name;
+    await publishNotification({
+      type: 'podiumUpdate',
+      message: `New podium: ${entityName} is now ranked ${updatedRank}. Previous Rank: ${currentRank}`,
+      userId: user.id
+    });
+  });
+
+  await Promise.all(notifications);
+};
+
+const getEntityRank = async (entityId) => {
+  const leaderboardSnapshot = await db
+    .collection("leaderboard")
+    .orderBy("totalPoints", "desc")
+    .get();
+
+  let currentRank = 0;
+
+  for (let i = 0; i < leaderboardSnapshot.docs.length; i++) {
+    const doc = leaderboardSnapshot.docs[i];
+    if (doc.data().entityId === entityId) {
+      currentRank = i + 1;
+      break;
+    }
+  }
+
+  if (currentRank === 0) {
+    console.log("Entity not found in leaderboard.");
+    throw new Error("Entity not found in leaderboard.");
+  }
+
+  return currentRank;
+};
 
 const updateLeaderboard = async (
   entityId,
@@ -108,6 +196,8 @@ module.exports.main = async (message, context) => {
     );
     console.log(messagePayload);
 
+    const currentRank = await getEntityRank(messagePayload.entityId);
+
     const leaderboardUpdate = await updateLeaderboard(
       messagePayload.entityId,
       messagePayload.entityType,
@@ -116,6 +206,12 @@ module.exports.main = async (message, context) => {
       messagePayload.result,
       messagePayload.totalScore
     );
+
+    const updatedRank = await getEntityRank(messagePayload.entityId);
+    console.log(`currentRank: ${currentRank} , NewRank: ${updatedRank}`);
+    if (updatedRank < currentRank) {
+      await notifyPodiumUpdate(messagePayload.entityId, messagePayload.entityType, currentRank, updatedRank);
+    }
 
     const response = {
       statusCode: 200,

@@ -26,6 +26,10 @@ functions:
       - event:
           eventType: providers/cloud.pubsub/eventTypes/topic.publish
           resource: 'projects/b009040970-serverless-393804/topics/leaderboard-topic'
+    environment:
+      FETCH_USER_DETAIL_URL: 'https://ulf9citxu9.execute-api.us-east-1.amazonaws.com'
+      FETCH_TEAM_DETAIL_URL: 'https://mjvsjlx9pa.execute-api.us-east-1.amazonaws.com/dev'
+      NOTIFICATION_URL: 'https://bu31ruyo8j.execute-api.us-east-1.amazonaws.com/dev/notifications/publish'
   publishLeaderboardUpdate:
     handler: publishLeaderboardUpdate
     events:

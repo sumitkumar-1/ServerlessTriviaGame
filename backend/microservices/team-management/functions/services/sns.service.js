@@ -47,6 +47,19 @@ const sendInvitationNotification = async (template, params) => {
   }
 };
 
+const sendInGameNotification = async (message) => {
+  try {
+    const snsParams = {
+      Message: JSON.stringify(message),
+      TopicArn: process.env.NotificationTopicARN
+    };
+    await sns.publish(snsParams).promise();
+  } catch (error) {
+    console.log("Error publishing notification message");
+    throw error;
+  }
+};
+
 const subscribeEmailNotification = async (email) => {
   try {
     const params = {
@@ -89,5 +102,6 @@ module.exports = {
   publishAcceptRejectInvitation,
   sendInvitationNotification,
   subscribeEmailNotification,
-  unsubscribeEmailNotification
+  unsubscribeEmailNotification,
+  sendInGameNotification
 };
