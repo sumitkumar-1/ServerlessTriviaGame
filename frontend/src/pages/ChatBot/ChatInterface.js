@@ -49,7 +49,7 @@ const ChatInterface = () => {
     e.preventDefault();
 
     const params = {
-      botId: 'Y6EYH6PKIJ', 
+      botId: 'GF8BEB7IUO', 
       botAliasId: 'TSTALIASID',
       localeId: 'en_US',
       sessionId: sessionId,
