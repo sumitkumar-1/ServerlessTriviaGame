@@ -120,15 +120,6 @@ const ProfileBar = (props) => {
     }
   };
 
-  const handleNotification = () => {
-    if (isNotificationOpen) {
-      setIsNotitifcationOpen(false);
-    } else {
-      setIsNotitifcationOpen(true);
-    }
-    console.log("Notification Button Clicked");
-  };
-
   return (
     <div className="container">
       <div className="row">
@@ -169,28 +160,34 @@ const ProfileBar = (props) => {
                         </Badge>
                         {isNotificationOpen && (
                           <div className="notificationContent">
-                            {arrayNotifications
-                              .slice()
-                              .reverse()
-                              .map((notification) => (
-                                <div
-                                  key={notification.notificationId}
-                                  className="notificationItem"
-                                >
-                                  <p>{notification.message}</p>
-                                  <hr />
-                                  <div
-                                    className="deleteNotificationContainer"
-                                    onClick={() =>
-                                      handleDeleteNotification(
-                                        notification.notificationId
-                                      )
-                                    }
-                                  >
-                                    <DeleteIcon />
-                                  </div>
-                                </div>
-                              ))}
+                            {arrayNotifications?.length !== 0 ? (
+                              <>
+                                {arrayNotifications
+                                  .slice()
+                                  .reverse()
+                                  .map((notification) => (
+                                    <div
+                                      key={notification.notificationId}
+                                      className="notificationItem"
+                                    >
+                                      <p>{notification.message}</p>
+                                      <hr />
+                                      <div
+                                        className="deleteNotificationContainer"
+                                        onClick={() =>
+                                          handleDeleteNotification(
+                                            notification.notificationId
+                                          )
+                                        }
+                                      >
+                                        <DeleteIcon />
+                                      </div>
+                                    </div>
+                                  ))}
+                              </>
+                            ) : (
+                              <p>No New Notifications</p>
+                            )}
                           </div>
                         )}
                       </div>

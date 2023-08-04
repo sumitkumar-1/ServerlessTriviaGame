@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { StoreUserResponse } from "../../services/user.service";
 import Spinner from "../../components/Spinner/Spinner";
 import { toast } from "react-toastify";
-import { PublishNotification } from "../../services/notification.service";
+import notificationService from "../../services/notification.service";
 
 const QuesAnswerPage = () => {
   const navigate = useNavigate();
@@ -42,14 +42,14 @@ const QuesAnswerPage = () => {
     };
     const response = await StoreUserResponse(requestBody);
     if (!response?.data?.response?.error) {
-      // const notification = {
-      //   userId: localStorage.getItem("UserId"),
-      //   typeId: "newUserCreated",
-      //   message: "Welcome to the Trivia Game."
-      // }
-      // await PublishNotification(notification);
       navigate("/login");
       toast.success("Registration Success!");
+      const notification = {
+        type: "welcomeUser",
+        userId: localStorage.getItem("UserId"),
+        message: "Welcome To the Trivia Titans."
+      }
+      await notificationService.PublishNotification(notification)
       setIsLoading(false);
     } else {
       toast.error("Internal Server Error.");
