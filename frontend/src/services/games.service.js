@@ -11,11 +11,9 @@ export const realTimeScore = (questionId, teamId, answer) =>
 export const sendMessage = (teamId,senderId, senderName, message) =>
   axios.post(`${baseUrl}/chat/send`, { teamId, senderId,senderName,message });
 
-  // export const getMessages = () => axios.get(`${baseUrl}/chat/get`);
 
-  export const getMessages = (teamId) => axios.get(`${baseUrl}/chat/get/${teamId}`);
+export const getMessages = (teamId) => axios.get(`${baseUrl}/chat/get/${teamId}`);
 
-// export const getQuestions = () => axios.get(`https://ns1ej9dzn0.execute-api.us-east-1.amazonaws.com/questions`);
 
 export const getTeamById = (teamId) =>
   axios.get(`${process.env.REACT_APP_TEAM_URL}/get/${teamId}`);
