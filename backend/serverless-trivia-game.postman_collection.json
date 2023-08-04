@@ -908,6 +908,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete User By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"put-your-id\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{userAuthUrl}}/deleteUserById",
+							"host": [
+								"{{userAuthUrl}}"
+							],
+							"path": [
+								"deleteUserById"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

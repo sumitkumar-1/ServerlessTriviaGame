@@ -20,6 +20,7 @@ router.get("/getuserbyuserid/:id", UserController.getUserById);
 router.get("/getAllUsers", UserController.getAllUsers);
 router.post("/makeAdmin", UserController.makeAdmin);
 router.post("/removeAdmin", UserController.removeAdmin);
+router.post("/deleteUserById", UserController.deleteUserById)
 
 // Add Questions to the firebase DB
 router.post("/addQuestion", QuestionsController.addQuestion);
