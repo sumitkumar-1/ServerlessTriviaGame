@@ -18,7 +18,8 @@ async function sendMessageToAllConnections(connections, messageData) {
         })
         .promise();
     } catch (error) {
-      // Handle error cases here
+      console.log(error);
+      throw error;
     }
   });
 

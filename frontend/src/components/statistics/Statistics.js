@@ -11,11 +11,11 @@ const Statistics = (props) => {
           <button className="btn btn-primary" onClick={() => navigate('/teamlist')}>
             Explore Team
           </button>
-          <button className="btn btn-primary" onClick={() => navigate('/create-question')} disabled={isAdmin !== 'true'}>
-            Create Questions
+          <button className="btn btn-primary" onClick={() => navigate('/gamelist')} disabled={isAdmin !== 'true'}>
+            Games
           </button>
-          <button className="btn btn-primary" onClick={() => navigate('/create-game')} disabled={isAdmin !== 'true'}>
-            Create Game
+          <button className="btn btn-primary" onClick={() => navigate('/questionlist')} disabled={isAdmin !== 'true'}>
+            Questions
           </button>
           <button className="btn btn-primary" onClick={() => navigate('/leaderboard')}>
             Leader Board

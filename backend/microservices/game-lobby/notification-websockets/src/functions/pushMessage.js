@@ -36,7 +36,6 @@ module.exports.main = async event => {
   } catch (error) {
     error_msg = error;
     console.error("Error:", error);
-
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed to process request', error_msg }),
