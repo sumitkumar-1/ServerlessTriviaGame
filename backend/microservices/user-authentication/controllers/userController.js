@@ -20,8 +20,8 @@ exports.create = async (req, res) => {
     const response = await UserServices.create(params);
     if (!response?.error) {
       const requestBody = {
-        id: response?.UserSub
-      }
+        id: response?.UserSub,
+      };
       const saveUserResponse = await UserServices.saveUserToDynamo(requestBody);
       if (!saveUserResponse?.data?.error) {
         res.send(response);
@@ -366,5 +366,28 @@ exports.removeAdmin = async (req, res) => {
       error: error,
     };
     res.send(errorMessage);
+  }
+};
+
+exports.deleteUserById = async (req, res) => {
+  try {
+    const params = {
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: req.body.id,
+    };
+    const response = await UserServices.deleteUserById(params);
+    if (!response.message) {
+      const response = {
+        message: `${req.body.id} User Deleted Successfully.`,
+      };
+      return res.send(response);
+    }
+    const responseMessage = {
+      message: "Error in deleting User.",
+    };
+    res.send(responseMessage);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ message: "Not Found.", error: err });
   }
 };

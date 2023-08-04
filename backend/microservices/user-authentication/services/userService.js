@@ -60,5 +60,12 @@ exports.updateUserAdmin = async (params) => {
 };
 
 exports.saveUserToDynamo = async (data) => {
-  return await axios.post(`${process.env.USER_PROFILE_BASE_URL}/saveUser`, data);
-}
+  return await axios.post(
+    `${process.env.USER_PROFILE_BASE_URL}/saveUser`,
+    data
+  );
+};
+
+exports.deleteUserById = async (params) => {
+  return await cognito.adminDeleteUser(params).promise();
+};
