@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Button, Container, Row, Col, Form, Card } from 'react-bootstrap';
 import questionCategories from "../questionCategories";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -87,125 +87,129 @@ const QuestionForm = () => {
     };
 
     return (
-        <Container>
+        <Container className="my-4">
             <Row>
                 <Col>
-                    <h2>Create Question</h2>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="questionCategory">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                            >
-                                <option value="">Select category</option>
-                                {questionCategories().map((category, index) => (
-                                    <option key={category.label} value={category.label}>
-                                        {category.label}
-                                    </option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group controlId="questionDifficulty">
-                            <Form.Label>Difficulty</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="difficulty"
-                                value={formData.difficulty}
-                                onChange={handleChange}
-                            >
-                                <option value="">Select difficulty</option>
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group controlId="questionQuestion">
-                            <Form.Label>Question</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="question"
-                                rows={4}
-                                value={formData.question}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="option1">
-                            <Form.Label>Option 1</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="option1"
-                                value={formData.options[0]} // Update the value prop here
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="option2">
-                            <Form.Label>Option 2</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="option2"
-                                value={formData.options[1]} // Update the value prop here
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="option3">
-                            <Form.Label>Option 3</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="option3"
-                                value={formData.options[2]} // Update the value prop here
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="option4">
-                            <Form.Label>Option 4</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="option4"
-                                value={formData.options[3]} // Update the value prop here
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="correctAnswer">
-                            <Form.Label>Correct Answer</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="correctAnswer"
-                                value={formData.correctAnswer}
-                                onChange={handleChange}
-                            >
-                                <option value="">Select correct answer</option>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                                <option value="option4">Option 4</option>
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group controlId="explanation">
-                            <Form.Label>Explanation</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="explanation"
-                                rows={4}
-                                value={formData.explanation}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="points">
-                            <Form.Label>Points</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="points"
-                                value={formData.points}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
-                    </Form>
+                    <Card className="shadow">
+                        <Card.Header as="h2" className="text-center">Create Question</Card.Header>
+                        <Card.Body>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group controlId="questionCategory">
+                                    <Form.Label>Category</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select category</option>
+                                        {questionCategories().map((category, index) => (
+                                            <option key={category.label} value={category.label}>
+                                                {category.label}
+                                            </option>
+                                        ))}
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="questionDifficulty">
+                                    <Form.Label>Difficulty</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="difficulty"
+                                        value={formData.difficulty}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select difficulty</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="questionQuestion">
+                                    <Form.Label>Question</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        name="question"
+                                        rows={4}
+                                        value={formData.question}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="option1">
+                                    <Form.Label>Option 1</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="option1"
+                                        value={formData.options[0]} // Update the value prop here
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="option2">
+                                    <Form.Label>Option 2</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="option2"
+                                        value={formData.options[1]} // Update the value prop here
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="option3">
+                                    <Form.Label>Option 3</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="option3"
+                                        value={formData.options[2]}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="option4">
+                                    <Form.Label>Option 4</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="option4"
+                                        value={formData.options[3]}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="correctAnswer">
+                                    <Form.Label>Correct Answer</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="correctAnswer"
+                                        value={formData.correctAnswer}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select correct answer</option>
+                                        <option value={formData.options[0]}>{formData.options[0]}</option>
+                                        <option value={formData.options[1]}>{formData.options[1]}</option>
+                                        <option value={formData.options[2]}>{formData.options[2]}</option>
+                                        <option value={formData.options[3]}>{formData.options[3]}</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="explanation">
+                                    <Form.Label>Explanation</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        name="explanation"
+                                        rows={4}
+                                        value={formData.explanation}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="points">
+                                    <Form.Label>Points</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="points"
+                                        value={formData.points}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Button variant="primary" type="submit">
+                                    Submit
+                                </Button>
+                            </Form>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
         </Container>

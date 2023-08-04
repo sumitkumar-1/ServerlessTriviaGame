@@ -19,6 +19,8 @@ import TeamList from "./pages/TeamList/TeamList";
 import QuestionForm from "./pages/ContentManagement/Question/QuestionForm";
 import GameForm from "./pages/ContentManagement/Game/GameForm";
 import ChatInterface from "./pages/ChatBot/ChatInterface";
+import GameList from "./pages/ContentManagement/Game/GameList";
+import QuestionList from "./pages/ContentManagement/Question/QuestionList";
 import Game from "./pages/InGameExperince/Game";
 import LexBot from "./pages/ChatBot/LexBot";
 
@@ -48,12 +50,14 @@ const App = () => {
           <Route path="/teamlist" element={<TeamList />} />
           <Route path="/teamdashboard/:id" element={<TeamDashboardPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/questionlist" element={<QuestionList />} />
+          <Route path="/gamelist" element={<GameList />} />
           <Route
             path="/detailedleaderboard"
             element={<DetailedStatisticsPage />}
           />
           {/* In game part*/}
-          <Route path="/chatbot" element={<LexBot/>} />
+          <Route path="/chatbot" element={<LexBot />} />
 
           {/* <Route path="/chat" element={<ChatInterface />} />
 

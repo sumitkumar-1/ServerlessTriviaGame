@@ -17,8 +17,10 @@ async function tagQuestion(question) {
     };
     try {
         const response = await axios.post(url, body, config);
+        console.log('Response from tagging API: ', response);
         return response.data;
     } catch (error) {
+        console.error('Error tagging question: ', error.message);
         throw new Error("Invalid question format.");
     }
 }
@@ -26,13 +28,14 @@ async function tagQuestion(question) {
 
 async function createQuestion(questionData) {
     let tags = [];
-    try {
-        let resp = await tagQuestion(questionData.question);
-        tags = resp.split("/").filter((tag) => tag !== "");
-    }
-    catch (error) {
-        throw new Error("Invalid question format.");
-    }
+    // try {
+    //     let resp = await tagQuestion(questionData.question);
+    //     tags = resp.split("/").filter((tag) => tag !== "");
+    //     console.log('Tags: ', tags);
+    // }
+    // catch (error) {
+    //     throw new Error("Invalid question format.");
+    // }
     if (tags.length === 0) {
         tags = ["General", questionData.category];
     }

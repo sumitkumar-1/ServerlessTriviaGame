@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Button, Container, Row, Col, Form, Modal, Card } from 'react-bootstrap';
 import axios from "axios";
 import questionCategories from "../questionCategories";
 import { MultiSelect } from "react-multi-select-component";
@@ -145,113 +145,117 @@ const GameForm = () => {
   };
 
   return (
-    <Container>
+    <Container className="my-4">
       <Row>
         <Col>
-          <h2>Create Game</h2>
-          <Form onSubmit={submitGameData}>
-            <Form.Group controlId="gameCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                name="category"
-                value={formData.category}
-                onChange={handleFormChange}
-              >
-                <option value="">Select category</option>
-                {questionCategories().map((category, index) => (
-                  <option key={category.label} value={category.label}>
-                    {category.label}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
+          <Card className="shadow">
+            <Card.Header as="h2" className="text-center">Create Game</Card.Header>
+            <Card.Body>
+              <Form onSubmit={submitGameData}>
+                <Form.Group controlId="gameCategory">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleFormChange}
+                  >
+                    <option value="">Select category</option>
+                    {questionCategories().map((category, index) => (
+                      <option key={category.label} value={category.label}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-            <Form.Group controlId="gameDifficulty">
-              <Form.Label>Difficulty</Form.Label>
-              <Form.Control
-                as="select"
-                name="difficulty"
-                value={formData.difficulty}
-                onChange={handleFormChange}
-              >
-                <option value="">Select difficulty</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </Form.Control>
-            </Form.Group>
+                <Form.Group controlId="gameDifficulty">
+                  <Form.Label>Difficulty</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="difficulty"
+                    value={formData.difficulty}
+                    onChange={handleFormChange}
+                  >
+                    <option value="">Select difficulty</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </Form.Control>
+                </Form.Group>
 
-            <Form.Group controlId="gameQuestions">
-              <Form.Label>Questions</Form.Label>
-              {isLoading ? (
-                <p>Loading questions...</p>
-              ) : (
-                <MultiSelect
-                  options={multiSelectOptions}
-                  hasSelectAll={true}
-                  value={formData.questions.map((question) => ({
-                    label: question.question,
-                    value: question.questionId,
-                  }))}
-                  onChange={handleQuestionSelection}
-                  labelledBy={"Select questions"}
-                />
-              )}
-            </Form.Group>
+                <Form.Group controlId="gameQuestions">
+                  <Form.Label>Questions</Form.Label>
+                  {isLoading ? (
+                    <p>Loading questions...</p>
+                  ) : (
+                    <MultiSelect
+                      options={multiSelectOptions}
+                      hasSelectAll={true}
+                      value={formData.questions.map((question) => ({
+                        label: question.question,
+                        value: question.questionId,
+                      }))}
+                      onChange={handleQuestionSelection}
+                      labelledBy={"Select questions"}
+                    />
+                  )}
+                </Form.Group>
 
-            <Form.Group controlId="gameTimeLimit">
-              <Form.Label>Time Limit (seconds)</Form.Label>
-              <Form.Control
-                name="timeLimit"
-                type="number"
-                placeholder="Time limit per question"
-                min="1"
-                value={formData.timeLimit}
-                onChange={handleFormChange}
-                required
-              />
-            </Form.Group>
+                <Form.Group controlId="gameTimeLimit">
+                  <Form.Label>Time Limit (seconds)</Form.Label>
+                  <Form.Control
+                    name="timeLimit"
+                    type="number"
+                    placeholder="Time limit per question"
+                    min="1"
+                    value={formData.timeLimit}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </Form.Group>
 
-            <Form.Group controlId="gameName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                name="name"
-                type="text"
-                placeholder="Enter game name"
-                value={formData.name}
-                onChange={handleFormChange}
-                required
-              />
-            </Form.Group>
+                <Form.Group controlId="gameName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    name="name"
+                    type="text"
+                    placeholder="Enter game name"
+                    value={formData.name}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </Form.Group>
 
-            <Form.Group controlId="gameParticipants">
-              <Form.Label>Participants</Form.Label>
-              <Form.Control
-                name="participants"
-                type="number"
-                placeholder="Number of participants"
-                min="1"
-                value={formData.participants}
-                onChange={handleFormChange}
-                required
-              />
-            </Form.Group>
+                <Form.Group controlId="gameParticipants">
+                  <Form.Label>Participants</Form.Label>
+                  <Form.Control
+                    name="participants"
+                    type="number"
+                    placeholder="Number of participants"
+                    min="1"
+                    value={formData.participants}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </Form.Group>
 
-            <Form.Group controlId="gameStatus">
-              <Form.Check
-                name="status"
-                type="checkbox"
-                label="Game Active"
-                checked={formData.status}
-                onChange={handleFormChange}
-              />
-            </Form.Group>
+                <Form.Group controlId="gameStatus">
+                  <Form.Check
+                    name="status"
+                    type="checkbox"
+                    label="Game Active"
+                    checked={formData.status}
+                    onChange={handleFormChange}
+                  />
+                </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Create Game
-            </Button>
-          </Form>
+                <Button variant="primary" type="submit">
+                  Create Game
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
