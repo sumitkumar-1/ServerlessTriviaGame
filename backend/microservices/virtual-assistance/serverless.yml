@@ -9,7 +9,7 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Resource: '*'
-  role: arn:aws:iam::493846474184:role/LabRole
+  role: arn:aws:iam::041159192901:role/LabRole
 
 functions:
   lexFulfillment:

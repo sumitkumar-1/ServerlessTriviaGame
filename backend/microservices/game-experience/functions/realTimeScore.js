@@ -25,6 +25,9 @@ module.exports.realTimeScore = async (event) => {
         // Check if the answer submitted is correct and pointsToAdd is a number
         if (body.answer === question.correctAnswer && !isNaN(pointsToAdd)) {
             // If the answer is correct, increase the team's score
+
+            console.log('answer is correct',body.answer );
+            console.log('answer is correct',question.correctAnswer );
             newScore += pointsToAdd;
 
             // Loop through all members of the team
