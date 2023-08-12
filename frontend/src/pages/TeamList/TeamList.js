@@ -5,6 +5,7 @@ import { Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const TeamList = () => {
+  const loggedInUserId = localStorage.getItem('UserId');
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -90,7 +91,7 @@ const TeamList = () => {
               >
                 View
               </Link>
-              <Button variant="danger" onClick={() => openConfirmationModal(team)}>
+              <Button variant="danger" onClick={() => openConfirmationModal(team)} disabled={loggedInUserId !== team.userId}>
                 Delete
               </Button>
             </Card.Body>
