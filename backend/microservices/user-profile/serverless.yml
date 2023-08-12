@@ -10,19 +10,10 @@ plugins:
 provider:
   name: aws
   runtime: nodejs18.x
+  region: us-east-1
   iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource:
-            - Fn::GetAtt: [ UsersTable, Arn ]
+    role: arn:aws:iam::426659419095:role/LabRole
+    
   environment:
     USERS_TABLE: ${self:custom.userTable}
 
