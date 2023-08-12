@@ -10,9 +10,10 @@ import AWS from "aws-sdk";
 
 // TODO: Remove constants credentials
 AWS.config.update({
-  accessKeyId: "AKIAUSWUWNCSAWZWC242",
-  secretAccessKey: "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",
+  accessKeyId: "ASIAWGVXCCPLT346NRO2",
+  secretAccessKey: "YX6E1FsTUM/lSHfW47Np+pEgZ1qwCRrDjgEEPWfH",
   region: "us-east-1",
+  sessionToken: "FwoGZXIvYXdzEF0aDHDXDhWFLkCGkoYzASLAAW5Pmqbe9fMtnY/KI6NSxhuQSyFu4dXIaQb5YcPk98+4wY0oPHtBrKq7US2/mnDtaz752/GCqNJWtc0kSfaGkxMit99d/HfPzJh5yPEK3oui9RmIOZ3KvW/jXjHzP1NAvp7JsrXT0czu1+2XYP+M1w28yM8vf8u2NjHNQJCBeWQFFDcMERl39BsPM3tlJVxyASFMT3+dpU6HdMQdyUJdVHG63Za2PlOxzM/WX5R81aAimmkKaQOVFouy80P9l6sEvSjCwd+mBjItYBonnMJNrW9TVO2qgTlfSN+57HUTZzrO4IrxDNfrECIMUP8alKhAb+xkIp6G"
 });
 
 const EditProfile = () => {
