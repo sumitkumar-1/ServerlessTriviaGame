@@ -14,5 +14,5 @@ exports.get = async (id) => {
 };
 
 exports.getCognitoUser = async (id) => {
-  return await axios.get(`https://ulf9citxu9.execute-api.us-east-1.amazonaws.com/getuserbyuserid/${id}`);
+  return await axios.get(`https://3k7qrzfb99.execute-api.us-east-1.amazonaws.com/getuserbyuserid/${id}`);
 }
