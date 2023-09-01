@@ -3,6 +3,10 @@
 
 This project is a trivia game built on a multi-cloud architecture, utilizing the services offered by AWS and GCP. The game will employ various services such as AWS Lambda, GCP Firestore, Chat GPT, DynamoDB, SQS, SNS, Pub/Sub, QuickSight, GCP DataStudio, Looker Studio, and more.
 
+## Architecture
+
+![SDP33-Final-Architecture-Diagram drawio](https://github.com/sumitkumar-1/ServerlessTriviaGame/assets/10169915/98017683-71ae-48e2-8edb-f52a6b09c157)
+
 ## Installation
 
 To run this project locally, you will need to have the following installed:
@@ -146,7 +150,3 @@ serverless offline
 ```
 
 To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
-
-## Architecture
-
-![SDP33-Final-Architecture-Diagram drawio](https://github.com/sumitkumar-1/ServerlessTriviaGame/assets/10169915/98017683-71ae-48e2-8edb-f52a6b09c157)
