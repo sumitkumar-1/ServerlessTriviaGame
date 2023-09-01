@@ -146,3 +146,7 @@ serverless offline
 ```
 
 To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
+
+## Architecture
+
+![SDP33-Final-Architecture-Diagram drawio](https://github.com/sumitkumar-1/ServerlessTriviaGame/assets/10169915/98017683-71ae-48e2-8edb-f52a6b09c157)
